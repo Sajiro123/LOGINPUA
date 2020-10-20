@@ -1,0 +1,242 @@
+﻿@model LOGINPUA.Models.ConductoresModel
+
+@{
+    ViewBag.Title = "Fuera_Campo";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+<style>
+    .center {
+        margin: auto;
+        width: 80%;
+        padding: 10px;
+    }
+</style>
+
+<br />
+
+
+<script type="text/javascript">
+    if (location.protocol == 'https:') {
+             location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        }
+    </script>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro de Supervision en Campo
+        </h4>
+    </div>
+</div>
+<hr />
+@using (Html.BeginForm("Estado_Bus_consulta", "Supervisor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="modal-body ">
+
+        <div class="center">
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <h2 class="col-sm-4 col-form-label">Placas</h2>
+                        <div class="col-sm-5">
+                            @Html.DropDownListFor(model => model.CC_CONDUCTORES.PLACA, ViewBag.lista as SelectList, "Ingresar PLACA", new { Name = "placa", @class = "selectpicker", @data_live_search = "true", @data_style = "btn-info", style = "width: 160%;" })
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <h2 class="col-sm-3 col-form-label">Fecha</h2>
+                        <div class="col-sm-8">
+                            <input type="text" name="name" value="@ViewBag.fecha_actual" class="form-control" disabled />
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <h2 class="col-sm-3 col-form-label">Hora</h2>
+                        <div class="col-sm-8">
+                            <input type="datetime" name="name" value="@ViewBag.Hora_actual" class="form-control" disabled>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br />            <br />
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <h2 class="col-sm-4 col-form-label">Dirección de inspección</h2>
+                        <div class="col-sm-7">
+                            <select name="direccion" value="" class="form-control vacios" style="width:100%;" required>
+                                <option value="CANTA CALLAO (SAN MARTIN) A-B">CANTA CALLAO (SAN MARTIN) A-B</option>
+                                <option value="TRISTAN (SURCO) B-A">TRISTAN (SURCO) B-A</option>
+                                <option value="CERES (ATE) A-B">CERES (ATE) A-B</option>
+                                <option value="LA MARINA(SAN MIGUEL) B-A">LA MARINA(SAN MIGUEL) B-A</option>
+                                <option value="SANTA MARIA (LA MOLINA)">SANTA MARIA (LA MOLINA) </option>
+                                <option value="MOLICENTRO (LA MOLINA) A-B">MOLICENTRO (LA MOLINA) A-B</option>
+                                <option value="HONDA (SAN MIGUEL) B-A">HONDA (SAN MIGUEL) B-A</option>
+                                <option value="MUSA (LA MOLINA) A-B">MUSA (LA MOLINA) A-B</option>
+                                <option value="MASIAS (SAN ISIDRO) B-A">MASIAS (SAN ISIDRO) B-A</option>
+                                <option value="SANTA MARIA (LA MOLINA) A-B">SANTA MARIA (LA MOLINA) A-B</option>
+                                <option value="TAGORE (ATE) A-B">TAGORE (ATE) A-B</option>
+                                <option value="SAN MARCOS (SAN MIGUEL) B-A">SAN MARCOS (SAN MIGUEL) B-A</option>
+                                <option value="FUERTE HOYOS (RIMAC) A-B">FUERTE HOYOS (RIMAC) A-B</option>
+                                <option value="PLAZA BUTTERS B-A">PLAZA BUTTERS B-A</option>
+                                <option value="CAJA DE AGUA (RIMAC) A-B">CAJA DE AGUA (RIMAC) A-B</option>
+                                <option value="PARDO (MIRAFLORES) B-A">PARDO (MIRAFLORES) B-A</option>
+                                <option value="FLOR DE AMANCAES (RIMAC) A-B">FLOR DE AMANCAES (RIMAC) A-B</option>
+                                <option value="OLAVIDE (SAN ISIDRO) B-A">OLAVIDE (SAN ISIDRO) B-A</option>
+                                <option value="PATIO SANTA CATALINA (SJL) A-B">PATIO SANTA CATALINA (SJL) A-B</option>
+                                <option value="VENUS (MARDALENA DEL MAR) B-A">VENUS (MARDALENA DEL MAR) B-A</option>
+                                <option value="PATIO PROCERES (SJL) A-B">PATIO PROCERES (SJL) A-B</option>
+                                <option value="TORRE UGARTE B-A">TORRE UGARTE B-A</option>
+                                <option value="PATIO NUEVA ALTERNATIVA A-B">PATIO NUEVA ALTERNATIVA A-B</option>
+                                <option value="NAVARRETE (SAN ISIDRO) B-A">NAVARRETE (SAN ISIDRO) B-A</option>
+                                <option value="PATIO FUTURO EXPRESS (SJL) A-B">PATIO FUTURO EXPRESS (SJL) A-B</option>
+                                <option value="ICA (CERCADO DE LIMA) B-A">ICA (CERCADO DE LIMA) B-A</option>
+                                <option value="GRAU (CERCADO DE LIMA) A-B">GRAU (CERCADO DE LIMA) A-B</option>
+                                <option value="FAUCETT (SAN MIGUEL) B-A">FAUCETT (SAN MIGUEL) B-A</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        <h2 class="col-sm-2 col-form-label">Km</h2>
+                        <div class="col-sm-6">
+                            <input type="text" name="km" value="" class="form-control" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <br />            <br />
+            <div class="row">
+                <div class="col-md-5"></div>
+
+                <div class="col-md-6">
+                    <input type="submit" name="name" value="Generar" id="validacion_v" class="btn btn-success btn-lg" />
+                </div>
+            </div>
+
+            <input type="text" class="latitud" name="latitud" hidden>
+            <input type="text" class="longitud" name="longitud" hidden>
+            <input type="text" class="longitud" value="REGISTRAR" name="accion" hidden>
+            <input type="text" class="id_maestro" value="0" name="accion" hidden>
+
+
+
+        </div>
+
+    </div>
+}
+
+
+@if (@ViewBag.Message == "Se ha registrado Correctamente")
+{
+
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({ title: 'Se registro Correctamente', type: 'success', });
+        });
+    </script>
+}
+
+
+
+@if (@ViewBag.Message == "Ingrese Placa")
+{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({ title: 'Ingresar Placa', type: 'warning', });
+        });
+    </script>
+}
+
+@if (@ViewBag.GPS == "Debe Activar GPS")
+{
+    <script>
+        $(document).ready(function () {
+            Swal.fire({ title: 'Debe Activar GPS', type: 'warning', });
+        });
+    </script>
+}
+
+
+<script>
+
+
+
+    $(document).ready(function () {
+        $(".bs-placeholder").css("width", "136%")
+        $('#CC_CONDUCTORES_PLACA').selectpicker('refresh')
+        $('#CC_CONDUCTORES_PLACA').parent().children('button').css('width', '273px')
+
+    });
+
+
+
+    function myFunction() {
+        var a = document.getElementById("latitud");
+        var b = document.getElementById("longitud");
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+
+        function showPosition(position) {
+            document.querySelector('.latitud').defaultValue = position.coords.latitude;
+            document.querySelector('.longitud').defaultValue = position.coords.longitude;
+
+        }
+    }
+    window.onload = myFunction();
+    $('#validacion_v').click(function (event) {
+        var bool = $('.vacios').toArray().some(function (el) {
+            return $(el).val().length < 1;
+        });
+
+        var documento = $('#vacio').val();
+        if (bool) {
+            alertify
+              .alert("Completar los campos faltantes", function () {
+              });
+            event.preventDefault();
+        }
+    });
+
+    $(document).ajaxStart(function () {
+
+    }).ajaxStop(function () {
+        $('#validacion_v').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Guardando...');
+    });
+
+
+</script>
+
+
+
+
+
+
+
+

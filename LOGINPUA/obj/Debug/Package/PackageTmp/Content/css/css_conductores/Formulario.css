@@ -1,0 +1,244 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
+
+
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: montserrat, arial, verdana;
+}
+
+#msform {
+    width: 100%;
+    margin: 100px auto;
+    text-align: center;
+    position: relative;
+}
+
+    #msform fieldset {
+        border: 0 none;
+        border-radius: 3px;
+         box-sizing: border-box;
+        width: 100%;
+        margin: -140px 0 0;
+    }
+
+        #msform fieldset:not(:first-of-type) {
+            display: none;
+        }
+
+    #msform input {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    #msform .action-button {
+    }
+
+.fs-title {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.25;
+}
+
+.table_responsive {
+    margin: 0 220px;
+    width: 75%;
+    height: 100%;
+    font-family: 'Arial';
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid #eee;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.10), 0px 10px 20px rgba(0,0,0,0.05), 0px 20px 20px rgba(0,0,0,0.05), 0px 30px 20px rgba(0,0,0,0.05);
+}
+
+    .table_responsive caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+    }
+
+    .table_responsive tr {
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        padding: .35em;
+    }
+
+    .table_responsive th,
+    .table_responsive td {
+        padding: .2em;
+        text-align: center;
+    }
+
+    .table_responsive th {
+        padding: 21px;
+        background: #00cccc;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 12px;
+        border-right: none;
+    }
+
+@media screen and (max-width: 700px) {
+    .table_responsive {
+        font-size: 19px;
+        border: 0;
+        width: 100%;
+    }
+
+      .table_exterior th,
+    .table_exterior td {
+        padding: 0;
+    }
+
+    .modal-lg {
+        width: 100%;
+    }
+
+        .table_responsive caption {
+            font-size: 1.3em;
+        }
+
+        .table_responsive thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        .table_responsive tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        .table_responsive td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+            color: #555;
+        }
+
+            .table_responsive td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .table_responsive td:last-child {
+                border-bottom: 0;
+            }
+}
+
+input[type="radio"]:disabled + label {
+    text-decoration: line-through;
+    cursor: not-allowed;
+    color: grey;
+}
+
+@media screen and (max-width: 575px) {
+    .table_exterior {
+        font-size: 17px;
+        margin: 0px -35px;
+    }
+    .modal-lg {
+        width: 100%;
+    }
+
+        .table_exterior td {
+            border-bottom: 1px solid #ddd;
+            font-size: .8em;
+            color: #555;
+        }
+
+
+    .table_exterior th,
+    .table_exterior td {
+        padding: .525em;
+    }
+}
+
+.table_exterior {
+
+    border: 1px solid #eee;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.10), 0px 10px 20px rgba(0,0,0,0.05), 0px 20px 20px rgba(0,0,0,0.05), 0px 30px 20px rgba(0,0,0,0.05);
+}
+
+    .table_exterior caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+    }
+
+    .table_exterior tr {
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        padding: .35em;
+    }
+
+    .table_exterior th,
+    .table_exterior td {
+         text-align: center;
+    }
+
+    .table_exterior th {
+        padding: 23px;
+        background: #00cccc;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 12px;
+        border-right: none;
+    }
+
+input {
+    height: 30px;
+}
+
+
+.select_option {
+    text-align: center;
+     width: 70%;
+    height: 34px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 7px;
+    border-bottom: groove;
+    height: auto;
+}
+
+
+  
+}

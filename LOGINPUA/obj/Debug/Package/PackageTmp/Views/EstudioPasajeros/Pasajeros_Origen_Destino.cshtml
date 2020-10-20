@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Pasajeros_Campo";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+<br />
+<script src="~/Content/js/js_estudio_pasajeros/js_PasajerosCampo.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+<div class="modal-body">
+    <div class="row">
+        <div style="width: 34%;margin-left: 14px;">
+            <label for="select-native-1" style="margin-right: -3px;">Corredor: </label>
+            <select id="selectCorredores" class="form-control" name="ID_CORREDOR" onchange="getRutaPorCorredor();"></select>
+        </div>
+        <div style="width: 29%;margin-left: 10px;">
+            <label for="select-native-1">Ruta :</label>
+            <select id="selectRuta" class="form-control" name="ID_RUTA" onchange="getRecorridoXRuta();"></select>
+        </div>
+        <div style="width: 24%;margin-left: 10px;">
+            <label for="select-native-1"> Lado:</label>
+            <select id="selectLado" class="form-control" onchange="getListaParadero();"></select>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div style="width: 46%;margin-left: 14px;">
+            <label for="select-native-1" style="margin-right: -3px;">Paradero Origen: </label>
+            <select class="form-control" id="selectParaderoOrigen"></select>
+        </div>
+        <div style="width: 46%;margin-left: 10px;">
+            <label for="select-native-1" style="margin-right: -3px;">Paradero Destino: </label>
+            <select class="form-control" id="selectParaderoDestino"></select>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div style="width: 45%;margin-left: 14px;">
+            <label for="select-native-1"> Tipo de Tarjeta: </label>
+            <select class="form-control" name="select-native-1" id="selectTarjeta">
+                <option value="1">General</option>
+                <option value="2">Estudiante</option>
+                <option value="3">Pase Libre</option>
+            </select>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
+        <div style="width: 97%;margin-left: 14px; margin-top:12px">
+            <button class="btn btn-info" type="button" style="width:98%" id="reg_pasaj_ori_des_btn" onclick="registrar_pasajeros_orig_dest();">Registrar</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    var Utilidades = new Util();
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_RECORRIDO_X_RUTA = "@Url.Action("getRecorridoByRuta", "Paradero")";
+     var URL_GET_VIAS = "@Url.Action("getVias", "Paradero")";
+    var URL_GET_PARADEROS = "@Url.Action("getListaParaderos", "Paradero")";
+    var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";
+    var URL_REG_PASAJEROS_ORIG_DEST = "@Url.Action("registroPasajeros_OrigenDestino", "EstudioPasajeros")";
+
+    
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var modalidadUsuario = '@ViewBag.modalidadUsuario';
+     var map;
+    var DATA_RECORRIDOS = [];
+    var TIPO_ACCION = {
+        REGISTRO: false,
+        EDICION: false
+    };
+
+
+</script>

@@ -1,0 +1,121 @@
+﻿
+<div class="modal fade" id="modalRegistroParadero">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h6 class="modal-title" id="tituloDialog" >Registro Paradero</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" style="width:600px;font-weight:100;">
+                    <div class="row">
+                        <div class="col-md-6" >
+                            <label><strong>Nombre</strong></label>
+                            <input id="txtNombreParadero" style="width:100% !important" type="text" class="form-control"  required/>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Etiqueta</strong></label>
+                            <input id="txtNombreEtiqueta" style="width:100% !important" type="text" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Tipo</strong></label>
+                            <select class="form-control" id="selectTipoParadero">
+                                <option value="1">PATIO</option>
+                                <option value="2" selected="selected">PARADERO</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Dist. Parcial</strong></label>
+                            <input id="txtDistanciaParcial" style="width:100% !important" type="text" class="form-control textDecimal" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Latitud</strong></label>
+                            <input id="txtLatitud"type="text" style="width:100% !important" class="form-control textDecimal" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Longitud</strong></label>
+                            <input id="txtLongitud" type="text" style="width:100% !important" class="form-control textDecimal" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><strong>Vía</strong></label>
+                            <select class="form-control" id="selectVia">
+                            </select>
+                        </div>
+                        <div class="col-md-6" hidden id="contenNroOrden" >
+                            <label><strong>N° Orden</strong></label>
+                            <input id="nroOrden" type="number" style="width:100% !important" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id="btnGuardarParadero" onclick="guardarParadero();" class="btn btn-info" type="button">
+                       Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function guardarParadero() {
+        var lenTabla = $('#tbParadero tbody > tr').length;       
+        var nroOrden = $('#tbParadero tbody').find('tr').eq(lenTabla - 1).find('td').eq(1).find('span').text();        
+        var numero_orden= (Number(nroOrden) + 1);
+     
+        if ($('#txtNombreParadero').val().length == 0) {
+            Swal.fire({
+                type: 'warning',
+                title: "Debe registrar el nombre del paradero.",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            return false;
+        }
+        //obteniendo nro orden 
+       
+        $.ajax({
+            url: (TIPO_ACCION.REGISTRO ? URL_REGISTRA_PARADERO : URL_MODIFICA_PARADERO),
+            dataType: 'json',
+            data: {
+                idParadero : $('#txtNombreParadero').attr('idparadero'),
+                idRecorrido: $('#selectLado').val(),
+                idTipoParadero: $('#selectTipoParadero').val(),
+                idVia: $('#selectVia').val(),
+                nombre: $('#txtNombreParadero').val(),
+                nombreEtiqueta: $('#txtNombreEtiqueta').val(),
+                distanciaParcial: $('#txtDistanciaParcial').val(),
+                latitud: $('#txtLatitud').val().length == 0 ? 0 : $('#txtLatitud').val(),
+                longitud: $('#txtLongitud').val().length == 0 ? 0 : $('#txtLongitud').val(),
+                numero_orden: (TIPO_ACCION.REGISTRO ? numero_orden  : $('#nroOrden').val() ),
+            },
+            success: function (result) {
+                Swal.fire({
+                    type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                    title: result.DES_ESTADO,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                if (result.COD_ESTADO == 1) {
+                    $('#modalRegistroParadero').modal('hide');
+                    getListaParadero();
+                }
+            }
+        }, JSON);
+    }
+</script>

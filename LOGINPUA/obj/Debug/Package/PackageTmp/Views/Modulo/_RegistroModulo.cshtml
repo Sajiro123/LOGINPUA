@@ -1,0 +1,67 @@
+﻿
+<div class="modal fade" id="exampleModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Nueva Menú</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+                <div class="form-group row">
+                    <h3 class="col-sm-2 col-form-label">Nombre</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control vacios" id="nombre" name="name" value="" />
+                    </div><div class="col-sm-1"></div>
+
+
+                    <div class="row">
+                        <div class="col-md-4"><h3 class="col-sm-2 col-form-label">Url</h3></div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control vacios" id="url" name="name" value="" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group row" id="icono_txt">
+                    <h3 class="col-sm-2 col-form-label">Imagen</h3>
+                    &nbsp;&nbsp;&nbsp;
+                    <div class="col-sm-7">
+                        <br />
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+                            <div>
+                                <span class="btn btn-outline-secondary btn-file">
+                                    <span class="fileinput-new">Seleccionar Imagen</span>
+                                    <span class="fileinput-exists">Cambiar</span>
+                                    <input type="file" id="imageUploadForm" accept=".jpg,.gif,.png" name="imgPerfil">
+
+                                </span>
+                                <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Eliminar</a>
+                            </div>
+                        </div>
+                    </div><div class="col-sm-1"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnGuardarParadero" onclick="AgregarModulo()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#nombre').keyup(function () {
+            $(this).val($(this).val().toUpperCase());
+        });
+    });
+     
+</script>

@@ -1,0 +1,226 @@
+﻿
+@{
+    ViewBag.Title = "Reporte_Versus";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+<style>
+    .cuadrado {
+        width: 50px;
+        height: 23px;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    table {
+        font-size: 1em;
+    }
+
+    .ui-draggable, .ui-droppable {
+        background-position: top;
+    }
+
+
+
+    .progress {
+        background: #d1cece;
+        display: block;
+        height: 20px;
+        text-align: center;
+        transition: width .3s;
+        width: 0;
+    }
+
+        .progress.hide {
+            opacity: 0;
+            transition: opacity 1.3s;
+        }
+</style>
+
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+
+@*<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"  rel="stylesheet"  />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            REPORTE DE VIAJES PROGRAMADOS VS EJECUTADOS
+        </h4>
+    </div>
+</div>
+
+
+@*<div class="row">
+*@
+<section class="design-process-section" id="process-tab">
+    <div class="row">
+        <div style="width:100%">
+            <!-- design process steps-->
+            <!-- Nav tabs -->
+            <br />
+
+            <!-- end design process steps-->
+            <!-- Tab panes -->
+            <div>
+
+                <div role="tabpanel" class="tab-pane" id="pasodos">
+                    <div class="design-process-content">
+
+                        <div style="padding-bottom: 14px;">
+                            <div class="modal-body">
+                                <div class="row">
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+
+                                            <div class="input-group mb-3">
+
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+                                                </div>
+                                                <select class="form-control form-control-sm" id="selectCorredores_dos" onchange="getRutaPorCorredor_dos();"></select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+
+                                            <div class="input-group mb-3">
+
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+                                                </div>
+                                                <select class="form-control form-control-sm" id="selectRuta_dos"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" title="Seleccionar rango de fechas"><span class="fa fa-calendar" aria-hidden="true"></span></span>
+                                            </div>
+                                            <input class="form-control form-control-sm" id="rangoFechaConsulta" />
+                                        </div>
+                                    </div>
+                                  
+                                    <div class="col-md-1">
+
+                                        <a href="#" id="Consultar" onclick="Listar_Viajes();" class="btn btn-success btn-sm" data-toggle="modal">Consultar</a>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+
+                                        <div class="progress hide" style="width: 100%;"></div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <hr>
+                            @*TABLE*@
+                            <div class="container" style="color: #004e86;">
+                                <div class="row" id="msj_fecha">
+                                </div>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="table-responsive">
+
+
+                                    <table class="text-center responsive-table" id="tbtable_Viajes" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="6"></th>
+                                                <th>1A</th>
+                                                <th>2A</th>
+                                                <th>3A</th>
+                                                <th>4A</th>
+                                                <th>5A</th>
+                                                <th>6A</th>
+                                                <th>7A</th>
+                                                <th>8A</th>
+                                                <th>1B</th>
+                                                <th>2B</th>
+                                                <th>3B</th>
+                                                <th>4B</th>
+                                                <th>5B</th>
+                                                <th>6B</th>
+                                                <th>7B</th>
+                                                <th>8B</th>
+                                                <th>N°</th>
+                                                <th>N°</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Ruta</th>
+                                                <th>Servicio</th>
+                                                <th>Unidad&nbsp;&nbsp;&nbsp;</th>
+                                                <th>Propietario</th>
+                                                <th>Conductor</th>
+                                                <th>Criterio</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>INI</th>
+                                                <th>A</th>
+                                                <th>B</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="24">Presionar el boton para consultar la información.</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+                @*TERCERO*@
+
+
+            </div>
+        </div>
+    </div>
+</section>
+@*
+    </div>*@
+
+
+<script>
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_DATA_VIAJES = "@Url.Action("getResumenViajesRuta", "Programacion")";
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+</script>
+<script src="~/Content/js/js_programacion_bus/ReporteVersus.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>

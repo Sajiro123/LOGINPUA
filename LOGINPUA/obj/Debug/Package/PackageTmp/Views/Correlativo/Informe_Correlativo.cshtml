@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "Informe_Correlativo";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+
+<script src="~/Content/js/js_correlativo/js_registro_inf_corr.js"></script>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <br />
+        <h4>
+
+            Informe Correlativo &nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <a href="" id="btnRegistrarInfCorr" onclick="$('#sectionParametrosAgregarInfCorr')[0].reset();" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_agregar_inf_corr">
+                        <span class="fa fa-plus"></span>
+                    </a>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+        </h4>
+    </div>
+</div>
+
+
+<br />
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            @*<div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredores_inicial();"></select>*@
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            @*<div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor">
+            </select>*@
+
+        </div>
+    </div>
+
+    <div class="col-md-7 text-right">
+        <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+    </div>
+
+
+
+    @*<div class="col-md-2">
+            <div class="col-xs-6">
+                <button class="btn btn-info btn-sm" id="mostrartodo_btn" onclick="getListBuses();"><i class="fas fa-bus-alt"></i>&nbsp; Mostrar Todo</button>
+            </div>
+        </div>*@
+
+    @*<div class="col-md-1" style="display: none">
+            <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="getListConductores();">Consultar</button>
+
+        </div>
+
+        <div class="col-md-2" style="display: none">
+            <div class="col-xs-6">
+
+            </div>
+        </div>
+        <div class="col-md-8 text-right">
+            <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+        </div>*@
+
+
+
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12">
+        <div>
+
+            <table class="responsive-table" id="TbInfCorr" style="width:100%">
+                <thead class="thead-azul-claro">
+                    <tr>
+                        <th>N°</th>
+                        <th>N° INFORME</th>
+                        <th>FECHA INFORME</th>
+                        <th>PERSONA ASIGNADA</th>
+                        <th>PERSONA DIRIGIDA</th>
+                        <th>PERSONA RESPONSABLE</th>
+                        <th>ASUNTO</th>
+                        <th>ESTADO</th>
+                        <th>REFERENCIA</th>
+                        <th>FECHA RECEPCION</th>
+                        <th>ARCHIVADOR</th>
+                        @if (idmodificar == 1)
+                        {
+                            <th style="color:#1d96b2"></th>
+                            <th style="color:#1d96b2"></th>
+                        }
+                        @if (ideliminar == 1)
+                        {
+                            <th style="color:#1d96b2"></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="display nowrap" id="listar_inf_corr">
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@Html.Partial("_AgregarInfCorr")
+@Html.Partial("_EditarInfCorr")
+@Html.Partial("_ActualizarInfCorr")
+
+
+
+<script>
+    var Utilidades = new Util();
+
+
+    @*var URL_LIST_CONDUCTORES = "@Url.Action("ListarConductores", "Conductores")";
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";*@
+    var URL_LIST_INFCORR = "@Url.Action("Listar_InfCorr", "Correlativo")";
+    var URL_REGISTRAR_INFCORR = "@Url.Action("Registrar_InfCorr", "Correlativo")";
+    var URL_ANULA_INFCORR = "@Url.Action("Anular_InfCorr", "Correlativo")";
+    var URL_EDITAR_INFCORR = "@Url.Action("Editar_InfCorr", "Correlativo")";
+    var URL_ACTUALIZAR_INFCORR = "@Url.Action("Actualizar_InfCorr", "Correlativo")";
+    var URL_ULT_INF_CORR = "@Url.Action("Ultimo_InfCorr", "Correlativo")";
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+    $('#selectActualizarfechaRecepcion').datepicker({
+        format: "dd/mm/yyyy", autoclose: true
+    });
+
+
+
+</script>
+

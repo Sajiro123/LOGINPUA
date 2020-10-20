@@ -1,0 +1,135 @@
+﻿
+<div class="modal fade" id="modal_AgregarNuevaSalida">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Registrar Viaje </h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="modal-body">
+                 
+                <div class="container row">
+
+
+
+                    <div class="form-group col-md-4">
+
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">FECHA PROGRAMACIÓN</label>
+
+                            <div class="form-group">
+                                <select class="form-control" style="display:unset;width:70%" id="id_fechaNuevoViaje"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+
+
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">FNODE</label>
+
+                            <div class="form-group">
+                                <input id="id_FNODE" style="display:unset;width:70%" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">TNODE</label>
+                            <div class="input-append datetimepicker">
+                                <input id="id_TNODE" style="display:unset;width:70%" type="text" class="form-control">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">SENTIDO</label>
+                            <div>
+                                <select class="form-control" id="id_lado" style="width:70%"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group  col-md-4">
+
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">HSALIDA</label>
+                            <div>
+                                <input id="id_HSALIDA" style="display:unset;width:70%" type="time" step="1" class="form-control">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">HLLEGADA</label>
+                            <div>
+                                <input id="id_HLLEGADA" style="display:unset;width:70%" type="time" step="1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">TIPO DE SERVICIO</label>
+                            <div class="">
+                                <select class="form-control" id="id_TipoServicio" style="width:70%"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">DISTANCIA</label>
+                            <div>
+                                <input id="id_DISTANCIA" style="display:unset;width:70%" type="number" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">N° SERVICIO</label>
+                            <div class="">
+                                <input id="id_SERVICIO" disabled style="display:unset;width:70%" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">TIPO DE DIA</label>
+                            <div class="">
+                                <input id="id_TipoDia" disabled style="display:unset;width:70%" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group  col-md-4">
+                        <div class="col-md-12">
+                            <label style="font-weight:bold">TRIP TIME </label>
+                            <div class="">
+                                <input id="id_triptime" style="display:unset;width:70%" type="time" step="1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="registrar_indiv_btn" class="btn btn-info" type="submit" onclick="RegistrarNuevoViaje()">Guardar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

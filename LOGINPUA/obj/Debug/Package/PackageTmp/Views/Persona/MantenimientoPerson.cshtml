@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "MantenimientoPerson";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .thead-azul-claro th {
+        color: white;
+        background-color: #2f6f9dd9;
+        border-color: #777;
+    }
+
+    .dropdown-item {
+        color: black !important;
+    }
+</style>
+
+<script src="~/Content/js/js_mantenimiento_persona/registro_persona.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+ 
+
+<br />
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Persona&nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="modal_registroperso" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+        </h4>
+    </div>
+</div>
+<hr />
+<div class="table-responsive">
+    <form>
+        <table class="responsive-table" id="tbPersona" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 40px;">N°</th>
+                    <th class="text-center" style="width: 60px;">TIPO DOCUMENTO</th>
+                    <th class="text-center" style="width: 70px;">NÚMERO DE DOCUMENTO</th>
+                    <th style="width: 165px;">NOMBRES</th>
+                    <th class="text-right" style="width:115px;">APELLIDO PATERNO</th>
+                    <th class="text-right" style="width:115px;">APELLIDO MATERNO</th>
+                    <th class="text-center" style="width:205px;">Correo Electronico</th>
+                    <th class="text-center" style="width:220px;">ROL</th>
+                    <th class="text-center" style="width: 70px;">USUARIO REGISTRO</th>
+                    <th class="text-center" style="width:150px;">FECHA REGISTRO</th>
+                    @if (ideliminar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+
+                    }
+                    @if (idmodificar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </form>
+</div>
+@Html.Partial("_RegistroPersona")
+
+<script>
+    var URL_GET_TIPO_DOCUMENTO = "@Url.Action("ListarTipoDocumento", "Persona")";
+    var URL_GET_TIPO_ROL = "@Url.Action("listarTipoRol", "Persona")";
+    var URL_GET_AGREGAR_PERSONA = "@Url.Action("AgregarPersona", "Persona")";
+    var URL_GET_LISTAR_PERSONA = "@Url.Action("getlistaPersonas", "Persona")";
+    var URL_GET_MODIFICAR_PERSONA = "@Url.Action("ModificarPersonas", "Persona")";
+    var URL_ANULA_PARADERO = "@Url.Action("EliminarPersonas", "Persona")";
+</script>
+

@@ -1,0 +1,645 @@
+﻿@model IEnumerable<ENTIDADES.CC_CORREDOR>
+@{
+    ViewBag.Title = "RegistroPicoPlaca";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    } 
+</style>
+ 
+@{
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+
+    List<ENTIDADES.CC_MODALIDAD_TRANSPORTE> listModalidades = new List<ENTIDADES.CC_MODALIDAD_TRANSPORTE>();
+    listModalidades = ViewBag.modalidadTransporte;
+}
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Paradero&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="abrirRegistroParadero();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+
+                    <button type="button" class="btn btn-primary btn-sm" title="Importar data paraderos" data-toggle="modal" onclick="importarParaderos();">
+                        <span class="fas fa-file-import" aria-hidden="true"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+                <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();">
+
+                </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectRuta" onchange="getRecorridoXRuta();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Lado"><span class="fas fa-project-diagram" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectLado" onchange="getListaParadero();">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="0">TODOS</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <button type="button" id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="mostrarParaderosEnMapa();">
+            Mostrar en mapa
+        </button>
+    </div>
+
+    <div class="col-md-2 text-right">
+        <button class="btn btn-success btn-sm">
+            <a style="color: white;" href="" id="exportar" data-toggle="modal" onclick="exportarTabla();">Exportar</a>
+        </button>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" style="width:100%" id="tbParadero">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 40px;">N</th>
+                    <th class="text-center">NOMBRE</th>
+                    <th class="text-center">TIPO</th>
+                    <th style="width: 72px;">LADO</th>
+                    <th class="text-right" style="width:115px;">DIST PARCIAL</th>
+                    <th class="text-right">LATITUD</th>
+                    <th class="text-right">LONGITUD</th>
+
+                    <th class="text-center" style="width:200px;">USUARIO CREA</th>
+                    <th style="width:220px;">F. CREA</th>
+@if (ideliminar == 1)
+{
+    <th></th>
+
+}
+@if (idmodificar == 1)
+{
+    <th></th>
+
+}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_MapaParaderos")
+@Html.Partial("_RegistroParadero")
+@Html.Partial("_ImportarParaderos")
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAZ6IMcXD3mxet5U9_yB7t_GlblGBUy5Og" type="text/javascript"></script>
+<script src="~/Scripts/googleMapsUtil/richmarker.js"></script>
+
+<script>
+    var Utilidades = new Util();
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_RECORRIDO_X_RUTA = "@Url.Action("getRecorridoByRuta", "Paradero")";
+    var URL_REGISTRA_PARADERO = "@Url.Action("registrarParadero", "Paradero")";
+    var URL_GET_VIAS = "@Url.Action("getVias", "Paradero")";
+    var URL_GET_PARADEROS = "@Url.Action("getListaParaderos", "Paradero")";
+    var URL_ANULA_PARADERO = "@Url.Action("anularParadero", "Paradero")";
+    var URL_MODIFICA_PARADERO = "@Url.Action("modificarParadero", "Paradero")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("importarDataParaderos", "Paradero")";
+    //
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var modalidadUsuario = '@ViewBag.modalidadUsuario';
+    //
+    var map;
+    var DATA_RECORRIDOS = [];
+    var TIPO_ACCION = {
+        REGISTRO: false,
+        EDICION: false
+    };
+    //
+    $(document).ready(function () {
+        //$('#selectModalidadTransporte').val(Number(modalidadUsuario))
+        getVias();
+        getCorredoresByModalidad();
+        //getRutaPorCorredor($('#selectCorredores').val());
+        inicializarMapa();
+        $('.textDecimal').numeric({ decimal: ".", negative: true, scale: 10 });
+        $("#formSubirExcelParadero").on("submit", function (e) {
+            e.preventDefault();
+            var formularioDatos = new FormData(document.getElementById("formSubirExcelParadero"));
+            $('#modalImportarParadero .modal-footer .btn-info').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Subiendo...');
+            $.ajax({
+                url: URL_ACTION_UPLOAD_FILE + '/?strRecorridos=' + $('#selectLadoImportar').val(),
+                type: "post",
+                dataType: "json",
+                data: formularioDatos,
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function (respuesta) {
+                $('#modalImportarParadero .modal-footer .btn-info').prop('disabled', false).html('Subir archivo');
+                Swal.fire({
+                    type: (respuesta.COD_ESTADO == 1 ? 'success' : 'error'),
+                    title: respuesta.DES_ESTADO,
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+                if (respuesta.COD_ESTADO == 1) {
+                    getListaParadero();
+                    $('#modalImportarParadero').modal('hide');
+                }
+            });
+        })
+    });
+
+    function inicializarMapa() {
+        map = new google.maps.Map(document.getElementById('divMapa'), {
+            center: { lat: -12.03750987324338, lng: -77.04015518045355 },
+            zoom: 10
+        });
+    }
+
+    function abrirRegistroParadero() {
+        var seleccionadoDosLados = $('#selectLado').val();
+        seleccionadoDosLados = seleccionadoDosLados.indexOf('|');
+        if (seleccionadoDosLados != -1) { //encontró el simbolo |
+            Swal.fire({
+                type: "error",
+                title: "Debe seleccionar un lado",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            return false;
+        }
+
+        TIPO_ACCION.REGISTRO = true;
+        TIPO_ACCION.EDICION = false;
+        $('#contenNroOrden').attr('hidden', '');
+        var ladoSeleccionado = $("#selectLado option:selected").text();
+        $('#txtNombreParadero, #txtNombreEtiqueta, #txtDistanciaParcial, #txtLatitud, #txtLongitud').val('');
+        $('#txtDistanciaParcial').val(0);
+        var texTitulo = $('#selectCorredores option:selected').text() + ' - ' + $('#selectRuta option:selected').text() + ' Lado: ' + $('#selectLado option:selected').text();
+        $('#tituloDialog').text(texTitulo);
+        $('#modalRegistroParadero').modal('show');
+    }
+
+    var PARADEROS_GMAP = [];
+    var NOMBRE_PARADERO_GMAP = [];
+    function mostrarParaderosEnMapa() {
+        if (JSON_PARADEROS.length == 0) {
+            Swal.fire({
+                type: 'warning',
+                title: "No hay información para mostrar.",
+                showConfirmButton: false,
+                timer: 2500
+            });
+            return false;
+        }
+        var cantidadParaderosNulos = 0;
+        limpiarParaderosDeMapa(PARADEROS_GMAP, NOMBRE_PARADERO_GMAP);
+        //
+        $.each(JSON_PARADEROS, function () {
+            var latitud = this.LATITUD;
+            var longitud = this.LONGITUD;
+            var nombreParadero = this.NOMBRE;
+            var item = getMarkerGoogleMap(latitud, longitud);
+            var itemHMTL = getHTMLNombreParadero((latitud + 0.001), (longitud), false, '<div style="color: black;font-size: 14px;font-weight: bold;    text-shadow: -1px 0 #ffffff, 0 1px white, 1px 0 #ffffff, 0 -1px white;">' + nombreParadero + '</div>');
+            PARADEROS_GMAP.push(item);
+            NOMBRE_PARADERO_GMAP.push(itemHMTL);
+        });
+        $('#modalMuestraParaderos').modal('show');
+    }
+
+    function limpiarParaderosDeMapa(dataJSON, dataHTMLParaderos) {
+        $.each(dataJSON, function () {
+            this.setMap(null);
+        });
+        //
+        $.each(dataHTMLParaderos, function () {
+            this.setMap(null);
+        });
+        //
+        dataHTMLParaderos = [];
+        dataJSON = [];
+    }
+
+    function getHTMLNombreParadero(latitud, longitud, draggable, htmlContenido) {
+        var pos = new google.maps.LatLng(latitud, longitud);
+        var markerHTML = new RichMarker({
+            position: pos,
+            map: map,
+            flat: true,
+            anchor: RichMarkerPosition.MIDDLE,
+            draggable: draggable,
+            content: htmlContenido,
+            draggable: true
+        });
+
+        return markerHTML;
+    }
+
+    function getMarkerGoogleMap(latitud, longitud) {
+        var positionMarkerParadero = { lat: latitud, lng: longitud };
+        var icon = {
+            url: '../../Content/icons/parking.svg', // url
+            scaledSize: new google.maps.Size(30, 30), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+
+        var markerParadero = new google.maps.Marker({
+            position: positionMarkerParadero,
+            map: map,
+            title: 'Golden Gate Bridge',
+            icon: icon
+        });
+
+        return markerParadero;
+    }
+
+    function getRutaPorCorredor() {
+        cargandoTabla();
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRuta').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRuta').append('<option value="0">' + '--No hay información--' + '</option>');
+
+                } else {
+                    $.each(result, function () {
+                        $('#selectRuta').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                }
+
+                getRecorridoXRuta();
+            }
+        }, JSON);
+    }
+
+    function getRecorridoXRuta() {
+        cargandoTabla();
+        $.ajax({
+            url: URL_GET_RECORRIDO_X_RUTA,
+            dataType: 'json',
+            data: { idRuta: $('#selectRuta').val() },
+            success: function (result) {
+                DATA_RECORRIDOS = result;
+                $('#selectLado').empty();
+                var strCodRecorrido = '';
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectLado').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectLado').append('<option value="' + this.ID_RECORRIDO + '">' + this.LADO + '</option>');
+                        strCodRecorrido += this.ID_RECORRIDO + '|';
+                    });
+                    strCodRecorrido = strCodRecorrido.substring(0, strCodRecorrido.length - 1);
+                    $('#selectLado').append('<option value="' + strCodRecorrido + '">' + '-- Ambos --' + '</option>');
+                }
+                getListaParadero($('#selectLado').val());
+            }
+        }, JSON);
+    }
+
+    function getVias() {
+        $.ajax({
+            url: URL_GET_VIAS,
+            dataType: 'json',
+            data: {},
+            success: function (result) {
+                $('#selectVia').empty();
+                $.each(result, function () {
+                    $('#selectVia').append('<option ' + (this.ID_VIA == 12 ? ' selected ' : '') + ' value="' + this.ID_VIA + '">' + (!this.NOMBRE ? '-- SELECCIONAR VIA --' : this.NOMBRE) + '</option>');
+                });
+            }
+        }, JSON);
+    }
+
+    function cargandoTabla() {
+        $('#tbParadero tbody').empty();
+        $('#tbParadero tbody').append('<tr>' +
+                                        '<td colspan="11">' +
+                                            //'<div class="alert alert-primary text-center">' +
+                                                'Cargando <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">' +
+                                            //'</div>' +
+                                        '</td>' +
+                                      '</tr>');
+    }
+    var JSON_PARADEROS = [];
+
+    function getListaParadero() {
+        // PERMISOS
+        //1= EDITAR || 2==ELIMINAR
+        var permiso_edit = $('#permisoActualiza').val();
+        var permiso_eliminar = $('#permisoEliminar').val();
+
+        $('#exportar').prop('disabled', false);
+        JSON_PARADEROS = [];
+        cargandoTabla();
+        $.ajax({
+            url: URL_GET_PARADEROS,
+            dataType: 'json',
+            data: { strCodRecorrido: $('#selectLado').val() },
+            success: function (result) {
+                var strHTMLtabla = '';
+                $('#tbParadero tbody').empty();
+                if (result.length == 0) {
+                    //$("#exportar").parent().prop("disabled", true);
+                    strHTMLtabla += '<tr>' +
+                                        '<td colspan="11" style="padding-left: 0;padding-right: 0;">' +
+                                        //'<div class="alert alert-warning text-center">' +
+                                        'No hay información para mostrar' +
+                                        //'</div>' +
+                                        '</td>' +
+                                    '</tr>';
+                    $('#tbParadero tbody').append(strHTMLtabla);
+                    return;
+                }
+                //
+                JSON_PARADEROS = result;
+                $.each(result, function (i) {
+                    var ladoPorIdRecorrido = verificarLadoxIdRecorrido(this.ID_RECORRIDO);
+                    strHTMLtabla += '<tr onclick="seleccionaFila($(this))" ' +
+                                        ' data-idParadero="' + this.ID_PARADERO + '" ' +
+                                        ' data-nombre="' + this.NOMBRE + '" ' +
+                                        ' data-etiquetaNombre="' + this.ETIQUETA_NOMBRE + '" ' +
+                                        ' data-latitud="' + this.LATITUD + '" ' +
+                                        ' data-longitud="' + this.LONGITUD + '" ' +
+                                        ' data-idVia="' + this.ID_VIA + '" ' +
+                                        ' data-idTipoParadero="' + this.ID_TIPO_PARADERO + '" ' +
+                                        ' data-distanciaParcial="' + this.DISTANCIA_PARCIAL + '" ' +
+                                        ' data-distanciaNrorden="' + this.NRO_ORDEN + '" ' +
+                                    ' >' +
+                                        '<td>' + (i + 1) + '</td>' +
+                                        '<td style="text-align: left;" >&nbsp;&nbsp;&nbsp;<span class="badge badge-primary" style="background-color:' + (ladoPorIdRecorrido == 'A' ? '#00a39c' : ' #004e86') + ';">' + this.NRO_ORDEN + '</span>&nbsp;&nbsp;' + this.NOMBRE + '  </td>' +
+                                        '<td class="text-center" >' + this.TIPO + '</td>' +
+                                        '<td class="text-center" >' + ladoPorIdRecorrido + '</td>' +
+                                        '<td class="text-right">' + (this.DISTANCIA_PARCIAL ? this.DISTANCIA_PARCIAL.toFixed(2) : 0) + '</td>' +
+                                        '<td class="text-right">' + (this.LATITUD ? this.LATITUD : 0) + '</td>' +
+                                        '<td class="text-right">' + (this.LONGITUD ? this.LONGITUD : 0) + '</td>' +
+                                        '<td class="text-center" >' + (this.USU_REG ? this.USU_REG : '') + '</td>' +
+                                        '<td>' + (this.FECHA_REG ? this.FECHA_REG : '') + '</td>' +
+                                       (permiso_eliminar == 1 ? '<td>' + '<span class="far fa-trash-alt" aria-hidden="true" style="cursor:pointer;"  onclick="confirmarAnulacionParadero(' + this.ID_PARADERO + ');" ></span>' + '</td>' : '') +
+                                         (permiso_edit == 1 ? '<td>' + '<span class="far fa-edit" aria-hidden="true" style="cursor:pointer;" onclick="abrirEditarRegistros($(this).parent().parent());" ></span>' + '</td>' : '') +
+                                    '</tr>';
+                });
+                $('#tbParadero tbody').append(strHTMLtabla);
+                util.activarEnumeradoTabla('#tbParadero', $('#btnBusquedaEnTabla'));
+
+            }
+        }, JSON);
+    }
+
+    function confirmarAnulacionParadero(idParadero) {
+        Swal.fire({
+            text: "Estas seguro que deseas anular el registro ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: URL_ANULA_PARADERO,
+                    dataType: 'json',
+                    data: { idParadero: idParadero },
+                    success: function (result) {
+                        getListaParadero();
+                        Swal.fire({
+                            type: (result.COD_ESTADO == 1 ? 'success' : 'error'),
+                            title: result.DES_ESTADO,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                }, JSON);
+            }
+        });
+    }
+
+    function abrirEditarRegistros(element) {
+        TIPO_ACCION.REGISTRO = false;
+        TIPO_ACCION.EDICION = true;
+        $('#contenNroOrden').removeAttr('hidden');
+        //
+        var idParadero = element.attr('data-idParadero');
+        var nombre = element.attr('data-nombre');
+        var etiquetaNombre = element.attr('data-etiquetaNombre');
+        var latitud = element.attr('data-latitud');
+        var longitud = element.attr('data-longitud');
+        var idVia = element.attr('data-idVia');
+        var idTipoParadero = element.attr('data-idTipoParadero');
+        var distanciaParcial = element.attr('data-distanciaParcial');
+        var distanciaNroden = element.attr('data-distanciaNrorden');
+
+
+        $('#txtNombreParadero').val(nombre);
+        $('#txtNombreParadero').attr('idParadero', idParadero);
+        $('#txtNombreEtiqueta').val(etiquetaNombre);
+        $('#selectTipoParadero').val(Number(idTipoParadero));
+        $('#txtDistanciaParcial').val(distanciaParcial);
+        $('#txtNombreParadero').val(nombre);
+        $('#selectTipoParadero').val(idTipoParadero);
+        $('#txtLatitud').val(latitud);
+        $('#txtLongitud').val(longitud);
+        $('#selectVia').val(idVia);
+        $('#nroOrden').val(distanciaNroden);
+
+        $('#modalRegistroParadero').modal('show');
+    }
+
+    function verificarLadoxIdRecorrido(idRecorrido) {
+        var rptaLado = '';
+        $.each(DATA_RECORRIDOS, function () {
+            if (this.ID_RECORRIDO == idRecorrido) {
+                rptaLado = this.LADO;
+            }
+        });
+        return rptaLado;
+    }
+
+    function seleccionaFila(elementFila) {
+        $.each($('#tbParadero tbody > tr'), function () {
+            $(this).css('background-color', '');
+        });
+        elementFila.css('background-color', '#17a2b838');
+    }
+
+    function getRecorridoXRutaImportar() {
+        $.ajax({
+            url: URL_GET_RECORRIDO_X_RUTA,
+            dataType: 'json',
+            data: { idRuta: $('#selectRutaImportar').val() },
+            success: function (result) {
+                DATA_RECORRIDOS = result;
+                $('#selectLadoImportar').empty();
+                var strCodRecorrido = '';
+                var textoTituloModal = '';
+                var strCodRecorrido = '';
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectLadoImportar').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectLadoImportar').append('<option value="' + this.ID_RECORRIDO + '">' + this.LADO + '</option>');
+                        strCodRecorrido += this.LADO + '~' + this.ID_RECORRIDO + '|';
+                    });
+                    strCodRecorrido = strCodRecorrido.substring(0, strCodRecorrido.length - 1);
+                    $('#selectLadoImportar').append('<option value="' + strCodRecorrido + '" selected >' + '-- Ambos --' + '</option>');
+                    $('#selectLadoImportar').prop('disabled', true);
+                }
+                textoTituloModal = 'Importar en ruta ' + $('#selectRutaImportar option:selected').text();
+                $('#modalImportarTitulo').text(textoTituloModal);
+            }
+        }, JSON);
+    }
+
+    function exportarTabla() {
+        tableDataExportar = [{ "sheetName": "Hoja", "data": [] }];
+        var options = {
+            fileName: $("#selectRutaCorredor option:selected").text() + "Listado_Paraderos_ruta_" + $('#selectRuta option:selected').text() + '_Lado_' + $('#selectLado option:selected').text()
+        };
+        var tHeadExcel =
+        [
+            { "text": "N" },
+            { "text": "NRO ORDEN" },
+            { "text": "NOMBRE" },
+            { "text": "TIPO" },
+            { "text": "LADO" },
+            { "text": "DIST.PARCIAL" },
+            { "text": "LATITUD" },
+            { "text": "LONGITUD" },
+            { "text": "ETIQUETA" },
+            { "text": "REGISTRADO POR" },
+            { "text": "FECHA REGISTRO" }
+        ];
+        tableDataExportar[0].data.push(tHeadExcel);
+        $.each(JSON_PARADEROS, function (i) {
+            var objeto = this;
+            var itemArr = [];
+            itemArr.push(
+                { "text": (i + 1) },
+                { "text": objeto.NRO_ORDEN },
+                { "text": objeto.NOMBRE },
+                { "text": objeto.TIPO },
+                { "text": objeto.LADO },
+                { "text": objeto.DISTANCIA_PARCIAL },
+                { "text": objeto.LATITUD },
+                { "text": objeto.LONGITUD },
+                { "text": objeto.ETIQUETA_NOMBRE },
+                { "text": objeto.USU_REG },
+                { "text": objeto.FECHA_REG }
+            )
+            tableDataExportar[0].data.push(itemArr);
+        });
+        Jhxlsx.export(tableDataExportar, options);
+    }
+
+    function getCorredoresByModalidad() {
+        //var modalidadTransporteSelecionado = $('#selectModalidadTransporte').val();
+        $('#selectCorredores').empty();
+        var cantidadRegistros = 0;
+        $.each(JSON_DATA_CORREDORES, function () {
+            //if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+            if (this.ID_MODALIDAD_TRANS == Number($('#mod').val())) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        //
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRuta tbody').empty();
+            var strHTMLtb = '<tr>' +
+                                 '<td colspan="8" style="padding-left: 0;padding-right: 0;">' +
+                                     //'<div class="alert alert-warning text-center">' +
+                                         'No hay información para mostrar' +
+                                     //'</div>' +
+                                 '</td>' +
+                              '</tr>';
+            $('#tbRuta tbody').append(strHTMLtb);
+            return false
+        }
+        //getListaRutas();
+        getRutaPorCorredor($('#selectCorredores').val());
+    }
+</script>
+

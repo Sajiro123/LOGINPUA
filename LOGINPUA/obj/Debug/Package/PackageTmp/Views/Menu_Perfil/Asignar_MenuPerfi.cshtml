@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Menu_Perfil";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+
+
+<style>
+    .alertify-notifier .ajs-message.ajs-success {
+        color: white;
+        font-size:17px
+    }
+
+    .alertify-notifier .ajs-message.ajs-error {
+            color: white;
+        font-size:17px
+    }
+
+    input {
+        margin-left: 13px;
+    }
+
+ 
+
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 17px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+   
+
+    .thead-azul-claro th {
+        color: white;
+        background-color: #2f6f9dd9;
+        border-color: #777;
+    }
+
+    .dropdown-item {
+        color: black !important;
+    }
+    .accion_li {
+     cursor:pointer;
+    }
+
+    .tree li {
+        list-style-type: none;
+        margin: 0;
+        padding: 10px 5px 0 5px;
+        position: relative;
+    }
+
+        .tree li::before,
+        .tree li::after {
+            content: '';
+            left: -20px;
+            position: absolute;
+            right: auto;
+        }
+
+        .tree li::before {
+            border-left: 2px solid #000;
+            bottom: 50px;
+            height: 100%;
+            top: 0;
+            width: 1px;
+        }
+
+        .tree li::after {
+            border-top: 2px solid #000;
+            height: 20px;
+            top: 25px;
+            width: 25px;
+        }
+
+        .tree li span {
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 2px solid #000;
+            border-radius: 3px;
+            display: inline-block;
+            padding: 3px 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .tree > ul > li::before,
+    .tree > ul > li::after {
+        border: 0;
+    }
+
+    .tree li:last-child::before {
+        height: 27px;
+    }
+
+    .tree li span:hover {
+        background: #00a39c;
+         border: 2px solid #94a0b4;
+    }
+
+
+    
+    .tree ul li a{
+        color : black;
+    }
+
+    [aria-expanded="false"] > .expanded,
+    [aria-expanded="true"] > .collapsed {
+        display: none;
+    }
+</style>
+
+<script src="~/Content/js/js_mantenimiento_menu_perfil/registro_menu_perfil.js"></script>
+ 
+<br />
+
+<h3 class="text-center">
+    Asignar Menús a Perfiles
+    <span class="far fa-check-square"></span>
+</h3>
+    
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="fas fa-bus-alt"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectIdmodalidad"></select>
+
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="fas fa-user-tie"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectPerfilModalidad"></select>
+        </div>
+    </div>
+</div>
+<div id="alerta"></div>
+
+<hr />
+<div style="background-color: #dedede;margin: auto 10px;width: auto;height: 735px;   overflow: scroll;">
+    <p></p>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <div class="tree">
+        <ul>
+            <li>
+                <span>
+                    <a style="text-decoration:none;" data-toggle="collapse" href="#Web" aria-expanded="false" aria-controls="Web">
+                        <i class="collapsed"><i class="fas fa-project-diagram"></i></i>
+                        <i class="expanded"><i class="fas fa-project-diagram"></i></i> LOGINPUA
+                    </a>
+                </span>
+                <div id="Web" class="collapse show">
+                    <ul id="menu_principal">
+                        <!--MODULO-->
+
+
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+        
+</div>
+
+@Html.Partial("_AgregarAccion")
+<script>
+     
+    var URL_GET_MENU_PADRE = "@Url.Action("listarMenuPadre", "Menu_Perfil")";
+    var URL_GET_PERFIL_MODALIDAD= "@Url.Action("listarModalidad_Perfiles", "Menu_Perfil")";
+    var URL_GET_AGREGAR_PERMISO = "@Url.Action("AgregarPermiso_Perfil", "Menu_Perfil")";
+    var URL_GET_LISTAR_PERMISOS = "@Url.Action("ListarPermisos", "Menu_Perfil")";
+    var URL_GET_LISTAR_MENU_ID = "@Url.Action("ListarMenu_x_ID", "Menu_Perfil")";
+    var URL_GET_MODIFICAR_MENU = "@Url.Action("Desactivar_Permisos", "Menu_Perfil")";
+    var URL_GET_LISTAR_MODALIDAD = "@Url.Action("listarModalidad", "Menu_Perfil")";
+    var URL_GET_AGREGAR_ACCIONES = "@Url.Action("Agregar_AccionMenu", "Menu_Perfil")";
+
+    var URL_GET_LISTAR_ACCIONES_IDPERFIL = "@Url.Action("accesoslist_menu_idperfil", "Menu_Perfil")";
+    var URL_GET_LISTAR_ACCIONES_X_MENUPERFIL = "@Url.Action("accesoslist_X_idmenuperfil", "Menu_Perfil")";
+    var URL_GET_LISTAR_ACCIONES= "@Url.Action("listarAcceso", "Menu_Perfil")";
+
+
+
+
+
+
+
+</script>

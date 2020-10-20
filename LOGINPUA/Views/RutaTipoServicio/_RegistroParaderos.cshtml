@@ -1,0 +1,195 @@
+﻿
+<div class="modal fade" id="modalMuestraParaderos">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title" id="txtTituloModalRegistro">-</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" >
+                <div style="width:1000px;height:600px;display:flex">
+                    <div style="width:40%;overflow: auto;">
+                        <table class="table table-sm" id="tbParaderoTipoServicio" style="max-height: 400px;">
+                            <thead class="thead-azul-claro">
+                                <tr>
+                                    <th>N°</th>
+                                    <th></th>
+                                    <th >LADO</th>
+                                    <th class="text-left">NOMBRE</th>
+                                    <th class="text-center">DIST PARCIAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="divMapa" style="width:60%;height:100%">
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var ID_RECORRIDO_TSERV_SELECCIONADO = null;
+    function mostrarParaderosByIdRecorrido(elementTR, element) {
+        
+        var idRecorridoTipoServicio = element.attr('data-idrecorridotservicio');
+        var rutaSeleccionada = $('#selectRuta option:selected').text();
+        var nombreRutaTipoServicio = elementTR.attr('data-nombreTipoServicioOper');
+        var sentido = element.attr('data-sentido');
+        $('#txtTituloModalRegistro').text('Registrar paraderos ' + rutaSeleccionada + ' ( ' + nombreRutaTipoServicio + ' ), sentido ' + sentido);
+        ID_RECORRIDO_TSERV_SELECCIONADO = idRecorridoTipoServicio;
+        //
+        $.ajax({
+            url: URL_GET_PARADERO_BY_RECORRIDOTSERV,
+            dataType: 'json',
+            data: { idRecorridoTipoServicio: idRecorridoTipoServicio },
+            success: function (result) {
+                JSON_PARADEROS = result;
+                if (result.length == 0) {
+                    Swal.fire({
+                        type: 'error',
+                        title: "No hay paraderos registrados en la ruta " + $('#selectRuta option:selected').text(),
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                mostrarParaderosEnMapa();
+                $('#modalMuestraParaderos').modal('show');
+                $('#tbParaderoTipoServicio tbody').empty();
+                var strHTMLtablaParaderos = '';
+                var contador = 1;
+                $.each(result, function (i) {
+                    strHTMLtablaParaderos += '<tr style="' + (this.ID_ESTADO == 1 ? ' background-color: #40fb7957; ' : ' ') + ' " >' +
+                                                '<td>' + (this.ID_ESTADO == 1 ? contador++ : '') + '</td>' +
+                                                '<td>' + '<input ' + (this.ID_ESTADO == 1 ? ' checked ' : ' ' ) + ' onclick="actualizarEstadoParadero(' + this.ID_PARADERO_TIPOSERVICIO + ', $(this));" type="checkbox" />' + '</td>' +
+                                                '<td>' + this.SENTIDO + '</td>' +
+                                                '<td>' + this.NOMBRE + '</td>' +
+                                                '<td class="text-right" >' + this.DISTANCIA_PARCIAL.toFixed(2) + '</td>' +
+                                             '</tr>';
+                });
+                $('#tbParaderoTipoServicio tbody').append(strHTMLtablaParaderos);
+            }
+        }, JSON);
+    }
+
+    function actualizarEstadoParadero(idParaderoTipoServicio, elementoChe) {
+        var idEstadoSeleccionado = (elementoChe.is(':checked') ?  1 : 3);
+     
+        $.ajax({
+            url: URL_ACTUALIZA_PARADEROTSERV,
+            dataType: 'json',
+            data: { idParaderoTipoServicio: idParaderoTipoServicio, idEstado: idEstadoSeleccionado },
+            success: function (result) {
+                Swal.fire({
+                    type: (result.COD_ESTADO == 1 ? 'success' : 'error'),
+                    title: result.DES_ESTADO,
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+
+                $.ajax({
+                    url: URL_GET_PARADERO_BY_RECORRIDOTSERV,
+                    dataType: 'json',
+                    data: { idRecorridoTipoServicio: ID_RECORRIDO_TSERV_SELECCIONADO },
+                    success: function (result) {
+                        JSON_PARADEROS = result;
+                        mostrarParaderosEnMapa();
+                        $('#tbParaderoTipoServicio tbody').empty();
+                        var strHTMLtablaParaderTSERV = '';
+                        var contador = 1;
+                        $.each(result, function (i) {
+                            strHTMLtablaParaderTSERV += '<tr style="' + (this.ID_ESTADO == 1 ? ' background-color: #40fb7957; ' : ' ') + ' " >' +
+                                                            '<td>' + (this.ID_ESTADO == 1 ? contador++ : '') + '</td>' +
+                                                            '<td>' + '<input ' + (this.ID_ESTADO == 1 ? ' checked ' : ' ') + ' onclick="actualizarEstadoParadero(' + this.ID_PARADERO_TIPOSERVICIO + ', $(this));" type="checkbox" />' + '</td>' +
+                                                            '<td>' + this.SENTIDO + '</td>' +
+                                                            '<td>' + this.NOMBRE + '</td>' +
+                                                            '<td class="text-right" >' + this.DISTANCIA_PARCIAL.toFixed(2) + '</td>' +
+                                                        '</tr>';
+                        });
+                        $('#tbParaderoTipoServicio tbody').append(strHTMLtablaParaderTSERV);
+                    }
+                }, JSON);
+            }
+        }, JSON);
+    }
+
+    function mostrarParaderosEnMapa() {
+        limpiarParaderosDeMapa(PARADEROS_GMAP, NOMBRE_PARADERO_GMAP);
+        //console.log('JSON_PARADEROS-->', JSON_PARADEROS)
+        //var Limite = new google.maps.LatLngBounds();
+        //var Coordenadas = [];
+        $.each(JSON_PARADEROS, function () {
+            if (this.ID_ESTADO == 1) {
+                var latitud = this.LATITUD;
+                var longitud = this.LONGITUD;
+                var nombreParadero = this.NOMBRE;
+                var item = getMarkerGoogleMap(latitud, longitud);
+                var itemHMTL = getHTMLNombreParadero((latitud + 0.001), (longitud), false, '<div style="color: black;font-size: 14px;font-weight: bold;    text-shadow: -1px 0 #ffffff, 0 1px white, 1px 0 #ffffff, 0 -1px white;">' + nombreParadero + '</div>');
+                PARADEROS_GMAP.push(item);
+                NOMBRE_PARADERO_GMAP.push(itemHMTL);
+            }
+            //var Coordenada = new google.maps.LatLng(latitud, longitud);
+            //Coordenadas.push(Coordenada);
+            //Limite.extend(Coordenada);
+        });
+        //map.fitBounds(Limite);
+    }
+
+    function limpiarParaderosDeMapa(dataJSON, dataHTMLParaderos) {
+        $.each(dataJSON, function () {
+            this.setMap(null);
+        });
+        //
+        $.each(dataHTMLParaderos, function () {
+            this.setMap(null);
+        });
+        //
+        dataHTMLParaderos = [];
+        dataJSON = [];
+    }
+
+    function getMarkerGoogleMap(latitud, longitud) {
+        var positionMarkerParadero = { lat: latitud, lng: longitud };
+        var icon = {
+            url: '../../Content/icons/parking.svg', // url
+            scaledSize: new google.maps.Size(30, 30), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+
+        var markerParadero = new google.maps.Marker({
+            position: positionMarkerParadero,
+            map: map,
+            title: 'Golden Gate Bridge',
+            icon: icon
+        });
+
+        return markerParadero;
+    }
+
+    function getHTMLNombreParadero(latitud, longitud, draggable, htmlContenido) {
+        var pos = new google.maps.LatLng(latitud, longitud);
+        var markerHTML = new RichMarker({
+            position: pos,
+            map: map,
+            flat: true,
+            anchor: RichMarkerPosition.MIDDLE,
+            draggable: draggable,
+            content: htmlContenido,
+            draggable: true
+        });
+
+        return markerHTML;
+    }
+</script>

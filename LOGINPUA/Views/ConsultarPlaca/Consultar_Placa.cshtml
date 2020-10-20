@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Consultar_Placa";
+    Layout = "~/Views/Shared/_LayoutInicial_Mobil.cshtml";
+}
+
+<script src="~/Content/js/js_buses/js_Consultar_Placa.js"></script>
+<style>
+    span {
+        font-size: 14px;
+    }
+</style>
+
+
+<br />
+
+
+<div id="sectionBusqueda" style="padding: 40px;margin-top: -31px;">
+    <div class="row" style="background-color:#0bbeb6">
+        <div class="col-md-12 text-center" style="padding-top: 12px;">
+            <span style="color:white;font-size: 17px;">¡Bienvenidos al Sistema de Consulta de Placa </span>
+            <br />
+            <span style="color:white;font-size: 17px;">de Sistema Integrado de Transporte de Lima!</span>
+            <br /><br />
+        </div>
+
+        <div class="col-md-12 text-center" style="padding-top: 21px;">
+            <div class="inner-addon left-addon" style="position: relative;">
+                <input type="text" value="" placeholder="Ingrese el Número de Placa" onkeyup="mayus(this);" id="txtBusquedaPlaca" maxlength="6" class="form-control" style="display:initial !important;width: 257px;text-align:center">
+                <p id="errorPlacaBusqueda" style="padding-bottom: 0; margin-bottom: 0; color: red;" hidden="">Verificar placa ingresada.</p>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 text-center" style="padding-top: 13px;padding-bottom: 24px;">
+            <br />
+
+
+            <button id="btnConsultar" onclick="Buscar_Placa();" style="width: 200px;border-radius: 50px;font-weight: bold;color: white;background-color: #154390;border: 1px solid #154390;" class="btn btn-info">BUSCAR</button>
+        </div>
+    </div>
+</div>
+
+
+<table class="table" id="table_resultado"></table>
+
+
+
+
+
+<script>
+
+
+    var URL_LIST_BUSCAR_PLACA = "@Url.Action("Consultar_x_placa", "ConsultarPlaca")";
+
+
+    function mayus(e) {
+        e.value = e.value.toUpperCase();
+    }
+</script>

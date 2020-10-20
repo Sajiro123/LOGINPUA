@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Mantenimiento";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+string red =ViewBag.corredores;
+}
+
+ 
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .modal-content {
+        width: 100%;
+    }
+</style>
+@*
+<script src="~/Content/js/js_mantenimiento_perfil/registro_perfil.js@(" ?v="+ DateTime.Now.ToString(" yyyyMMddhmmss"))"></script>*@
+
+<script src="~/Content/js/js_recorrido/js_recorridos.js"></script>
+
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Recorridos&nbsp;&nbsp;&nbsp;
+            <button type="button" id="modal_registroperf" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                <span class="fa fa-plus"></span>
+            </button>
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+        </h4>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores_dos" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select name="id_corredor" class="form-control form-control-sm" id="selectRutaConsulta"></select>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="table-responsive">
+
+    <form>
+        <table class="responsive-table" id="tbRecorrido" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 40px;">N°</th>
+                    <th class="text-center" style="width: 60px;">DISTANCIA A </th>
+                    <th class="text-center" style="width: 60px;">DISTANCIA B </th>
+                    <th class="text-center" style="width: 60px;">FNODE A </th>
+                    <th class="text-center" style="width: 60px;">FNODE B</th>
+                    <th class="text-center" style="width: 60px;">TNODE A</th>
+                    <th class="text-center" style="width: 60px;">TNODE B</th>
+                    <th style="width: 125px;">USUA REG</th>
+                    <th style="width: 125px;">FECHA REG</th>
+                    <th class="text-center" style="width:50px;"></th>
+                    <th class="text-center" style="width:50px;"></th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="9" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+        @*@Html.Partial("_RegistroPerfil")*@
+
+<script>
+    $('#txtBuscar').keyup(function () {
+        $.uiTableFilter($('#tbRecorrido'), this.value);
+    });
+    var URL_GET_LISTAR_RECORRIDOS = "@Url.Action("Listar_Recorridos", "Recorridos")";
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+
+
+  @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+
+    function getCorredoresByModalidad() {
+
+        var modalidadTransporteSelecionado = $('#mod').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+
+        $.each(JSON_DATA_CORREDORES, function () {
+            if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+ 
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+             return false
+        }
+         getRutaPorCorredor_dos();
+    }
+
+    function getRutaPorCorredor_dos() {
+
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores_dos').val() },
+            success: function (result) {
+                $('#selectRuta_dos').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRuta_dos').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRuta_dos').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+</script>
+

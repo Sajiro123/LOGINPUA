@@ -1,0 +1,73 @@
+﻿
+<div class="modal fade" id="exampleModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Nueva Persona</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+                <div class="form-group row">
+               
+                    <h3 class="col-sm-2 col-form-label">Nombres</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control"  id="nombre" name="NOMBRE" value=""   />
+                    </div><div class="col-sm-1"></div>
+
+                    <h3 class="col-sm-2 col-form-label">ApePaterno</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="apepaterno" name="name" value="" />
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <h3 class="col-sm-2 col-form-label">ApeMaterno</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="apematerno" name="name" value="" />
+                    </div><div class="col-sm-1"></div>
+
+                    <h3 class="col-sm-2 col-form-label">Tipdoc</h3>
+                    <div class="col-sm-3">
+                        <select id="tipodocu" class="form-control" style="width:137%"> </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <h3 class="col-sm-2 col-form-label">Numdoc</h3>
+                    <div class="col-sm-3">
+                        <input type="text"  class="form-control" id="numdocu" name="name" value="" />
+                    </div><div class="col-sm-1"></div>
+
+                    <h3 class="col-sm-2 col-form-label">Correo</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="correo" name="name" value="" />
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+
+
+                    <h3 class="col-sm-2 col-form-label">Tipo de Rol</h3>
+                    <div class="col-sm-3">
+                        <select id="tiporol" class="form-control" style="width:137%"> </select>
+                    </div>
+                </div>
+           
+             
+
+                <div class="modal-footer">
+                    <button id="consultar" onclick="AgregarPersona()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

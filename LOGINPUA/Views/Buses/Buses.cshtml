@@ -1,0 +1,239 @@
+﻿
+@{
+    ViewBag.Title = "Buses";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+
+}
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+
+    .textoAchicado {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 163px;
+    }
+</style>
+
+<script src="~/Content/js/js_buses/js_registro_buses.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+  
+
+ 
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <br />
+        <h4>
+
+            Registro Buses &nbsp;&nbsp;&nbsp;
+
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <a href="" id="btnRegistrarBus" onclick="$('#sectionParametros')[0].reset(); $('#archivoSubido').parent().find('label').text('Subir Archivo')" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
+                        <span class="fa fa-plus"></span>
+                    </a>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+        </h4>
+    </div>
+</div>
+
+
+
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor"></select>
+
+        </div>
+    </div>
+
+    
+    <div class="col-md-4">
+        <div class="col-md-1">
+            <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="getListBusesbyId();">Consultar</button>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-info btn-sm" id="mostrartodo_btn" onclick="getListBuses();"><i class="fas fa-bus-alt"></i>&nbsp; Mostrar Todo</button>
+    </div>
+    @*style="padding-right: 64px;"*@
+    <div class="col-md-4 text-right">
+        <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+    </div>
+
+
+
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12">
+        <div>
+
+            <table class="responsive-table" id="Tbbuses" style="width:100%">
+                <thead class="thead-azul-claro">
+                    <tr>
+                        <th>N°</th>
+                        @if (idmodificar == 1)
+                        {
+                            <th style="width: 100px;color:#1d96b2"></th>
+                            <th style="width: 100px;color:#1d96b2"></th>
+                        }
+                        @if (ideliminar == 1)
+                        {
+                            <th style="width: 100px;color:#1d96b2"></th>
+                        }
+
+
+                        <th>CORREDOR</th>
+                        <th style="width:150px">PADRON</th>
+                        <th style="width:150px">PLACA</th>
+                        <th>SOAT</th>
+                        <th>RTV</th>
+                        <th>RC</th>
+                        <th>REVISION ANUAL GNV</th>
+                        <th>REVISION QUINQUENAL CILINDROS GNV</th>
+                        <th>VEHICULOS</th>
+                        <th>CVS</th>
+                        <th>AÑO DE FABRICACION</th>
+                        <th>COMBUSTIBLE</th>
+                        <th>FECHA DE INCIO A PT</th>
+                        <th>NOMBRE DE LA EMPRESA</th>
+                        <th style="width: 255px;">PROPIETARIO</th>
+                        <th>PAQUETE CONCESIÓN</th>
+                        <th>PAQUETE DONDE BRINDA SERVICIO</th>
+                        <th>TIPO SERVICIO</th>
+                        <th>ESTADO</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>TECNOLOGIA EURO</th>
+                        <th>POTENCIA MOTOR</th>
+                        <th>SERIE DE MOTOR</th>
+                        <th>SERIE CHASIS</th>
+                        <th>COLOR VEHICULO</th>
+                        <th>LONGITUD</th>
+                        <th>ASIENTOS</th>
+                        <th>ÁREA LIBRE DE PASILLO (m2)</th>
+                        <th>PESO NETO (KG)</th>
+                        <th>PESO BRUTO (KG)</th>
+                        <th>ALTURA</th>
+                        <th>ANCHO</th>
+                        <th>CARGA UTIL</th>
+                        <th>PUERTA A LA IZQUIERDA</th>
+                        <th>PARTIDA REGISTRAL</th>
+                        <th>CODIGO CVS</th>
+                        <th>CVS INICIO</th>
+                        <th>CVS VIGENCIA</th>
+                        <th>SOAT INICIO</th>
+                        <th>SOAT VIGENCIA</th>
+                        <th>N° PÓLIZA VEHÍCULOS</th>
+                        <th>VEHICULOS INICIO</th>
+                        <th>VEHICULOS VIGENCIA</th>
+                        <th>N° POLIZA RESPONSABILIDAD CIVIL</th>
+                        <th>RC INICIO</th>
+                        <th>RC VIGENCIA</th>
+                        <th>N° POLIZA ACCIDENTES PERSONALES COLECTIVOS PARTICULARES</th>
+                        <th>APCP INICIO</th>
+                        <th>APCP VIGENCIA</th>
+                        <th>SEMAFORO APCP</th>
+                        <th>N° POLIZA MULTIRIESGOS</th>
+                        <th>MULTIRESGOS INICIO</th>
+                        <th>MULTIRIESGOS VIGENCIA</th>
+                        <th>SEMAFORO MULTIRIESGOS</th>
+                        <th>RTV INICIO</th>
+                        <th>RTV VIGENCIA</th>
+                        <th>INICIO REVISION ANUAL GNV</th>
+                        <th>VIGENCIA REVISION ANUAL GNV</th>
+                        <th>INICIO REVISION CILINDROS GNV</th>
+                        <th>VIGENCIA REVISION CILINDROS GNV</th>
+                    </tr>
+                </thead>
+                <tbody class="display nowrap" id="listar_buses"></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@Html.Partial("_AgregarBuses")
+@Html.Partial("_EditarBuses")
+@Html.Partial("_AfectarBuses")
+
+<script>
+
+
+
+    var URL_LIST_BUSES = "@Url.Action("ListarBuses", "Buses")";
+    var URL_LIST_CORREDORES = "@Url.Action("getRutaCorredor", "Buses")";
+    var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("Subir_Excel", "Buses")";
+    var URL_REGISTRAR_BUS_INDIV = "@Url.Action("Registro_Bus_Indiv", "Buses")";
+    var URL_ANULA_BUS = "@Url.Action("anularBus", "Buses")";
+    var URL_MODIFICA_BUS = "@Url.Action("Modificar_Bus", "Buses")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var URL_GET_PLACA_DESAFECT = "@Url.Action("Buses_Desafectados", "Buses")";
+
+
+
+    $('#txtFechaRegistro').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro1').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro2').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro3').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro4').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro5').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro6').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro7').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro8').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro9').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro10').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro11').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro12').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro13').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro14').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro15').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro16').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro17').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro18').datepicker({ format: "dd/mm/yyyy" });
+    $('#txtFechaRegistro19').datepicker({ format: "dd/mm/yyyy" });
+
+
+
+</script>
+

@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "Conductores";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    //List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    //int ideliminar = 0;
+    //int idmodificar = 0;
+
+}
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+
+    .textoAchicado {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 163px;
+    }
+</style>
+
+<script src="~/Content/js/js_conductor/js_conductor.js"></script>
+
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <br />
+        <h4>
+
+            Conductores &nbsp;&nbsp;&nbsp;
+
+
+            @*@foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <a href="" id="btnRegistrarBus" onclick="$('#sectionParametros')[0].reset(); $('#archivoSubido').parent().find('label').text('Subir Archivo')" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
+                        <span class="fa fa-plus"></span>
+                    </a>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }*@
+
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+        </h4>
+    </div>
+</div>
+
+
+
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3" style="display: none">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor" ></select>
+
+        </div>
+    </div>
+
+
+    @*<div class="col-md-2">
+        <div class="col-xs-6">
+            <button class="btn btn-info btn-sm" id="mostrartodo_btn" onclick="getListBuses();"><i class="fas fa-bus-alt"></i>&nbsp; Mostrar Todo</button>
+        </div>
+    </div>*@
+
+    <div class="col-md-1" style="display: none">
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="getListConductores();">Consultar</button>
+
+    </div>
+
+    <div class="col-md-2" style="display: none">
+            <div class="col-xs-6">
+                
+            </div>
+    </div>
+    <div class="col-md-8 text-right" >
+        <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+    </div>
+
+
+
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12">
+        <div>
+
+            <table class="responsive-table" id="Tbconductores" style="width:100%">
+                <thead class="thead-azul-claro">
+                    <tr>
+                        <th>N°</th>
+                        @*@if (idmodificar == 1)
+                        {
+                            <th style="width: 100px;color:#1d96b2">aS</th>
+                            <th style="width: 100px;color:#1d96b2">aS</th>
+                        }
+                        @if (ideliminar == 1)
+                        {
+                            <th style="width: 100px;color:#1d96b2">aS</th>
+                        }*@
+
+
+                        <th>CODIGO CAC</th>
+                        <th>SEMAFORO CAC</th>
+                        <th>EMPRESA</th>
+                        <th>APELLIDOS</th>
+                        <th>NOMBRES</th>
+                        <th>TIPO DE LICENCIA</th>
+                        <th>NUMERO DE LICENCIA</th>
+                        <th>FECHA NACIMIENTO</th>
+                        <th>NUMERO DE DOCUMENTO</th>
+                        <th>INICIO CAC</th>
+                        <th>VIGENCIA CAC</th>
+                        <th>FECHA REGISTRO</th>
+
+                    </tr>
+                </thead>
+                <tbody class="display nowrap" id="listar_conductores"></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+
+
+    var URL_LIST_CONDUCTORES = "@Url.Action("ListarConductores", "Conductores")";
+    @*var URL_LIST_CORREDORES = "@Url.Action("getRutaCorredor", "Buses")";
+    var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("Subir_Excel", "Buses")";
+    var URL_REGISTRAR_BUS_INDIV = "@Url.Action("Registro_Bus_Indiv", "Buses")";
+    var URL_ANULA_BUS = "@Url.Action("anularBus", "Buses")";
+    var URL_MODIFICA_BUS = "@Url.Action("Modificar_Bus", "Buses")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var URL_GET_PLACA_DESAFECT = "@Url.Action("Buses_Desafectados", "Buses")";*@
+
+
+
+    //$('#txtFechaRegistro').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro1').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro2').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro3').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro4').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro5').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro6').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro7').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro8').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro9').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro10').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro11').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro12').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro13').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro14').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro15').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro16').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro17').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro18').datepicker({ format: "dd/mm/yyyy" });
+    //$('#txtFechaRegistro19').datepicker({ format: "dd/mm/yyyy" });
+
+
+
+</script>

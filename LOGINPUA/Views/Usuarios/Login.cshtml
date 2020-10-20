@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin_v2.cshtml";
+}
+<link href="~/Content/Cargar_Pagina.css" rel="stylesheet" />
+<div>
+    <div class="contiene_slider">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active" id="item_slider">
+                    <img src="@Href("~/Util/Image2/img1.jpg")" alt="Login" style="width:100%;">
+
+                </div>
+                <div class="item" id="item_slider">
+                    <img src="@Href("~/Util/Image2/img2.jpg")" alt="Login2" style="width:100%;">
+                </div>
+                <div class="item" id="item_slider">
+                    <img src="@Href("~/Util/Image2/img1.jpg")" alt="Login3" style="width:100%;">
+                </div>
+                <div class="item" id="item_slider">
+                    <img src="@Href("~/Util/Image2/img2.jpg")" alt="Login4" style="width:100%;">
+                </div>
+
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#my Carousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Sistema Integrado de Transporte de Lima</h2>
+                <p>
+                    Los corredores complementarios constituyen un sistema de transporte público urbano que opera en la ciudad de Lima, capital del Perú. Está compuesto por una red de líneas o servicios de autobuses urbanos distribuidos en cinco corredores que cubren las principales avenidas de la ciudad
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h2>LOGIN</h2>
+                <form class="form-signin" method="post" action="@Url.Action("Ingresar","Login")">
+                    <label for="txtUsuario" class="sr-only">Usuario</label>
+                    <input type="text" name="usuario" id="txtUsuario" value="@ViewBag.usuario" class="form-control" placeholder="Ingresa tu Usuario" required autofocus />
+                    <label for="txtContrasena" class="sr-only">Contraseña</label>
+                    <input type="password" name="clave" id="txtContrasena" class="form-control" placeholder="Ingresa tu Contraseña" required />
+                    <button class="btn btn-lg btn-primary btn-block" id="btnIngresar" type="submit">Ingresar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br /><br />
+
+
+    <div class="control-group">
+        <div class="form-group row" style="margin-left: 18%;margin-top:-40px">
+            <a class="col-sm-2 col-form-label" href="@Url.Action("Consultar_Placa", "ConsultarPlaca")"><img style="width:140px" src="~/Util/consulta_placas.png" alt="Alternate Text" /></a>
+
+            <div class="col-sm-3" style="margin-left:-82px;margin-top:44px;">
+                <h4>Consulta Vehicular</h4>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*<div class="row" style="margin-left: 18%;width:100px;">
+            <div class="col-lg-5">
+            </div>
+            <div class="col-lg-5">
+            </div>
+
+        </div>*@
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#txtUsuario').keyup(function () {
+            $(this).val($(this).val().toUpperCase());
+        });
+    });
+
+    var msj = '@Html.Raw(ViewBag.mensaje)';
+    $(document).ready(function () {
+        if (msj.length > 0) {
+            Swal.fire({
+                //position: 'top-end',
+                type: 'error',
+                title: msj,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    });
+</script>

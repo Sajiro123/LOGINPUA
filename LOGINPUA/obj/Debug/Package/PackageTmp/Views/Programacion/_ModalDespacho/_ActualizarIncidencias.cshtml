@@ -1,0 +1,66 @@
+﻿
+<div class="modal fade" id="modal_ActualizarIncidencias">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Actualizar Viaje </h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group ">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-12 col-form-label">Hora Programada</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <input type="text" class="form-control" disabled id="idhora_programada" />
+                            </div>
+                        </div>
+                        <br />
+                           
+                        <div class="row">
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-12 col-form-label">Incidencia</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <select class="form-control" id="id_incidencia">
+                                    <option value="Inasistencia  de Operador">Inasistencia  de Operador</option>
+                                    <option value="Desfase de Salida Programada">Desfase de Salida Programada</option>
+                                    <option value="Falla del Bus">Falla del Bus</option>
+                                    <option value="Falla del Sistema de Recaudo">Falla del Sistema de Recaudo</option>
+                                    <option value="Accidente">Accidente</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-2 col-form-label">Observaciones</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <textarea class="form-control" id="id_observacion2" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="modal-footer">
+                            <button id="consultar" onclick="ActualizarObserv_BUTTON()" class="btn btn-info" type="button" style="margin-left: 249px;">
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,439 @@
+﻿@{
+    List<ENTIDADES.CC_ACCESO_CORREDORES> List_Acceso = (List<ENTIDADES.CC_ACCESO_CORREDORES>)Session["acceso_corredor"];
+    ViewBag.Lista_Accesos = List_Acceso;
+}
+<!DOCTYPE html>
+    <html lang="es-es">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>.::PROTRANSPORTE::.</title>
+        <link href="~/Content/scss/tableformt.css" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="~/Content/jquery.multiselect.css" />
+
+        <link href="~/Content/css/simple-sidebar.css" rel="stylesheet" />
+        <script src="~/Scripts/jquery-2.2.0.js"></script>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href="~/Content/plugins/tooltipster/tooltipster.css" rel="stylesheet" />
+        <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+        <script src="~/Content/plugins/tooltipster/jquery.tooltipster.min.js"></script>
+        <script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script> 
+        <link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
+        <link href="~/Content/plugins/sweetAlert/sweetalert2.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+        <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+        <script src="~/Scripts/exportar_excel/xlsx.core.min.js"></script>
+        <script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+    <script src="~/Scripts/exportar_excel/jhxlsx.js"></script>
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/plugins/moment/moment.js"></script>
+    <script src="~/Scripts/Utilidades/Util.js"></script>
+    <script src="~/Content/plugins/numberValidador/numberValidador.js"></script>
+    <script src="~/Content/js/all.min.js"></script>
+    <script src="~/Content/js/bootstrap-select.js"></script>
+    <script src="~/Content/plugins/lodash/lodash.min.js"></script>
+    <script>eval(mod_pagespeed_2HaUiZdTC$);</script>
+    <link href="~/Content/css/css_programacion/alertify.css" rel="stylesheet" />
+    <script src="~/Content/js/js_programacion/alertify.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.js"></script>
+
+
+    <style>
+        .dropdown-item:hover {
+            background-color: #FFFFFF;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #4aa09c;
+            border-color: #717171;
+        }
+
+
+            .btn-primary:hover {
+                color: #fff;
+                background-color: #858887 !important;
+                border-color: #ffffff;
+            }
+
+        .card-header {
+            background-color: #00a39c;
+        }
+
+        .card-header {
+            color: white;
+        }
+
+        .card-body {
+            color: gray;
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            padding: 2.875rem 1.25rem;
+            font-size: 1.2rem;
+        }
+
+        a {
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .card-header:hover {
+            background-color: #FFB74D;
+        }
+
+        .menu_card {
+            color: black;
+        }
+
+        .card-header {
+            width: auto;
+            border-bottom: 1px solid #5cbfbb;
+        }
+
+        .link:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .card-body:hover {
+            background-color: #586163;
+            width: auto%;
+        }
+
+        .card-body {
+            background-color: #103379;
+            width: auto%;
+            padding: 0.8rem;
+            color: white;
+        }
+
+        .link {
+            color: white;
+            text-decoration: none;
+        }
+
+        .link_:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .i_icon {
+            margin-left: 30px;
+        }
+
+
+
+        .theme-config {
+            position: absolute;
+            right: 0;
+            overflow: hidden;
+        }
+
+        body.rtls .theme-config {
+            left: 0;
+            right: auto;
+        }
+
+        body.rtls .theme-config-box {
+            margin-left: -143px;
+            margin-right: 0;
+        }
+
+            body.rtls .theme-config-box.show {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+        .theme-config-box {
+            margin-right: -143px;
+            position: relative;
+            z-index: 2100;
+            transition-duration: 0.8s;
+        }
+
+            .theme-config-box.show {
+                margin-right: 0;
+            }
+
+        body.rtls .spin-icon {
+            right: 0;
+            left: auto;
+        }
+
+        .spin-icon {
+            background: #1ab394;
+            position: absolute;
+            padding: 7px 10px 7px 13px;
+            border-radius: 20px 0 0 20px;
+            font-size: 16px;
+            top: 40%;
+            left: 0;
+            width: 40px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .skin-1 .spin-icon {
+            background: #0e9aef !important;
+        }
+
+        .skin-2 .spin-icon {
+            background: #23c6c8 !important;
+        }
+
+        .skin-3 .spin-icon {
+            background: #ecba52 !important;
+        }
+
+        body.rtls .spin-icon {
+            border-radius: 0 20px 20px 0;
+        }
+
+        #container {
+            width: 100%;
+        }
+
+        .right {
+            float: right;
+            width: 100px;
+        }
+
+        body.rtls .skin-settings {
+            margin-right: 40px;
+            margin-left: 0;
+        }
+
+        body.rtls .skin-settings {
+            direction: ltr;
+        }
+
+
+        .skin-settings {
+            width: 143px;
+            height: 93.7vh;
+            margin-left: 40px;
+            background: #f3f3f4;
+        }
+
+            .skin-settings .title {
+                background: #efefef;
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: 600;
+                display: block;
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+        .sidebar-container .setings-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e7eaec;
+        }
+
+        body.rtls .setings-item .switch {
+            margin-left: 5px;
+        }
+
+        .setings-item {
+            padding: 10px 30px;
+        }
+
+            .setings-item.skin {
+                text-align: center;
+            }
+
+            .setings-item .switch {
+                float: right;
+            }
+
+        .skin-name a {
+            text-transform: uppercase;
+        }
+
+        .setings-item a {
+            color: #fff;
+        }
+    </style>
+
+
+</head>
+<body>
+    <div class="d-flex" id="wrapper" style="display:none">
+        <!-- Sidebar -->
+        <div class="list-group list-group-flush" style="background-color: #00a39c !important;">
+            <div class="bg-light border-right" id="sidebar-wrapper" style="max-width:300px;background-color: #00a39c !important;color: white !important;">
+                <br />
+                <img src="~/Util/PT_logon2.png" alt="Alternate Text" width="100%" />
+                <br /><br />
+                <div style="text-align:center">
+                    <img src="~/Util/36_blanco.png" width="80px" alt="Alternate Text" />
+                    <br />
+                    <span>
+
+                        <p style="font-size: 1.1rem;">Sistema Integrado de Transporte para<br />  Corredores Complementarios y COSAC</p>
+                        <br>
+                        <small></small>
+                    </span>
+
+                </div>
+                <br /><br /><br />
+                <div class="list-group list-group-flush">
+                    <div id="accordion">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <button class="btn btn-primary" id="menu-toggle"><span class="fa fa-align-justify"></span></button>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item dropdown">
+                            <img class="imagen_logo" src="~/Util/Logotipo_ATU.png" alt="logoPT" width="184" style="margin-left:70%">
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+
+                        <div class="collapse navbar-collapse" id="navbar1">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a href="#" id="menu" data-toggle="dropdown" class="nav-link dropdown-toggle"><span>@Session["user_login"].ToString() (@Session["user_rol"]) &nbsp;&nbsp;</span><span class="fa fa-user-circle" style="font-size: 20px;"></span></a>
+                                    <ul class="dropdown-menu dropleft">
+                                        @if (List_Acceso.Count != 0)
+                                        {
+                                            <li class="dropdown-item dropdown-submenu">
+                                                <a href="#" data-toggle="dropdown" style="color:#212529" class="dropdown-toggle">Accesos</a>
+                                                <ul class="dropdown-menu">
+
+
+                                                    @foreach (var item in List_Acceso)
+                                                    {
+                                                        <li class="dropdown-item">
+                                                            <i class="fas fa-bus-alt"></i> <a target="_blank" style="text-decoration: underline;color:@item.COLOR_REPRESENTATIVO;font-weight:bold;" href="@Url.Action(item.NOMBRE_ACCESO, "Proveedor_Servicio")/?abrev_corr=@item.PROVABREV_CORR&usuario=@item.USUARIO&contraseña=@item.CONTRASENA&url=@item.URL_SERV">@item.CORREDOR_NOMBRE</a>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </li>
+                                        }
+                                        <li class="dropdown-item dropdown-submenu">
+                                            <a class="dropdown" style="color:#212529" href="@Url.Action("Actualizar_Datos", "Persona")">Actualizar Datos</a>
+                                        </li>
+                                        <li class="dropdown-item dropdown-submenu">
+                                            <a class="dropdown" style="color:#212529" href="@Url.Action("CerrarSesion","Login")">Cerrar Sesión </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown" style="color:#f8f9fa">
+                                    asdasd
+                                </li>
+                            </ul>
+                        </div>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="theme-config">
+                <div class="theme-config-box" id="box_hide">
+                    <div class="spin-icon" id="spin_buton" style="background-color:#103379 !important">
+                        <i class="fas fa-angle-left" id="icon_flecha"></i>
+                    </div>
+                    <div class="skin-settings">
+
+
+                        @if (List_Acceso.Count != 0)
+                        {
+                            foreach (var item in List_Acceso)
+                            {
+                                <li class="dropdown-item">
+                                    <a target="_blank" style="text-decoration: underline;color:@item.COLOR_REPRESENTATIVO;font-weight:bold;" href="@Url.Action(item.NOMBRE_ACCESO, "Proveedor_Servicio")/?abrev_corr=@item.PROVABREV_CORR&usuario=@item.USUARIO&contraseña=@item.CONTRASENA&url=@item.URL_SERV"> <img src="~/Util/Image/@(item.CORREDOR_NOMBRE).png" style="height: 100px; width: 100px; margin-top: 10px; border-top-right-radius: 50px;border-bottom-left-radius: 50px; box-shadow: #504f4f 3px 3px;" alt="Alternate Text" /> </a>
+                                </li>
+                            }
+
+                            <div class="text-center">
+                                <a href="http://200.37.244.149:8002/avlcc/" target="_blank" class="dropdown-item">  <input type="image" src="~/Util/Image/map-icon-new-1.png" border="0" style="width:90px;margin-top:20px" alt="Submit" /></a>
+
+                                <a href="http://200.37.244.150:8003/BOE/BI" target="_blank" class="dropdown-item">  <input type="image" src="http://200.37.244.150:8003/BOE/portal/1904081920/InfoView/common/appService.do?service=skinning&resource=img&img=img.login.banner.logo" border="0" style="width:90px;margin-top:20px;margin-left:10px" alt="Submit" /></a>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+        });
+
+
+        $('.spin-icon').click(function () {
+            $(".theme-config-box").toggleClass("show");
+
+
+            var clase = document.getElementById("box_hide").className;
+
+            if (clase == "theme-config-box") {
+                $("#icon_flecha").removeClass("fas fa-angle-left");
+                $("#icon_flecha").addClass("fas fa-angle-right");
+            } else {
+                   $("#icon_flecha").removeClass("fas fa-angle-right");
+                $("#icon_flecha").addClass("fas fa-angle-left");
+
+
+            } 
+        });
+
+
+
+
+
+        $('.dropdown-submenu > a').on("click", function (e) {
+            var submenu = $(this);
+            $('.dropdown-submenu .dropdown-menu').removeClass('show');
+            submenu.next('.dropdown-menu').addClass('show');
+            e.stopPropagation();
+        });
+
+        $('.dropdown').on("hidden.bs.dropdown", function () {
+            // hide any open menus when parent closes
+            $('.dropdown-menu.show').removeClass('show');
+        });
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+   
+
+</body>
+</html>

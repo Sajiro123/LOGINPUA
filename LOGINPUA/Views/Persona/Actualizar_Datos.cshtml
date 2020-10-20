@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Actualizar_Datos";
+    Layout = "~/Views/Shared/_LayoutPrincipal.cshtml";
+
+    var List = Session["user_datos"] as List<ENTIDADES.CC_PERSONA>;
+
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/esm/popper.js"></script>
+ <style>
+    body {
+        background: #eee;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+
+    .imgRedonda {
+        width: 300px;
+        height: 300px;
+        border-radius: 150px;
+    }
+</style>
+
+@foreach (var item in List)
+{
+
+
+    <div class="row">
+
+        <div style="width:5000%;height: 120px;background-color:#19459d;">
+            <br />
+            <p class="h2" style="margin:15px 85px;color:white">Tu información</p>
+        </div>
+        <div class="col-md-12">
+            <br />
+            <a style="color:black;margin-left: 200px;" href="@Url.Action("Sistemas_","Home")"> <i class="fas fa-arrow-circle-left" style="font-size:50px;cursor:pointer;"></i></a>
+
+            <div class="center row" style="background-color:#f9f9f9">
+                <div class="col-md-4">
+                    <img style="margin-top: 50px;" class="img-thumbnail imgRedonda" src="@Href("~/Util/Image/Users_icon.jpg")">
+                </div>
+
+                <div class="col-md-8">
+                    <h1>@item.NOMBRES @item.APEPAT @item.APEMAT</h1>
+                    <br /><br />
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" id="txtnombre" autofocus name="nombre" class="form-control" value="@item.NOMBRES" />
+                            <small id="emailHelp" class="form-text text-muted">Ingresar  nombre</small>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" name="apepat" id="txtapepa" class="form-control" value="@item.APEPAT" />
+                            <small id="emailHelp" class="form-text text-muted">Ingresar apellido paterno</small>
+                        </div>
+                    </div>
+
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" name="apemat" id="txtapemat" class="form-control" value="@item.APEMAT" />
+                            <small id="emailHelp" class="form-text text-muted">Ingresar apellido materno</small>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" name="nrdoc" id="txtnrodocu" class="form-control" value="@item.NRODOCUMENTO" />
+                            <small id="emailHelp" class="form-text text-muted">Ingresar número de documento</small>
+                        </div>
+                    </div>
+
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" name="correoo" id="txtcorreo" class="form-control" value="@item.CORREO" />
+                            <small id="emailHelp" class="form-text text-muted">Correo electronico</small>
+                        </div>
+
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-danger btn-lg btn-block" id="consultar" onclick="Agregar_DatosUser()">Guardar</button>
+                        </div>
+                    </div>
+                    <br /><br />
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <input type="text" name="name" id="txtidpersona" value="@item.ID_PERSONA" hidden />
+}
+
+
+<script>
+    var URL_GET_MODIFICARDATOS_PERSONA = "@Url.Action("EditarDatosPersona", "Persona")";
+
+    $(document).ready(function () {
+        $(".list-group").remove();
+        $("#menu-toggle").remove();
+
+ 
+    });
+
+    function Agregar_DatosUser() {
+
+        var idpersona = $('#txtidpersona').val();
+        var nombre = $('#txtnombre').val();
+        var apepa = $('#txtapepa').val();
+        var apemat = $('#txtapemat').val();
+        var nrodocumento = $('#txtnrodocu').val();
+        var correo = $('#txtcorreo').val();
+  
+
+        $('#consultar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Guardando...');
+        $.ajax({
+            url: URL_GET_MODIFICARDATOS_PERSONA,
+            data: {
+                idpersona: idpersona,
+                nombre: nombre,
+                apepaterno: apepa,
+                apematerno: apemat,
+                numdocu: nrodocumento,
+                correo: correo,
+             },
+            dataType: 'json',
+            success: function (result) {
+                $('#consultar').prop('disabled', false).html('Guardar'); 
+   
+                Swal.fire({
+                    type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                    title: result.DES_ESTADO,
+                    showConfirmButton: false,
+                });
+                $('#exampleModal').modal('hide');
+            }
+        }, JSON);
+
+    }
+
+</script>

@@ -1,0 +1,212 @@
+
+@media screen and (max-width: 700px) {
+    .cards {
+        display: block;
+    }
+
+    .img_resp {
+        display: none;
+    }
+
+    .wrapper {
+        width: 81%;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .cards {
+        display: block;
+    }
+
+    .img_resp {
+        display: none;
+    }
+
+    .wrapper {
+        width: 81%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .cards {
+        display: none;
+    }
+}
+
+
+.btn-primary {
+    color: #fff;
+    background-color: #19459d;
+    border-color: #f8f9fa;
+}
+
+
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #858887 !important;
+        border-color: #ffffff;
+    }
+
+.card-header {
+    background-color: #00a39c;
+}
+
+    .card-header a {
+        color: white;
+    }
+
+.card-body {
+    color: gray;
+    padding: 0 !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 2.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+.input-group {
+    margin-bottom: 0px !important;
+}
+
+.row h4 {
+    padding-bottom: 15px;
+}
+
+.sombreaItemMenu {
+    background-color: #e4e0dc;
+}
+
+
+.theme-config {
+    position: absolute;
+    right: 0;
+    overflow: hidden;
+}
+
+body.rtls .theme-config {
+    left: 0;
+    right: auto;
+}
+
+body.rtls .theme-config-box {
+    margin-left: -143px;
+    margin-right: 0;
+}
+
+    body.rtls .theme-config-box.show {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+.theme-config-box {
+    margin-right: -143px;
+    position: relative;
+    z-index: 2100;
+    transition-duration: 0.8s;
+}
+
+    .theme-config-box.show {
+        margin-right: 0;
+    }
+
+body.rtls .spin-icon {
+    right: 0;
+    left: auto;
+}
+
+.spin-icon {
+    background: #1ab394;
+    position: absolute;
+    padding: 7px 10px 7px 13px;
+    border-radius: 20px 0 0 20px;
+    font-size: 16px;
+    top: 40%;
+    left: 0;
+    width: 40px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.skin-1 .spin-icon {
+    background: #0e9aef !important;
+}
+
+.skin-2 .spin-icon {
+    background: #23c6c8 !important;
+}
+
+.skin-3 .spin-icon {
+    background: #ecba52 !important;
+}
+
+body.rtls .spin-icon {
+    border-radius: 0 20px 20px 0;
+}
+
+#container {
+    width: 100%;
+}
+
+.right {
+    float: right;
+    /*width: 100px;*/
+}
+
+body.rtls .skin-settings {
+    margin-right: 40px;
+    margin-left: 0;
+}
+
+body.rtls .skin-settings {
+    direction: ltr;
+}
+
+
+.skin-settings {
+    width: 143px;
+    height: 93.7vh;
+    margin-left: 40px;
+    background: #f3f3f4;
+}
+
+    .skin-settings .title {
+        background: #efefef;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 600;
+        display: block;
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+.sidebar-container .setings-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e7eaec;
+}
+
+body.rtls .setings-item .switch {
+    margin-left: 5px;
+}
+
+.setings-item {
+    padding: 10px 30px;
+}
+
+    .setings-item.skin {
+        text-align: center;
+    }
+
+    .setings-item .switch {
+        float: right;
+    }
+
+.skin-name a {
+    text-transform: uppercase;
+}
+
+.setings-item a {
+    color: #fff;
+}

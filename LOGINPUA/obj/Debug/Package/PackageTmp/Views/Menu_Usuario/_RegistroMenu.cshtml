@@ -1,0 +1,98 @@
+﻿ <div class="modal fade" id="exampleModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Nueva Menú</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+
+
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <h3 class="col-sm-3 col-form-label">Tipo Menú</h3>
+
+                            <div class="col-md-4">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="customRadio1" checked>
+                                    <label class="custom-control-label" for="customRadio1">Menú Principal</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio2" value="customRadio2">Sub Menú</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>  
+                </div>
+
+                <div class="form-group ">
+                    <div class="row">
+                        <div class="col-sm-6" id="contenido2">
+                            <div class="row">
+                                <div class="col-md-4"><h3 class="col-form-label">Modulos</h3></div>
+                                <div class="col-md-8">
+                                    <select id="id_modulo" class="form-control" style="width:110%"> </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5" id="contenido">
+
+                            <div class="row">
+                                <div class="col-md-4"><h3 class="col-form-label">Menú   </h3></div>
+                                <div class="col-md-8">
+                                    <select id="menu_padre" class="form-control" style="width:138%"> </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <h3 class="col-sm-2 col-form-label">Nombre</h3>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control vacios" id="nombre" name="name" value="" />
+                    </div><div class="col-sm-1"></div>
+
+                    <div class="row">
+                        <div class="col-md-4"><h3 class="col-sm-2 col-form-label">Url</h3></div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control vacios" id="url" name="name" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row" id="icono_txt" style="display:none">
+                    <h3 class="col-sm-2 col-form-label">Icono</h3>
+                    <div class="col-sm-4">
+                        <div class="bs-example">
+
+                            <span id="popoverbtn"></span>
+                            <i class="fas fa-grin-beam" onclick="$('#popoverbtn').popover('toggle');" style="cursor:pointer"></i>
+                        </div>         <input type="text" class="form-control " id="icono" name="name" value="" style="display:none" />
+                    </div><div class="col-sm-2"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="consultar" onclick="AgregarMenu()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .display_css {
+        display: contents;
+    }
+</style>

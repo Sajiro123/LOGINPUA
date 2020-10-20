@@ -1,0 +1,182 @@
+﻿
+<style>
+    .ms-options {
+        min-height: 0;
+    }
+
+
+    legend.scheduler-border {
+        width: inherit; /* Or auto */
+        padding: 0 10px; /* To give a bit of padding on the left and right */
+        border-bottom: none;
+    }
+</style>
+
+<div class="modal fade" id="exampleModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Nuevo Usuario</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+
+
+
+
+            <div class="form-group container">
+
+                <fieldset class="border p-1">
+                    <legend class="scheduler-border" style="font-size:18px">USUARIO</legend>
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <h3 class="col-sm-2 col-form-label">Personas</h3>
+                            <div class="col-sm-3">
+                                <select id="idpersona" class="selectpicker" data-live-search="true"></select>
+                            </div><div class="col-sm-1"></div>
+
+                            <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" style="width:118%" id="usuario" name="name" value="" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                        <div class="col-sm-3">
+                            <input type="password" class="form-control" style="width:118%" id="clave1" name="name" value="" />
+                        </div><div class="col-sm-1"></div>
+
+                        <h3 class="col-sm-2 col-form-label">Confirmar Contraseña</h3>
+                        <div class="col-sm-3">
+                            <input type="password" class="form-control" style="width:118%" id="clave2" name="name" value="" />
+                        </div>
+                    </div>
+
+
+                    <select id="idestado" class="form-control" style="width:118%" hidden>
+                        <option value="1">Activado</option>
+                        <option value="2">Desactivado</option>
+                    </select>
+
+                </fieldset>
+
+                <br />
+
+                <fieldset class="border p-1">
+                    <legend class="scheduler-border" style="font-size:18px">PERFIL POR MODALIDAD</legend>
+                    <br />
+                    <div class="control-group">
+                        <div class="form-group row" id="txtperfil">
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+
+                <button id="button_cambio" style="margin-left: 718px;margin-top: -27px;" class="btn btn-info btn-sm"><i class="fas fa-user-cog"></i></button>     
+                <div id="fieldset_buton" style="display: none;">
+                    <div class="form-group row">
+                        <div class="col-md-2"></div>
+
+                        <div class="col-md-5">
+                            <div class="custom-control custom-radio">
+                                <input type="checkbox" id="AbexaRadio1" name="customRadio" class="custom-control-input" value="AbexaRadio1" >
+                                <label class="custom-control-label" for="AbexaRadio1">ABEXA</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="custom-control custom-radio">
+                                <input type="checkbox" id="MatrixRadio2" name="customRadio" class="custom-control-input" value="MatrixRadio2" >
+                                <label class="custom-control-label" for="MatrixRadio2">MATRIX</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <fieldset class="border p-1"  >
+                        <legend class="scheduler-border" style="font-size:18px">PROVEEDOR CUENTA</legend>
+
+                        <div id="div_abexa" style="display:none">
+                            <div class="control-group">
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Proveedor</h3>
+                                    <div class="col-sm-3">
+                                        <select id="txtAbexaSelect" style="width:137%" class="form-control" data-live-search="true">
+                                            <option value="1">ABEXA</option>
+                                        </select>
+                                    </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Corredores</h3>
+                                    <div class="col-sm-3">
+                                        <div id="idcorredores_div">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div id="div_matrix" style="display:none">
+                            <div class="control-group">
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Proveedor</h3>
+                                    <div class="col-sm-3">
+                                        <select id="txtPROVEEDORSERV" style="width:137%" class="form-control" data-live-search="true"></select>
+                                    </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                                    <div class="col-sm-3">
+                                        <select id="txtUsuarioProv" class="selectpicker" data-live-search="true"></select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="control-group">
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Corredores</h3>
+                                    <div class="col-sm-3">
+                                        <div id="div_context_Matrix">
+                                            <select multiple id="id_corredor_MATRIX">
+                                                <option value="5">PN</option>
+                                                <option value="2">JP</option>
+                                            </select>
+
+                                        </div>
+
+                                     </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                                    <div class="col-sm-3">
+                                        <input type="text" disabled class="form-control" id="txtcontraseña_prov" name="name" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+
+
+
+                <div class="modal-footer">
+                     <button id="consultar" onclick="AgregarUsuarios()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+ 

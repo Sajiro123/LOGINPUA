@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "SubirProgramacion";
+    //Layout = "~/Views/Shared/_Layout_corredores_Programacion.cshtml";
+    //Layout = "~/Views/Shared/_LayoutPrincipal.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION>
+    Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+}
+@Html.Partial("_ImportarExcelProgramacion")
+
+@*<script src="~/Content/js/js_programacion_bus/js_importarProgramacion.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>*@
+ <script src="~/Content/js/js_programacion_bus/js_importarProgramacion.js"></script>
+
+
+
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+
+
+
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Subir Programación&nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+        </h4>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectRutaConsulta" onchange="getTipoServicioByRuta();"></select>
+        </div>
+    </div>
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-1">
+        <button onclick="ExcelFormato()" class="btn btn-sm btn-success" style="float:right;"><i style="font-size:19px;color:black" class="far fa-file-excel"></i>   Descargar Formato</button>
+
+    </div>
+    <div class="col-md-1">
+        <button onclick="ExcelWord()" class="btn btn-sm btn-danger" style="float:right;"><i style="font-size:19px;color:black" class="far fa-file-excel"></i>   Descargar Manual</button>
+
+    </div>
+</div>
+<hr />
+
+<div class="table-responsive">
+
+    <table id="tbSalidaProgramada" class="text-center responsive-table" style="width:100%">
+        <thead>
+            <tr>
+                <th class="text-center">N</th>
+                <th>F. PROG</th>
+                @*<th>CORREDOR</th>
+                    <th class="text-center" scope="col">RUTA</th>*@
+                <th class="text-center" scope="col">SEMANA</th>
+                <th class="text-center" scope="col">TIPO DÍA</th>
+                <th class="text-center" scope="col">CANT VIAJE</th>
+                <th class="text-center" title="Ver POG"></th>
+                <th class="text-center"></th>
+                <th class="text-center" scope="col">USUARIO</th>
+                <th class="text-center" scope="col">F. SUBIDA</th>
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+    @Html.Partial("_ModalPOD/_ModalPOG")
+    @Html.Partial("_ModalPOD/_ModalPOGRegistro")
+    @Html.Partial("_ModalDespacho/_AgregarSalidaNueva")
+
+
+
+
+</div>
+<script>
+
+    var URL_GET_AGREGAR_CAMPOS_POG = "@Url.Action("AgregarCamposPOG", "Programacion")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("cargarArchivo", "Programacion")";
+    var URL_GET_TIPO_DIAS = "@Url.Action("getTipoDias", "Programacion")";
+    var URL_GET_RESUMEN_PROGRAMACION = "@Url.Action("getResumenProgramado", "Programacion")";
+    var URL_GET_TIPO_SERVICIO_BY_CORREDOR = "@Url.Action("getTipoServicioByCorredor", "Programacion")";
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_DATA_VIAJES = "@Url.Action("getDataViajesProgramacion", "Programacion")";
+    var URL_GET_TIPOOPER_X_RUTA = "@Url.Action("getTiposServicioByIdRuta", "RutaTipoServicio")";
+    var URL_GET_SENTIDO_RUTA = "@Url.Action("getRecorridoByRuta", "Paradero")";
+    var URL_TIPO_SERV= "@Url.Action("getTiposServicioByIdRuta", "RutaTipoServicio")";
+    var URL_REGISTRARNUEVOVIAJE = "@Url.Action("RegistrarNuevoViaje", "Programacion")";
+    var URL_LISTSERVICIOMAESTROPROG = "@Url.Action("ListServicioMaestroProg", "Programacion")";
+
+    
+    
+    
+
+    var util = new Util();
+
+
+    function ExcelFormato() {
+        window.open("@Url.Content("~/Util/FormatoExcel.Pod.xlsx")");
+    }
+
+    function ExcelWord() {
+        window.open("@Url.Content("~/Util/ManualProgramacion.pdf")");
+    }
+
+
+</script>

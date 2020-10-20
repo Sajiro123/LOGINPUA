@@ -1,0 +1,181 @@
+﻿@{
+    string ruta = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
+    if (ruta.Substring(ruta.Length - 1).Equals("/"))
+    {
+        ruta = ruta.Substring(0, ruta.Length - 1);
+    }
+
+}
+
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>.::PROTRANSPORTE::.</title>
+
+    <link href="~/Content/scss/tableformt.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.multiselect.css" />
+    <link href="~/Content/css/simple-sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css">
+    <link href="~/Content/plugins/tooltipster/tooltipster.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.0.js" ></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/tooltipster/jquery.tooltipster.min.js"></script>
+    <script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>
+
+    <link rel="stylesheet" href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/sweetAlert/sweetalert2.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/css/css_conductores/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="~/Content/LayoutInicial.css" />
+    <link href="~/Content/tableexport.css" rel="stylesheet" />
+
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/exportar_excel/xlsx.core.min.js"></script>
+    <script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+    <script src="~/Scripts/exportar_excel/jhxlsx.js"></script>
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/plugins/moment/moment.js"></script>
+    <script src="~/Scripts/Utilidades/Util.js"></script>
+    <script src="~/Content/plugins/numberValidador/numberValidador.js"></script>
+    <script src="~/Content/js/all.min.js"></script>
+    <script src="~/Content/js/bootstrap-select.js"></script>
+    <script src="~/Content/plugins/lodash/lodash.min.js"></script>
+    <script>eval(mod_pagespeed_2HaUiZdTC$);</script>
+    <link rel="stylesheet" href="~/Content/css/css_programacion/alertify.css" />
+    <script src="~/Content/js/js_programacion/alertify.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.js"></script>
+    <script src="~/Content/plugins/uitablefilter/jquery.uitablefilter.js"></script>
+    <script src="~/Content/plugins/fancytable/fancyTable.js"></script>
+    <script src="~/Scripts/tableexport.js"></script>
+    <script src="~/Scripts/Blob.min.js"></script>
+    <link href="~/Content/Cargar_Pagina.css" rel="stylesheet" />
+
+</head>
+<body>
+
+
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="list-group list-group-flush" style="background-color: #00a39c !important;box-shadow: rgb(0, 0, 0) -2px 1px 11px 3px;">
+            <div class="bg-light border-right" id="sidebar-wrapper" style="width: 15rem;background-color: #00a39c !important;color: white !important;width:242px;">
+                <br />
+
+                <img src="~/Util/PT_logon2.png" alt="Alternate Text" style="width:100%" />
+                <br /><br />
+                <div style="text-align:center">
+                    <img src="~/Util/36_blanco.png" style="width:50%" alt="Alternate Text" />
+                    <br />
+                    <span>
+                        <p style="font-size: 1rem;">Sistema Integrado de Transporte para<br />  Corredores Complementarios y COSAC</p>
+                        <br>
+                        <small></small>
+                    </span>
+                </div>
+
+                <div class="list-group list-group-flush">
+                    <div id="accordion">
+                        <input type="hidden" id="mod" />                     
+                      
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="margin-left: 5px;">
+               
+                <div style="text-align:center;    width: 100%;"><img src="~/Util/PT_logon2.png" class="imagen_logo" alt="Alternate Text" /></div> 
+                <br /><br /><br />
+             
+
+            </nav>
+
+
+          
+         
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+     
+        <!-- /#page-content-wrapper -->
+    </div>
+    <script>
+
+
+        var URL_GET_MODALIDAD = "@Url.Action("Sistemas_", "Home")";
+
+        var util = new Util();
+        var currentAction = '@ViewBag.currentAction';
+        var currentController = '@ViewBag.currentRoute';
+
+
+        //MODALIDAD ESCOGER POR MODULO
+
+        function Escoger_Modalidad(id) {
+            window.location.replace(URL_GET_MODALIDAD + '/?id_modalidad=' + 1);
+
+
+        }
+
+
+
+
+        $('.dropdown-submenu > a').on("click", function (e) {
+            var submenu = $(this);
+            $('.dropdown-submenu .dropdown-menu').removeClass('show');
+            submenu.next('.dropdown-menu').addClass('show');
+            e.stopPropagation();
+        });
+        //
+        $('.dropdown').on("hidden.bs.dropdown", function () {
+            // hide any open menus when parent closes
+            $('.dropdown-menu.show').removeClass('show');
+        });
+        //
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        //
+        verificaCurrentView(currentAction, currentController);
+        //verificando action clikeado
+        function verificaCurrentView(action, controller) {
+            $.each($('#accordion .card'), function () {
+                $.each($(this).find('.card-body'), function () {
+                    var elementAction = $(this).find('a');
+                    var actionNombre = elementAction.attr('data-action').toUpperCase();
+                    var controlerNombre = elementAction.attr('data-controller').toUpperCase();
+                    //console.log(actionNombre, controlerNombre)
+                    //console.log(action.toUpperCase(), actionNombre, '<<---->>', controller.toUpperCase(), controlerNombre)
+                    if (action.toUpperCase() == actionNombre && controller.toUpperCase() == controlerNombre) {
+                        //console.log('-->', elementAction[0]);
+                        elementAction.parent().addClass('sombreaItemMenu');
+                        elementAction.parent().parent().addClass('show');
+                        return false;
+                    }
+                });
+            });
+
+        }
+    </script>
+
+
+
+</body>
+</html>

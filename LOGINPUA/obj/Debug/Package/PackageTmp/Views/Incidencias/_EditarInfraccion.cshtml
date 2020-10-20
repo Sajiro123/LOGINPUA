@@ -1,0 +1,143 @@
+﻿<div class="modal fade" id="modal_editar_infracc">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width:600px;margin-left:200px;">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Nómina</h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+            <form id="sectionParametrosEditarInfraccion" autocomplete="off">
+                <div class="modal-body" style="padding-left: 45px; padding-right: 0px;">
+
+                    <div class="form-group  col-md-6" style="display:none">
+                        <div>
+                            <input name="ID_INFRACCION" class="form-control" id="TXT_ID_INFRACCION" style="display:unset;width:80% ">
+                        </div>
+
+                    </div>
+
+
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <div class="form-group  col-md-6">
+                                <label>PERSONA DE LA INCIDENCIA</label>
+                                <div>
+                                    <select name="ID_PERSONA_INCIDENCIA" class="form-control" id="selectEditarPersonaIncidencia" style="display:unset;width:80% "></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group  col-md-6">
+                                <label>CODIGO DE INFRACCION</label>
+                                <div>
+                                    <input name="COD_INFRACCION" class="form-control" id="TXT_COD_INFRACCION" style="display:unset;width:80% ">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="control-group">
+                        <div class="form-group row">
+
+                            <div class="form-group  col-md-6">
+                                <label>CALIFICACION</label>
+                                <div class="">
+                                    <select name="CALIFICACION" id="TXT_CALIFICACION" style="display:unset;width:80%" type="text" class="form-control">
+                                        <option value="LEVE">LEVE</option>
+                                        <option value="GRAVE">GRAVE</option>
+                                        <option value="MUY GRAVE">MUY GRAVE</option>
+                                    </select>
+                                    @*<input name="CALIFICACION" id="TXT_CALIFICACION" style="display:unset;width:80%" type="text" class="form-control">*@
+                                </div>
+                            </div>
+
+                            <div class="form-group  col-md-6">
+                                <label>TIPO DE INCIDENCIA</label>
+                                <div class="">
+                                    <input name="TIPO_INCIDENCIA" id="TXT_TIPO_INCIDENCIA" style="display:unset;width:80%" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <div class="form-group  col-md-6">
+                                <label>MULTA EN UIT (%)</label>
+                                <div class="">
+                                    <input name="MULTA_UIT" id="TXT_MULTA_UIT" style="display:unset;width:80%" type="number" class="form-control">
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-group col-md-6">
+                                <label>REINCIDENCIA EN UIT (%)</label>
+                                <div class="">
+                                    <input name="REINCIDENCIA_UIT" id="TXT_REINCIDENCIA" style="display:unset;width:80%" type="number" class="form-control">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="form-group row">
+
+                            <div class="form-group col-md-6">
+                                <label>TIPO_INFRACCION</label>
+                                <div class="">
+                                    <input name="TIPO_INFRACCION" id="TXT_TIPO_INFRACCION" style="display:unset;width:80%" type="text" class="form-control">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group  col-md-6">
+                                <label>SANCION</label>
+                                <div class="">
+                                    <textarea onkeyup="textAreaAdjust(this)" name="SANCION" id="TXT_SANCION" style="display:unset;width:80%;" type="text" class="form-control"></textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <div class="form-group  col-md-6">
+                                <label>DESCRIPCION</label>
+                                <div class="">
+                                    <textarea onkeyup="textAreaAdjust(this)" name="DESCRIPCION" id="TXT_DESCRIPCION" style="display:unset;width:80%;" type="text" class="form-control"></textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                        <div class="modal-footer">
+                            <button id="editar_infrac_btn" class="btn btn-info" type="submit">Guardar</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
+                </form>
+            </div>
+
+        </div>
+    </div>

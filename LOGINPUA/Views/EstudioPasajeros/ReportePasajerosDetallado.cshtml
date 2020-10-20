@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewBag.Title = "ReportePasajerosDetallado";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    var fecha_actual = DateTime.Now.ToString("dd/MM/yyyy");
+}
+
+
+<script src="~/Content/js/js_estudio_pasajeros/js_ReportePasajerosDetalle.js"></script>
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+
+
+
+<script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+<script src="~/Scripts/exportar_excel/Blob.js"></script>
+<script src="~/Scripts/exportar_excel/xls.core.min.js"></script>
+<script src="~/Scripts/exportar_excel/tableexport.js"></script>
+
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Reporte de Estudio de Pasajeros
+        </h4>
+    </div>
+</div>
+<br />
+
+<div     class="row" id="row_filtros">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="idfiltro_primero" onchange="FiltroCambio()">
+                <option value="DIAS"selected>Dias</option>
+                <option value="PARADERO" >Paradero</option>
+            </select>
+
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="idfiltro">
+                <option value="OFERTA_DEMANDA" selected>Oferta-Demanda</option>
+                @*<option value="ORIGEN_DESTINO">Origen-Destino</option>*@
+                <option value="COLECTIVO">Colectivo</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select name="id_corredor" class="form-control form-control-sm" id="selectRutaConsulta" onchange="cambioDeRuta();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="txtFecha" class="form-control form-control-sm" value="@fecha_actual" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+
+  
+
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input class="form-control form-control-sm" id="rangoFechaConsulta">
+        </div>
+    </div>
+    <div class="col-md-1">
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="Listar_pasajeros_filtro();">Consultar</button>
+    </div>
+    </div>
+<div class="row">
+
+
+<div class="col-md-2">
+        <br />
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Lado"><svg class="svg-inline--fa fa-project-diagram fa-w-20" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="project-diagram" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M384 320H256c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32zM192 32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v128c0 17.67 14.33 32 32 32h95.72l73.16 128.04C211.98 300.98 232.4 288 256 288h.28L192 175.51V128h224V64H192V32zM608 0H480c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32z"></path></svg><!-- <span class="fas fa-project-diagram" aria-hidden="true"></span> --></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectLado" onchange="getParaderosxRuta($('#selectRutaConsulta').val())">
+                <option value="A">A</option>
+                <option value="B">B</option>
+            </select>
+        </div>
+    </div>
+   
+
+    <div class="col-md-2">
+        <br />
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Salto de horas consulta" id="basic-addon1"><svg class="svg-inline--fa fa-clock fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm57.1 350.1L224.9 294c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v137.7l63.5 46.2c5.4 3.9 6.5 11.4 2.6 16.8l-28.2 38.8c-3.9 5.3-11.4 6.5-16.8 2.6z"></path></svg><!-- <span class="fas fa-clock" aria-hidden="true"></span> --></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectHoraSalto">
+                 <option value="30">30 Minutos</option>
+                <option value="60" selected>60 Minutos</option>
+
+            </select>
+        </div>
+    </div>
+ 
+</div>
+    
+   
+
+    
+
+<hr />
+
+<div class="table-responsive">
+    <table class="text-center responsive-table" style="width:100%" id="tablaGeneral">
+        <thead class="thead-azul-claro">
+
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_LISTAR_DIAS = "@Url.Action("Listar_Reporte_Dias", "EstudioPasajeros")";
+    var URL_GET_LISTAR_PARADEROS = "@Url.Action("Listar_Reporte_Paraderos", "EstudioPasajeros")"; 
+    var URL_GET_RECORRIDO_X_RUTA = "@Url.Action("getRecorridoByRuta", "Paradero")";
+
+        
+    function getParaderosxRuta(idRuta) {
+        JSONparaderos = [];
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getParaderosByIdRuta", "Salida")",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: {
+                id_ruta: idRuta,
+            },
+            success: function (data) {
+                $('#selectParaderoIni').empty();
+                $('#selectParaderoFin').empty();
+                if (data.length == 0) {
+                    //$('#btnConsultaHoras, #exportar').prop('disabled', true);
+                    $('#selectParaderoIni, #selectParaderoFin').append('<option value="0">-- No hay información para mostrar --</option>');
+                    return;
+                }
+                $('#btnConsultaHoras, #exportar').prop('disabled', false);
+                $('#exportar').prop('disabled', true);                    //QUITAR SOLO PARA DESARROLLO
+
+                var agrupadoPorLados = _.groupBy(data, function (d) { return d.LADO })  //agrupado por fechas la data del comparativo A
+                $.each(agrupadoPorLados[$('#selectLado').val()], function (i) {
+                    var item = {
+                        ID_PARADERO: this.ID_PARADERO,
+                        NRO_ORDEN: (this.NRO_ORDEN - 1),
+                        NOMBRE: this.NOMBRE,
+                        LADO: this.LADO,
+                        ETIQUETA_NOMBRE: this.ETIQUETA_NOMBRE,
+                        DISTANCIA_PARCIAL: this.DISTANCIA_PARCIAL
+                    }
+                    JSONparaderos.push(item);//nuevo json para paradero con el nro orden -1 por el terminal
+                    $('#selectParaderoIni').append('<option value="' + this.ID_PARADERO + '">' + (this.NRO_ORDEN - 1) + '.- ' + this.NOMBRE + '</option>');
+                    $('#selectParaderoFin').append('<option value="' + this.ID_PARADERO + '"  ' + (agrupadoPorLados[$('#selectLado').val()].length - 1 == i ? ' selected ' : '') + ' >' + (this.NRO_ORDEN - 1) + '.- ' + this.NOMBRE + '</option>');
+                });
+                //$('#selectParaderoIni').val(955);//DURITO
+                //$('#selectParaderoFin').val(959);//DURITO
+                //getViajesPorRuta();//DURITO
+            }
+        });
+    }
+</script>

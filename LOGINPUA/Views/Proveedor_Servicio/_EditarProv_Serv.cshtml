@@ -1,0 +1,69 @@
+﻿@{ List<ENTIDADES.CC_USUARIO_PERSONA> lisUsuario = new List
+                <ENTIDADES.CC_USUARIO_PERSONA>(); lisUsuario = ViewBag.listaUsuario; }
+
+
+<style>
+    .focus:focus {
+        color: red;
+    }
+</style>
+
+ 
+<div class="modal fade" id="ActualizarModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Usuario Asignado a un Proovedor</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group ">
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-sm-3">
+                            <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <select   id="idusuario_prove" class="selectpicker" data-live-search="true">
+                                @foreach (var item in lisUsuario)
+                                {
+                                    <option value="@item.ID_USUARIO">@item.USUARIO</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="focus"><i class="fas fa-key btn-password" style="cursor:pointer"></i></button>    
+                         </div>
+
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-3">
+
+                            <h3 class="col-sm-2 col-form-label">Corredor</h3>
+                        </div>
+
+                        <div class="col-sm-8" id="idcorredores_div">
+
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="modal-footer">
+                <button id="consultar1" onclick="AgregarUsuarios_Corredor($(this))" class="btn btn-info" type="button">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+     
+
+</script>

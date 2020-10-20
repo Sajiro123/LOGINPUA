@@ -1,0 +1,575 @@
+﻿<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="modal-dialog" class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Registro Buses</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#uploadTab" class="btn btn-outline-secondary" style="color:black" onclick="modal_indiv()" aria-controls="uploadTab" role="tab" data-toggle="tab">Individual</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#browseTab" class="btn btn-outline-secondary" style="color:black" onclick="modal_Masivo()" aria-controls="browseTab" role="tab" data-toggle="tab">Masivo</a>
+
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <br />
+
+                    <div>
+                        <div class="tab-content">
+                            
+                                <div role="tabpanel" class="tab-pane active" id="uploadTab">
+                                    <form id="sectionParametros"  autocomplete="off"    >
+                                        <div>
+
+
+                                            <div class="row">
+
+                                                <div class="form-group col-md-4">
+
+                                                    <div class="col-md-12">
+                                                        <label>FECHA DE INCIO A PT</label>
+
+                                                        <div class="form-group" id="sectionFecha">
+                                                             <input id="txtFechaRegistro"  name="BS_FECINI_PT" style="display:unset;width:70%"  type="text" class="form-control " />
+                                                        </div> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+
+                                                    <div class="col-md-12">
+                                                        <label>TIPO CORREDOR</label>
+                                                        <div>
+                                                            <select name="ID_CORREDOR" class="form-control" id="selectAbrevCorredor" style="display:unset;width:70% "></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+
+                                                    <div class="col-md-12">
+                                                        <label>NOMBRE DE LA EMPRESA</label>
+                                                        <div>
+                                                            <input required name="BS_NOM_EMPRE" style="display:unset;width:70%" type="text" class="form-control">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4">
+
+                                                    <div class="col-md-12">
+                                                        <label>PADRON</label>
+                                                        <div class="input-append datetimepicker">
+                                                            <input name="BS_PADRON" id="BS_PADRON" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4">
+
+                                                    <div class="col-md-12">
+                                                        <label>PLACA</label>
+                                                        <div class="input-append datetimepicker">
+                                                            <input name="BS_PLACA" id="BS_PLACA" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PROPIETARIO</label>
+                                                        <div class="">
+                                                            <input name="BS_PROPIETARIO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PAQUETE CONCESIÓN</label>
+                                                        <div class="">
+                                                            <input required name="BS_PAQUETE_CONCESION" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PAQUETE DONDE BRINDA SERVICIO</label>
+                                                        <div class="">
+                                                            <input required name="BS_PAQUETE_SERVICIO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>TIPO_SERVICIO</label>
+                                                        <div class="">
+                                                            <input name="BS_TIPO_SERVICIO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>ESTADO</label>
+                                                        <div class="">
+                                                            <input name="BS_ESTADO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>MARCA</label>
+                                                        <div class="">
+                                                            <input name="BS_MARCA" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>MODELO</label>
+                                                        <div class="">
+                                                            <input name="BS_MODELO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>AÑO FABRICACION</label>
+                                                        <div class="form-group"  id="sectionFecha">
+                                                            <input id="txtFechaRegistro1" name="BS_AÑO_FABRICACION" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>COMBUSTIBLE</label>
+                                                        <div class="">
+                                                            <input name="BS_COMBUSTIBLE" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>TECNOLOGIA EURO</label>
+                                                        <div class="">
+                                                            <input name="BS_TECNOLOGIA_EURO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label> POTENCIA MOTOR</label>
+                                                        <div class="">
+                                                            <input name="BS_POTENCIA_MOTOR" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label> SERIE MOTOR</label>
+                                                        <div class="">
+                                                            <input name="BS_SERIE_MOTOR" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label> SERIE CHASIS</label>
+                                                        <div class="">
+                                                            <input name="BS_SERIE_CHASIS" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>COLOR VEHICULO</label>
+                                                        <div class="">
+                                                            <input name="BS_COLOR_VEHICULO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>LONGUITUD</label>
+                                                        <div class="">
+                                                            <input name="BS_LONGITUD" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>ASIENTOS</label>
+                                                        <div class="">
+                                                            <input name="BS_ASIENTOS"  style="display:unset;width:70%" type="number" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>AREA PASILLO</label>
+                                                        <div class="">
+                                                            <input name="BS_AREA_PASILLO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PESO NETO</label>
+                                                        <div class="">
+                                                            <input name="BS_PESO_NETO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PESO BRUTO</label>
+                                                        <div class="">
+                                                            <input name="BS_PESO_BRUTO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>ALTURA</label>
+                                                        <div class="">
+                                                            <input name="BS_ALTURA" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>ANCHO</label>
+                                                        <div class="">
+                                                            <input name="BS_ANCHO" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label> UTIL</label>
+                                                        <div class="">
+                                                            <input name="BS_CARGA_UTIL" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PUERTA IZQUIERDA</label>
+                                                        <div class="">
+                                                            <input name="BS_PUERTA_IZQUIERDA" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>PARTIDA REGISTRAL</label>
+                                                        <div class="">
+                                                            <input name="BS_PARTIDA_REGISTRAL" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>CODIGO CVS</label>
+                                                        <div class="">
+                                                            <input  required name="BS_CODIGO_CVS" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>CVS INICIO</label>
+                                                        <div class="">
+                                                            <input required name="BS_CVS_FEC_INIC" id="txtFechaRegistro2" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>CVS VIGENCIA</label>
+                                                        <div class="">
+                                                            <input required name="BS_CVS_FEC_FIN" id="txtFechaRegistro3"  style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>SOAT INICIO</label>
+                                                        <div class="">
+                                                            <input  required name="BS_SOAT_FEC_INIC" id="txtFechaRegistro4" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>SOAT VIGENCIA</label>
+                                                        <div class="">
+                                                            <input required name="BS_SOAT_FEC_FIN" id="txtFechaRegistro5" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>N° PÓLIZA VEHÍCULOS</label>
+                                                        <div class="">
+                                                            <input required name="BS_POLIZA_VEHICULOS" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>VEHICULOS INICIO</label>
+                                                        <div class="">
+                                                            <input required name="BS_VEHICULOS_INIC" id="txtFechaRegistro6" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>VEHICULOS FIN</label>
+                                                        <div class="">
+                                                            <input required name="BS_VEHICULOS_FIN" id="txtFechaRegistro7" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>N° POLIZA RESPONSABILIDAD CIVIL</label>
+                                                        <div class="">
+                                                            <input required name="BS_POLIZA_CIVIL"   style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>RC INICIO</label>
+                                                        <div class="">
+                                                            <input required name="BS_RC_INICIO"  id="txtFechaRegistro8" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>RC VIGENCIA</label>
+                                                        <div class="">
+                                                            <input required name="BS_RC_FIN" id="txtFechaRegistro9   " style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>N° POLIZA ACCIDENTES PERSONALES COLECTIVOS PARTICULARES</label>
+                                                        <div class="">
+                                                            <input name="BS_POLIZA_ACCI_COLECTIVOS" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>APCP INICIO</label>
+                                                        <div class="">
+                                                            <input name="BS_APCP_INIC" id="txtFechaRegistro10" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>APCP VIGENCIA</label>
+                                                        <div class="">
+                                                            <input name="BS_APCP_FIN" id="txtFechaRegistro11" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>N° POLIZA MULTIRIESGOS</label>
+                                                        <div class="">
+                                                            <input name="BS_POLIZA_MULTIRIESGOS" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>MULTIRESGOS INICIO</label>
+                                                        <div class="">
+                                                            <input name="BS_MULTIRESGOS_INIC" id="txtFechaRegistro12" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>MULTIRIESGOS VIGENCIA</label>
+                                                        <div class="">
+                                                            <input name="BS_MULTIRESGOS_FIN" id="txtFechaRegistro13" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>RTV INICIO </label>
+                                                        <div class="">
+                                                            <input name="BS_RTV_INIC" id="txtFechaRegistro14" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>RTV VIGENCIA</label>
+                                                        <div class="">
+                                                            <input name="BS_RTV_FIN" id="txtFechaRegistro15" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>INICIO REVISION ANUAL GNV</label>
+
+                                                        <div class="">
+                                                            <input name="BS_REVI_ANUAL_GNV_INIC" id="txtFechaRegistro16" style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>VIGENCIA REVISION ANUAL GNV</label>
+                                                        <div class="">
+                                                            <input name="BS_REVI_ANUAL_GNV_FIN" id="txtFechaRegistro17"  style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>INICIO REVISION CILINDROS GNV</label>
+                                                        <div class="">
+                                                            <input name="BS_REVISION_CILINDROS_GNV_INIC" id="txtFechaRegistro18"  style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group  col-md-4">
+                                                    <div class="col-md-12">
+                                                        <label>VIGENCIA REVISION CILINDROS GNV</label>
+                                                        <div class="">
+                                                            <input name="BS_REVISION_CILINDROS_GNV_FIN" id="txtFechaRegistro19"  style="display:unset;width:70%" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="registrar_indiv_btn" class="btn btn-info" type="submit">Guardar</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                        </div>
+
+                            
+
+                            <div role="tabpanel" class="tab-pane" id="browseTab">
+
+                                <div class="modal-body">
+
+                                    <form id="formSubirExcelBuses" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="form-group custom-file">
+                                                <input type="file" name="programacionArchivo" onchange="subirArchivoTemp($(this))" class="custom-file-input" id="archivoSubido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+
+                                                <label class="custom-file-label" id="lblArchivoSubido" for="archivoSubido">Subir Archivo</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="registrar_excel_btn" class="btn btn-info" type="submit">Guardar</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        </div>
+                                        @*<button id="btnSubirArchivo" class="btn btn-info" type="submit">Registrar</button>*@
+
+                                    </form>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

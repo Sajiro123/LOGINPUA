@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Ubicacion Actual";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
+
+<h2>@ViewBag.Title</h2>
+
+<form role="form">
+    <div id="map" class="map" tabindex="0" style="width: 100%; height: 100%">
+        <div id="popup">
+            <span class="popup_contenido"></span>
+        </div>
+    </div>
+</form>
+
+<style>
+    #popup {
+        min-width: 100px;
+        /*height: 50px;*/
+        background: #FFFFFF;
+        border: 1px solid #000000;
+        padding: 2px !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+<script>
+
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([@ViewBag.longitud, @ViewBag.latitud]),
+        zoom: 13
+    });
+
+    var map = new ol.Map({
+        layers: [
+          new ol.layer.Tile({
+              source: new ol.source.OSM()
+          })
+        ],
+        target: 'map',
+        controls: ol.control.defaults({
+            attributionOptions: {
+                collapsible: false
+            }
+        }),
+        view: view
+    });
+
+    var element = document.getElementById('popup');
+
+    var popup = new ol.Overlay({
+        element: element,
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+
+    map.addOverlay(popup);
+
+    map.on('click', function (evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+                function (feature, layer) {
+                    return feature;
+                });
+
+        if (feature) {
+            var geometry = feature.getGeometry();
+            var coord = geometry.getCoordinates();
+            mostrarMarkerPopup_2(coord, feature.get('name'));
+        } else {
+            $(element).hide();
+        }
+    });
+
+    function mostrarMarkerPopup_2(ubicacion, texto) {
+        popup.setPosition(ubicacion);
+        $(element).find(".popup_contenido").html(texto);
+        $(element).show();
+    }
+</script>
+
+<script type="text/javascript">
+    var nomControlador = 'Supervisor';
+
+    $(document).ready(function () {
+        pintar();
+    });
+
+    function pintar() {
+        var layers = map.getLayers().getArray();
+        for (var i = layers.length - 1; i > 0; i--) {
+            map.removeLayer(layers[i]);
+        }
+        var markersFeature = new Array();
+        var vectorSource = new ol.source.Vector({});
+
+        var puntoNuevo = ol.proj.fromLonLat([@ViewBag.longitud, @ViewBag.latitud]);
+        var iconFeature = new ol.Feature({
+            geometry: new ol.geom.Point(puntoNuevo),
+        });
+
+        var iconStyle = new ol.style.Style({
+            image: new ol.style.Icon(({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                opacity: 1,
+                src:  '@Url.Content("~/Util/Image/marcador_mapa.png")'
+            }))
+        });
+
+        iconFeature.setStyle(iconStyle);
+
+        markersFeature.push(iconFeature);
+
+
+        var markers = new ol.source.Vector({
+            features: markersFeature
+        });
+
+        var markersLayer = new ol.layer.Vector({
+            source: markers
+        });
+
+        map.addLayer(markersLayer);
+
+
+    }
+
+
+</script>

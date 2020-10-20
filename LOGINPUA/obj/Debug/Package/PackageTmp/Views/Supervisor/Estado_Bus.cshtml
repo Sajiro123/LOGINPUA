@@ -1,0 +1,2011 @@
+﻿@model LOGINPUA.Models.BusesModel
+@{
+    ViewBag.Title = "Estado_Bus";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    int i = 0;
+    DateTime fecha_Actual = DateTime.Now;
+    string fecha_Busqueda = fecha_Actual.ToString("dd/MM/yyyy");
+    int count_i = 1;
+    string id_check1 = "";
+    string id_check2 = "";
+    string id_check3 = "";
+
+    string id_checkdiv = "";
+    string id_checkdiv2 = "";
+
+     
+
+}
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .modal-content input {
+        width: 213px;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table_responsive td, .table_responsive th {
+        padding: 0;
+    }
+    /*.table td, .table th {
+    padding: 0;
+    }*/
+</style>
+
+
+<script type="text/javascript">
+        if (location.protocol != 'https:') {
+            location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        }
+    </script>
+
+<link href="~/Content/css/css_conductores/Formulario.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/css/css_buses/accordion.css">
+
+
+<br /><br />
+<br /><br />
+
+
+
+@using (Html.BeginForm("Insertar_Buses_Despacho_FINAL", "Supervisor", FormMethod.Post, new { enctype = "multipart/form-data", @id = "msform" }))
+{
+    <input type="text" name="accion" value="@ViewBag.accion" hidden />
+    <div class="page">
+
+
+
+
+
+
+        @Html.AntiForgeryToken()
+        @*PRIMERA TABLA*@
+        <div>
+
+            <fieldset>
+                <table class="table table_responsive" style="background-color:#43CBB9">
+                    <thead>
+                        <tr><th colspan="5">DOCUMENTACIÓN  VIGENTE DENTRO DEL VEHÍCULO</th></tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="3">Tiene<br></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td scope="col">COMPONENTES</td>
+                            <td scope="col">Sí</td>
+                            <td scope="col">No	</td>
+                            <td scope="col">Vigencia</td>
+                            <td scope="col">Observaciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Lista_Dentro_Vehiculo)
+                        {
+                            <tr>
+                                <td data-label="COMPONENTES">
+                                    @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                    <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                </td>
+                                <td colspan="2" data-label="ESTADO">
+                                    <div>
+                                        @if (ViewBag.vigencias[i] == null)
+                                        {
+
+                                            <div style="pointer-events: none;">
+                                                <input name="estado[]" type="checkbox" class="container checkmark " value="1" style="width:40%;cursor: not-allowed;" />
+                                                <input name="estado[]" type="checkbox" class="container checkmark" value="0" checked="checked" style="width:40%;cursor: not-allowed;" />
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+
+
+                                            <div style="pointer-events: none;">
+
+                                                <input name="estado[]" type="checkbox" class="container checkmark" value="1" checked="checked" style="width:40%;cursor: not-allowed;" />
+                                                <input name="estado[]" type="checkbox" class="container checkmark" value="0" style="width:40%;cursor: not-allowed;" />
+                                            </div>
+
+                                        }
+                                    </div>
+                                </td>
+
+                                <td data-label="Vigencia">
+
+                                    @if (ViewBag.vigencias[i] == null)
+                                    {
+                                        <label>No Presenta Documento</label>
+                                    }
+                                    else
+                                    {
+
+                                        if (Convert.ToDateTime(@ViewBag.vigencias[i]) <= Convert.ToDateTime(fecha_Busqueda))
+                                        {
+                                            <label> @ViewBag.vigencias[i] </label>
+                                            <h5 style="color:red">CADUCADO</h5>
+                                        }
+                                        else
+                                        {
+                                            <label> @ViewBag.vigencias[i] </label>
+
+                                        }
+
+
+
+                                    }
+
+                                </td>
+                                <td data-label="Observaciones">
+                                    <div class="col-md-12">
+                                        <div class="col-lg-12" style="text-align:center">
+                                            <select id="span_small" class="form-control" name="observacion[]" value="0">
+                                                <option value="0">Seleccionar Opción </option>
+                                                <option value="DT">Dentro del vehículo</option>
+                                                <option value="FR">Fuera del vehículo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            if (i < 6) { i = i + 1; }
+                        }
+                    </tbody>
+                </table>
+                <br /><br />
+                <button type="button" name="next" class="next btn btn-dark action-button active center-block" onclick="getLocation()">Siguiente</button>
+            </fieldset>
+
+
+
+            @*SEGUNDA TABLA*@
+            <fieldset>
+                <div style="margin:-30px 0">
+                    <img src="~/Util/Image/circuito.png" /><img src="~/Util/Image/partes_bus.png" />
+
+
+                </div>
+
+
+                <br /><br />
+
+                <div class="accordion" style="background-color: #eeeeee;">
+                    <div class="accordion-item">
+                        <img data-target="#modalAdd" data-toggle="modal" src="~/Util/Image2/camera-png-icon-10.png" id="img" style="border: 0;width:120px;height:110px;cursor:pointer" />
+
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">FRONTAL</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior" style="padding:0px" align="center">
+                                    <tr>
+                                        <th colspan="9">EXTERIOR</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2" style="text-align:center">¿PRESENTA?</td>
+                                        <td colspan="3">ESTADO</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">CONCEPTOS</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">SI</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">NO</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">B</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">R</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">M</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">OBSERVACIONES</td>
+                                    </tr>
+
+
+
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 7 && item.CD_ID < 15)
+                                                {
+                                                    count_i++;
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                        <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input type="checkbox" name="estado[]" id="@id_check1" class="container" value="1" checked style="width:30%;" />
+                                                                        <input type="checkbox" name="estado[]" id="@id_check2" class="container" value="0" style="width:30%;" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                    else if (ViewBag.accion == "EDITAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 7 && item.CD_ID < 15)
+                                                {
+                                                    count_i++;
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (@item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+
+                                                                        @if (item.BD_CALIDAD == 0)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 1)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 2)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+                    @*TERCERA TABLA *@
+                    <div class="accordion-item">
+
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">LATERAL DERECHO</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior" align="center">
+                                    <tr>
+                                        <th colspan="9">EXTERIOR</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2" style="text-align:center">¿PRESENTA?</td>
+                                        <td colspan="3">ESTADO</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">CONCEPTOS</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">SI</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">NO</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">B</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">R</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">M</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">OBSERVACIONES</td>
+                                    </tr>
+
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 15 && item.CD_ID < 22)
+                                                {
+                                                    count_i++;
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                        <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input type="checkbox" name="estado[]" id="@id_check1" class="container" value="1" checked style="width:30%;" />
+                                                                        <input type="checkbox" name="estado[]" id="@id_check2" class="container" value="0" style="width:30%;" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                    else if (ViewBag.accion == "EDITAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 15 && item.CD_ID < 22)
+                                                {
+                                                    count_i++;
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+
+                                                                        @if (item.BD_CALIDAD == 0)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 1)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 2)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+                    @*CUARTA TABLA *@
+
+                    <div class="accordion-item">
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">POSTERIOR</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior" align="center">
+                                    <tr>
+                                        <th colspan="9">EXTERIOR</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2" style="text-align:center">¿PRESENTA?</td>
+                                        <td colspan="3">ESTADO</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">CONCEPTOS</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">SI</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">NO</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">B</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">R</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">M</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">OBSERVACIONES</td>
+                                    </tr>
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 22 && item.CD_ID < 30)
+                                                {
+                                                    count_i++;
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                        <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input type="checkbox" name="estado[]" id="@id_check1" class="container" value="1" checked style="width:30%;" />
+                                                                        <input type="checkbox" name="estado[]" id="@id_check2" class="container" value="0" style="width:30%;" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                    else if (ViewBag.accion == "EDITAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 22 && item.CD_ID < 30)
+                                                {
+                                                    count_i++;
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+
+                                                                        @if (item.BD_CALIDAD == 0)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 1)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 2)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    @*QUINTA TABLA *@
+
+                    <div class="accordion-item">
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">LATERAL IZQUIERDO</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior" align="center">
+                                    <tr>
+                                        <th colspan="9">EXTERIOR</th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2" style="text-align:center">¿PRESENTA?</td>
+                                        <td colspan="3">ESTADO</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">CONCEPTOS</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">SI</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">NO</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">B</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">R</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">M</td>
+                                        <td scope="col" class="mdl-cell mdl-cell--1-col graybox">OBSERVACIONES</td>
+                                    </tr>
+
+
+                                    @if (ViewBag.accion == "REGISTRAR")
+                {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 30 && item.CD_ID < 39)
+                                                {
+                                                    count_i++;
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                        <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        <input type="checkbox" name="estado[]" id="@id_check1" class="container" value="1" checked style="width:30%;" />
+                                                                        <input type="checkbox" name="estado[]" id="@id_check2" class="container" value="0" style="width:30%;" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                    else if (ViewBag.accion == "EDITAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Exterior_Vehiculo)
+                                            {
+                                                if (item.CD_ID >= 30 && item.CD_ID < 39)
+                                                {
+                                                    count_i++;
+                                                    <tr>
+                                                        <td></td>
+                                                        <td data-label="CONCEPTOS" style="">
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+                                                        <td colspan="2" data-label="ESTADO">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                    <div id="@id_checkdiv">
+                                                                        @if (item.BD_ESTADO == 0)
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3" data-label="CALIDAD">
+                                                            <div>
+                                                                @if (item.CD_ID == 7)
+                                                                {
+                                                                    <input name="calidad[]" class="container " type="checkbox" value="8" checked="checked" hidden />
+                                                                }
+                                                                else
+                                                                {
+                                                                    count_i++;
+
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    <div id="@id_checkdiv2">
+
+                                                                        @if (item.BD_CALIDAD == 0)
+                                                                        {
+
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                            {
+                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                            }
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 1)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                        else if (item.BD_CALIDAD == 2)
+                                                                        {
+                                                                            <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                            <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+
+                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+                    @*SEXTA TABLA *@
+
+
+                    <div class="accordion-item">
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">INSPECCION DE ACTIVIDADES DE MANTENIMIENTO PREVENTIVO</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior table-xs" align="center">
+                                    <tr>
+                                        <th colspan="9">CABINA<br></th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2" style="text-align:center">¿PRESENTA?</td>
+                                        <td colspan="3">ESTADO</td>
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CONCEPTOS</td>
+                                        <td>SI</td>
+                                        <td>NO</td>
+                                        <td>B</td>
+                                        <td>R</td>
+                                        <td>M</td>
+
+
+                                        <td>OBSERVACIONES</td>
+                                    </tr>
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Cabina_Vehiculo)
+                                            {
+                                                count_i++;
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                        <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <div>
+                                                            @if (item.CD_ID == 48)
+                                                            {
+
+                                                                <input name="estado[]" type="checkbox" class="container checkmark" value="5" checked="checked" style="width:30%;" hidden />
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                                id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                id_checkdiv = "check" + count_i.ToString();
+                                                                id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                <div id="@id_checkdiv">
+                                                                    <input type="checkbox" name="estado[]" id="@id_check1" class="container checkmark" value="1" checked style="width:30%;" />
+                                                                    <input type="checkbox" name="estado[]" id="@id_check2" class="container checkmark" value="0" style="width:30%;" />
+                                                                </div>
+
+                                                            }
+
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <div>
+                                                            @{ count_i++;
+                                                                id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                id_check3 = "product-" + count_i.ToString() + "-3";
+                                                                id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                            }
+                                                            <div id="@id_checkdiv2">
+                                                                <input name="calidad[]" class="container checkmark" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                <input name="calidad[]" class="container checkmark" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                <input name="calidad[]" class="container checkmark" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                </tr>
+
+                                                                }
+                                        </tbody>
+                                                                }
+                                                                else if (ViewBag.accion == "EDITAR")
+                                                                {
+                                                                    <tbody>
+                                                                        @foreach (var item in Model.Lista_Cabina_Vehiculo)
+                                                                        {
+                                                                            count_i++;
+
+                                                                            <tr>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                                                    <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                                                </td>
+                                                                                <td colspan="2">
+                                                                                    <div>
+                                                                                        @if (item.CD_ID == 48)
+                                                                                        {
+                                                                                            <input name="estado[]" type="checkbox" class="container checkmark" value="5" checked="checked" style="width:30%;" hidden />
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                                            id_checkdiv = "check" + count_i.ToString();
+                                                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                            <div id="@id_checkdiv">
+                                                                                                @if (item.BD_ESTADO == 0)
+                                                                                                {
+                                                                                                    <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                                                    <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                                                    if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                    {
+                                                                                                        <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                                                    }
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                                                    <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+                                                                                                }
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                </td>
+
+
+
+
+
+
+
+                                                                                <td colspan="3">
+                                                                                    <div>
+
+                                                                                        @{ count_i++;
+                                                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+                                                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                        }
+                                                                                        <div id="@id_checkdiv2">
+                                                                                            @if (item.BD_CALIDAD == 0)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+
+                                                                                                if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                {
+                                                                                                    <span class="badge badge-danger">@item.STATUS</span>
+                                                                                                }
+                                                                                            }
+                                                                                            else if (item.BD_CALIDAD == 1)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                                            }
+                                                                                            else if (item.BD_CALIDAD == 2)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </td>
+
+
+
+
+
+
+
+
+                                                                                <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                                            </tr>
+                                                                                            }
+                                                                    </tbody>
+                                                                                            }
+                                </table>
+
+                            </p>
+                        </div>
+                    </div>
+
+
+                    @*SEPTIMA TABLA*@
+                    <div class="accordion-item">
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">MANTENIMIENTO DE BUSES </div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior table-xs" align="center">
+                                    <tr>
+                                        <th colspan="9">CABINA<br></th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="3">ESTADO</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CONCEPTOS</td>
+                                        <td>B</td>
+                                        <td>R</td>
+                                        <td>M</td>
+                                        <td>OBSERVACIONES</td>
+                                    </tr>
+
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @foreach (var item in Model.Lista_Revisiones_Mecanicas)
+                                            {
+                                                if (item.CD_ID < 102)
+                                                {
+
+
+                                                    count_i++;
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                        </td>
+                                                        <td colspan="2" style="display:none">
+                                                            <div>
+
+                                                                @{
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+                                                                }
+
+                                                                <div id="@id_checkdiv">
+                                                                    <input type="checkbox" name="estado[]" id="@id_check1" class="container checkmark" value="1" checked style="width:30%;" />
+                                                                    <input type="checkbox" name="estado[]" id="@id_check2" class="container checkmark" value="0" style="width:30%;" />
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="3">
+                                                            <div>
+                                                                @{ count_i++;
+                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                }
+                                                                <div id="@id_checkdiv2">
+                                                                    <input name="calidad[]" class="container checkmark" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                    <input name="calidad[]" class="container checkmark" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                    <input name="calidad[]" class="container checkmark" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td><input type="text" class="select_option" style="width: 100%;" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                                    </tr>
+
+                                                                        }
+                                                                    }
+                                        </tbody>
+                                                                    }
+                                                                    else if (ViewBag.accion == "EDITAR")
+                                                                    {
+                                                                        <tbody>
+                                                                            @foreach (var item in Model.Lista_Revisiones_Mecanicas)
+                                                                            {
+                                                                                if (item.CD_ID < 102)
+                                                                                {
+
+
+                                                                                    count_i++;
+
+                                                                                    <tr>
+                                                                                        <td></td>
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                                                            <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                                                        </td>
+                                                                                        <td colspan="2" style="display:none">
+                                                                                            <div>
+                                                                                                @if (true)
+                                                                                                {
+
+
+                                                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                                                    id_checkdiv = "check" + count_i.ToString();
+                                                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                                    <div id="@id_checkdiv">
+                                                                                                        @if (item.BD_ESTADO == 0)
+                                                                                                        {
+                                                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                                                            if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                            {
+                                                                                                                <span class="badge badge-danger">@item.STATUS</span>
+                                                                                                            }
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                                                            <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                }
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td colspan="3">
+                                                                                            <div>
+
+                                                                                                @{ count_i++;
+                                                                                                    id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                                    id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                                    id_check3 = "product-" + count_i.ToString() + "-3";
+                                                                                                    id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                                }
+                                                                                                <div id="@id_checkdiv2">
+                                                                                                    @if (item.BD_CALIDAD == 0)
+                                                                                                    {
+                                                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                                                        if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                        {
+                                                                                                            <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                                                        }
+                                                                                                    }
+                                                                                                    else if (item.BD_CALIDAD == 1)
+                                                                                                    {
+                                                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+
+
+                                                                                                    }
+                                                                                                    else if (item.BD_CALIDAD == 2)
+                                                                                                    {
+                                                                                                        <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                        <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+
+
+                                                                                                    }
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                                                    </tr>
+                                                                                                        }
+                                                                                                    }
+                                                                        </tbody>
+                                                                                                    }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+                    @*OCTAVA TABLA*@
+
+                    <div class="accordion-item">
+
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">LIMPIEZA Y DESINFECCION </div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <table class="table table_exterior table-xs" align="center">
+                                    <tr>
+                                        <th colspan="9">LIMPIEZA Y DESINFECCION<br></th>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2"></td>
+                                        <td></td>
+                                        <td colspan="2">PRESENTA</td>
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CONCEPTOS</td>
+                                        <td>SI</td>
+                                        <td>NO</td>
+                                        <td>OBSERVACIONES</td>
+                                    </tr>
+
+                                    @if (ViewBag.accion == "REGISTRAR")
+                                    {
+                                        <tbody>
+                                            @if (true) { count_i++; }
+
+                                            @*DESDE ACA COPIO*@
+
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <label>Limpieza Interior</label>
+                                                    <input type="text" name="conceptos[]" value="102" hidden />
+                                                </td>
+                                                <td colspan="2">
+                                                    <div>
+
+                                                        @{
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                            id_checkdiv = "check" + count_i.ToString();
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+                                                        }
+
+                                                        <div id="@id_checkdiv">
+                                                            <input type="checkbox" name="estado[]" id="@id_check1" class="container checkmark" value="1" checked style="width:30%;" />
+                                                            <input type="checkbox" name="estado[]" id="@id_check2" class="container checkmark" value="0" style="width:30%;" />
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </td>
+                                                <td colspan="3" style="display:none">
+                                                    <div>
+                                                        @{ count_i++;
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                        }
+                                                        <div id="@id_checkdiv2">
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="select_option" style="width: 100%;" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                            </tr>
+
+
+                                            @*DESDE ACA COPIO*@
+                                            @if (true) { count_i++; }
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <label>Limpieza Exterior</label>
+
+                                                    <input type="text" name="conceptos[]" value="103" hidden />
+                                                </td>
+                                                <td colspan="2">
+                                                    <div>
+
+                                                        @{
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                            id_checkdiv = "check" + count_i.ToString();
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+                                                        }
+
+                                                        <div id="@id_checkdiv">
+                                                            <input type="checkbox" name="estado[]" id="@id_check1" class="container checkmark" value="1" checked style="width:30%;" />
+                                                            <input type="checkbox" name="estado[]" id="@id_check2" class="container checkmark" value="0" style="width:30%;" />
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </td>
+                                                <td colspan="3" style="display:none">
+                                                    <div>
+                                                        @{ count_i++;
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                        }
+                                                        <div id="@id_checkdiv2">
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="select_option" style="width: 100%;" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                            </tr>
+
+                                            @*DESDE ACA COPIO*@
+                                            @if (true) { count_i++; }
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <label>Desinfección del bus</label>
+
+                                                    <input type="text" name="conceptos[]" value="104" hidden />
+                                                </td>
+                                                <td colspan="2">
+                                                    <div>
+
+                                                        @{
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                            id_checkdiv = "check" + count_i.ToString();
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+                                                        }
+
+                                                        <div id="@id_checkdiv">
+                                                            <input type="checkbox" name="estado[]" id="@id_check1" class="container checkmark" value="1" checked style="width:30%;" />
+                                                            <input type="checkbox" name="estado[]" id="@id_check2" class="container checkmark" value="0" style="width:30%;" />
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </td>
+                                                <td colspan="3" style="display:none">
+                                                    <div>
+                                                        @{ count_i++;
+                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                        }
+                                                        <div id="@id_checkdiv2">
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                            <input name="calidad[]" class="container checkmark" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="select_option" style="width: 100%;" placeholder="Ingresar Observaciones" name="observacion[]" /></td>
+                                            </tr>
+
+
+
+
+
+                                        </tbody>
+                                                            }
+                                                            else if (ViewBag.accion == "EDITAR")
+                                                            {
+
+
+
+                                                                <tbody>
+                                                                    @foreach (var item in Model.Lista_Revisiones_Mecanicas)
+                                                                    {
+                                                                        if (item.CD_ID == 102 || item.CD_ID == 103 || item.CD_ID == 104)
+                                                                        {
+
+
+                                                                            count_i++;
+
+                                                                            <tr>
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(modelItem => item.CD_CONCEPTOS)
+                                                                                    <input type="text" name="conceptos[]" value="@item.CD_ID" hidden />
+                                                                                </td>
+                                                                                <td colspan="2">
+                                                                                    <div>
+                                                                                        @if (true)
+                                                                                        {
+
+
+                                                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+
+                                                                                            id_checkdiv = "check" + count_i.ToString();
+                                                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                            <div id="@id_checkdiv">
+                                                                                                @if (item.BD_ESTADO == 0)
+                                                                                                {
+                                                                                                    <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" />
+                                                                                                    <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" checked="checked" />
+                                                                                                    if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                    {
+                                                                                                        <span class="badge badge-danger">@item.STATUS</span>
+                                                                                                    }
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <input name="estado[]" id="@id_check1" type="checkbox" class="container" value="1" style="width:30%;" checked="checked" />
+                                                                                                    <input name="estado[]" id="@id_check2" type="checkbox" class="container" value="0" style="width:30%;" />
+
+
+                                                                                                }
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td colspan="3" style="display:none">
+                                                                                    <div>
+
+                                                                                        @{ count_i++;
+                                                                                            id_check1 = "product-" + count_i.ToString() + "-1";
+                                                                                            id_check2 = "product-" + count_i.ToString() + "-2";
+                                                                                            id_check3 = "product-" + count_i.ToString() + "-3";
+                                                                                            id_checkdiv2 = "checkgroup" + count_i.ToString();
+
+                                                                                        }
+                                                                                        <div id="@id_checkdiv2">
+                                                                                            @if (item.BD_CALIDAD == 0)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" checked="checked" style="width:29%" />
+                                                                                                if (item.STATUS == "NO PROGRAMABLE")
+                                                                                                {
+                                                                                                    <span class="badge badge-danger">@item.STATUS</span>
+
+                                                                                                }
+                                                                                            }
+                                                                                            else if (item.BD_CALIDAD == 1)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" checked="checked" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+
+
+                                                                                            }
+                                                                                            else if (item.BD_CALIDAD == 2)
+                                                                                            {
+                                                                                                <input name="calidad[]" class="container" id="@id_check1" type="checkbox" value="2" checked="checked" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check2" type="checkbox" value="1" style="width:29%" />
+                                                                                                <input name="calidad[]" class="container" id="@id_check3" type="checkbox" value="0" style="width:29%" />
+
+
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td data-label="ESTADO"><input type="text" class="select_option" placeholder="Ingresar Observaciones" name="observacion[]" value="@item.BD_OBSERVACION" /></td>
+                                                                            </tr>
+                                                                                                }
+                                                                                            }
+                                                                </tbody>
+
+
+
+                                                                                            }
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+
+
+
+
+
+                    @*NOVENA TABLA*@
+
+                    <div class="accordion-item">
+                        <a href="#" class="heading">
+                            <div class="icon"></div>
+                            <div class="title">OTROS</div>
+                        </a>
+
+                        <div class="content">
+                            <p>
+                                <div class="text-center">
+                                    <label for="comment">Comentario:</label>
+                                    <textarea class="form-control" name="comentario" id="comentario" rows="3"></textarea>
+                                </div>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <input type="text" name="placa" id="placa" value="@ViewBag.placa" hidden />
+                    <input type="text" name="Concesionario" id="Concesionario" value="@ViewBag.concesionario" hidden />
+                    <input type="text" name="km" id="km" value="@ViewBag.km" hidden />
+                    <input type="text" name="direccion" id="direccion" value="@ViewBag.direccion" hidden />
+                    <input type="text" name="latitud" id="latitud" value="@ViewBag.latitud" hidden />
+                    <input type="text" name="longitud" id="longitud" value="@ViewBag.longitud" hidden />
+                    <input type="text" name="corredor" id="corredor" value="@ViewBag.Corredor" hidden />
+                    <input type="text" name="id_maestro" id="id_maestro" value="@ViewBag.id_maestro" hidden />
+
+
+
+
+
+
+                    <br /><br />
+                    <button type="submit" id="boton" onclick="RegistrarReporte()" class="btn btn-dark btn-lg">Guardar</button>
+                </div>
+
+            </fieldset>
+
+
+
+
+        </div>
+
+    </div>
+
+
+    @Html.Partial("_RegistroImagenes")
+
+                                                                                            }
+
+
+<script src="~/Content/js/jquery.easing.min.js"></script>
+<script src="~/Content/js/js_conductor/formulario.js"></script>
+<script src="~/Content/js/js_buses/accordion.js"></script>
+
+<script>
+    var URL_INSERT_DATA = "@Url.Action("Insertar_Buses_Despacho_FINAL", "Supervisor")";
+
+    $(document).ready(function () {
+
+        $('#div').prop('disabled', true);
+
+        $('input[type=checkbox]').click('click', function () {
+            var parent = $(this).parent().attr('id');
+            var inputs = $('#' + parent + ' input[type=checkbox]')
+            $.each(inputs, function () {
+                $(this).removeAttr('checked')
+            });
+            var a = this.id;
+            document.getElementById(a).checked = true;
+        });
+
+
+        //PINTAR CUADRO
+
+
+
+        $('.accordion-item').each(function (i, j) {
+            var cantidad_NP = 0
+
+            //if (i == 6) {
+                var tr_table = $($(this).children('div').children('table').children('tbody')[1]).children()
+
+                //each de los tr
+                $(tr_table).each(function () {
+                    var td = $(this).children();
+                    $(td).each(function (r, k) {
+                        if (r == 2) {
+                            if ($(this).children().children().children()[2]) {
+                                //NO PROGRAMABLES EN ESTADO
+                                cantidad_NP++;
+                             }
+                        }
+                        if (r == 3) {
+                            if ($(this).children().children().children()[3]) {
+                                //NO PROGRAMABLES EN ESTADO
+                                cantidad_NP++;                               
+                            }
+                        }
+
+                    });
+                });
+                if (cantidad_NP > 0) {
+                    $($(this).children('a').children()[1]).append('<span class="badge badge-pill badge-secondary ml-2" style="background-color: #ff1f1f;margin-left: 22px;font-size: 17px;">' + cantidad_NP + '</span>')
+                }
+
+            //}
+
+
+        });
+
+    });
+
+
+    /*GEOCALIZAZION*/
+    var a = document.getElementById("latitud");
+    var b = document.getElementById("longitud");
+
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        document.querySelector('.latitud').defaultValue = position.coords.latitude;
+        document.querySelector('.longitud').defaultValue = position.coords.longitude;
+    }
+
+    $('.disabled').prop('readonly', true);
+
+    function RegistrarReporte() {
+        $.blockUI({ message: null });
+    }
+
+    function subirArchivoTemp(element) {
+        var nombreArchivo = element.val().split("\\").pop();
+        var extensionArchivo = nombreArchivo.split('.')[1];
+        element.siblings(".custom-file-label").addClass("selected").html(nombreArchivo);
+    }
+
+
+    $('#img').click(function (event) {
+        event.preventDefault()
+        $("input[name=Foto_Cargar1]").val("");
+        $("input[name=Foto_Cargar2]").val("");
+        $("input[name=Foto_Cargar3]").val("");
+        $("input[name=Foto_Cargar4]").val("");
+
+        $(".custom-file-label").text("Seleccionar Imagen");
+
+    });
+
+
+
+</script>

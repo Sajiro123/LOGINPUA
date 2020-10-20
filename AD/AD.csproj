@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44D23C0C-163A-471D-B4A6-03CC862D2F3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AD</RootNamespace>
+    <AssemblyName>AD</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Dapper.Contrib, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.1.50.0\lib\net45\Dapper.Contrib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=2.112.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\TFS\VS\Librerias\Oracle\32bits\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Interception">
+      <HintPath>..\LOGINPUA\bin\Unity.Interception.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Conexion.cs" />
+    <Compile Include="ConexionSQL\Conexion.cs" />
+    <Compile Include="Configuracion.cs" />
+    <Compile Include="EntidadesAD\AnalisisProgramacionAD.cs" />
+    <Compile Include="EntidadesAD\EstudioPasajerosAD.cs" />
+    <Compile Include="EntidadesAD\CorrelativoAD.cs" />
+    <Compile Include="EntidadesAD\IncidenciasAD.cs" />
+    <Compile Include="EntidadesAD\BusesAD.cs" />
+    <Compile Include="EntidadesAD\CorredorAD.cs" />
+    <Compile Include="EntidadesAD\ConductoresAD.cs" />
+    <Compile Include="EntidadesAD\Menu_UsuarioAD.cs" />
+    <Compile Include="EntidadesAD\ModalidadTransporteAD.cs" />
+    <Compile Include="EntidadesAD\ModuloAD.cs" />
+    <Compile Include="EntidadesAD\BusesConductoresAD.cs" />
+    <Compile Include="EntidadesAD\ProduccionDemandaAD.cs" />
+    <Compile Include="EntidadesAD\PasajeroValidacionAD.cs" />
+    <Compile Include="EntidadesAD\Generar_pogAD.cs" />
+    <Compile Include="EntidadesAD\PlacaFiscalizacion.cs" />
+    <Compile Include="EntidadesAD\Proveedor_ServAD.cs" />
+    <Compile Include="EntidadesAD\PerfilAD.cs" />
+    <Compile Include="EntidadesAD\MenuPerfilAD.cs" />
+    <Compile Include="EntidadesAD\SupervisorAD.cs" />
+    <Compile Include="EntidadesAD\RolPersonaAD.cs" />
+    <Compile Include="EntidadesAD\RutasAD.cs" />
+    <Compile Include="EntidadesAD\Usuario_PersonaAD.cs" />
+    <Compile Include="EntidadesAD\PersonaAD.cs" />
+    <Compile Include="EntidadesAD\ParaderoAD.cs" />
+    <Compile Include="EntidadesAD\ProgramacionAD.cs" />
+    <Compile Include="EntidadesAD\RecorridoAD.cs" />
+    <Compile Include="EntidadesAD\RegistroPicoPlacaAD.cs" />
+    <Compile Include="EntidadesAD\RutaAD.cs" />
+    <Compile Include="EntidadesAD\SalidaAD.cs" />
+    <Compile Include="EntidadesAD\SalidaProgramadaAD.cs" />
+    <Compile Include="EntidadesAD\TipoDiaAD.cs" />
+    <Compile Include="EntidadesAD\TipoServicioAD.cs" />
+    <Compile Include="EntidadesAD\ViaAD.cs" />
+    <Compile Include="EntidadesAD_SQL\ViajesCOSAC_AD.cs" />
+    <Compile Include="InterfaceAD.cs" />
+    <Compile Include="EntidadesAD\LoginAD.cs" />
+    <Compile Include="OracleDynamicParameters.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ENTIDADES\Entidades.csproj">
+      <Project>{ebd3d24a-f878-4b89-8d43-31f161b2f200}</Project>
+      <Name>Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REPOSITORIO\Repositorio.csproj">
+      <Project>{c5047a51-92f9-406e-b979-ff0e8bbf8c3a}</Project>
+      <Name>Repositorio</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

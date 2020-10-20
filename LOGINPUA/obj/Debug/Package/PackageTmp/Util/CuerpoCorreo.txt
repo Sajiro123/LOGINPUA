@@ -1,0 +1,51 @@
+</head>
+<style type="text/css">
+.container {
+  position: relative;
+  text-align: left;
+  color: #19459c;
+  font-weight: bold;
+}
+.top-right {
+  position: absolute;
+  top: -2px;
+  right: 71%;
+}
+.center-right {
+  position: absolute;
+  top: 38%;
+  right: 75%;
+}
+.bottom-right {
+  position: absolute;
+  bottom: -19px;
+
+}
+</style>
+<body>
+<div>
+{{param_1}},</br>
+
+Primero para saludarlo y el deseo de buena salud,</br>
+
+Mediante la presente informo la remisión de las placas asignadas por los Concesionarios de Corredores Complementarios enviadas de acuerdo a la programación,  con el fin se realice la desinfección de dichas unidades que ejecutaran servicios el día {{param_2}} </br>
+
+Así mismo informar que el archivo se encuentra disponible  en el Sistema del Centro de Control  LINK =>  http://sistemas.protransporte.gob.pe/LOGINPUA/ y que sus usuarios y contraseñas han sido remitidos a sus respectivos correos y poder ser descargado, menciono lo siguiente con la finalidad de que se mas rápido la obtención del archivo para su uso y fines. </br>
+
+Es todo cuanto informo Saludos,</br></br>
+</div>
+<div class="container">
+	<div>
+<img src="https://sistemas.protransporte.gob.pe/LOGINPUA/Util/Logotipo_ATU-01.jpg" width="200px" height="50px" style="margin-top: 30px;">
+	</div>
+	<div class="top-right">{{param_3}}</br>
+		Subdirección de Servicios de Transporte Regular
+	</div>
+	<div class="center-right">{{param_4}}</br>
+		Jirón Cuzco N° 286, Cercado de Lima
+	</div>
+	<div class="bottom-right">Lima – Perú</br>
+		www.atu.gob.pe
+	</div>
+</div>
+</body>

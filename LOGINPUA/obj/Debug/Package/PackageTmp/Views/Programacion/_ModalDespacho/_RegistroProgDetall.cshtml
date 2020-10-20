@@ -1,0 +1,71 @@
+﻿
+<div class="modal fade" id="modal_RegistroProgDetall">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Registrar Viajes</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group">
+                <div class="container">
+
+                    <div class="row">
+                        <div style="width: 26%;margin-left: 20px;text-align: center">SERVICIO</div>
+                        <div style="width: 23%;text-align: center">LADO</div>
+                        <div style="width: 25%;text-align: center">BUSC</div>
+                        <div style="width: 18%;text-align: center">DISP</div>
+                    </div>
+                    <div class="row" style="margin-top: 13px;width: 105%;">
+
+                        <div style="width: 32%;margin-left: 4%;">
+                            <input class="form-control" type="text" name="name" value="" style="TEXT-ALIGN: center;" id="txtservicio_unidad">
+                        </div>
+                        <div id="txtlado_unidad2" style="width: 21%;margin-left: 3%;"></div>
+                        <div style="margin-left: 5%;">
+                            <button type="button" class="btn btn-info " id="btnBusquedaEnTabla" onclick="getListarViajesXServ(2)">
+                                <svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg><!-- <span class="fa fa-search"></span> -->
+                            </button>
+                        </div>
+                        <div style="width: 11%;margin-left: 9%;">
+                            <input id="txtDispo" type="checkbox" class="form-control" name="name" value="" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="table-responsive">
+                        <table id="idDespachoUnidad_Serv" class="table table-bordered  table-striped responsive-table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>H.P</th>
+                                    <th>H.R</th>
+                                    <th>UNID</th>
+                                    <th>COND</th>
+                                    <th></th>
+                                    <th></th>
+
+                                    @if (ViewBag.id_perfilcc == 21 || ViewBag.id_perfilcc == 41)
+                                    {
+                                        <th></th>
+                                    }
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "MantenimientoPerson";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+    
+}
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .modal-content {
+        width: 100%;
+    }
+</style>
+<script src="~/Content/js/js_mantenimiento_perfil/registro_perfil.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+
+
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Perfil&nbsp;&nbsp;&nbsp;
+
+           
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="modal_registroperf" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-4" style="margin-bottom:0px !important">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="fas fa-bus-alt"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="idmodalidad"></select>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="table-responsive">
+
+    <form>
+        <table class="responsive-table" id="tbPerfil" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 40px;">N°</th>
+                    <th class="text-center" style="width: 60px;">NOMBRE</th>
+                    <th class="text-center" style="width: 60px;">MODALIDAD</th>
+                    <th class="text-center" style="width: 90px;">USU_REG</th>
+                    <th style="width: 125px;">FECHA_REG</th>
+
+
+                    @if (ideliminar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+
+                    }
+                    @if (idmodificar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+
+                    }
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+@Html.Partial("_RegistroPerfil")
+
+<script>
+    //$('#txtBuscar').keyup(function () {
+    //    $.uiTableFilter($('#tbPerfil'), this.value);
+    //});
+    var URL_GET_PERFIL = "@Url.Action("listarPerfil", "Perfil")";
+    var URL_GET_MODIFICAR_PERFIL = "@Url.Action("ModificarPerfil", "Perfil")";
+    var URL_ANULAR_PERFIL = "@Url.Action("AnularPerfil", "Perfil")";
+    var URL_GET_AGREGAR_PERFIL = "@Url.Action("AgregarPerfil", "Perfil")";
+    var URL_GET_LISTAR_MODALIDAD = "@Url.Action("listarModalidad", "Perfil")";
+</script>
+

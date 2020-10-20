@@ -1,0 +1,181 @@
+﻿
+.rotar3  
+    {  
+       -webkit-transform: rotate(-90deg);  
+      -moz-transform: rotate(-90deg);  
+      -ms-transform: rotate(-90deg);  
+      -o-transform: rotate(-90deg);  
+      transform: rotate(-90deg);  
+       
+      -webkit-transform-origin: 50% 50%;  
+      -moz-transform-origin: 50% 50%;  
+      -ms-transform-origin: 50% 50%;  
+      -o-transform-origin: 50% 50%;  
+      transform-origin: 50% 50%;  
+       
+      font-size: 40px;  
+      width: 250px;  
+      position: relative;  
+      top: 150px;  
+    } 
+.tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-color: #aaa;
+    margin: 0px auto;
+}
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+         border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #aaa;
+        color: #333;
+        background-color: #fff;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+         border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #aaa;
+        color: #fff;
+        background-color: #f38630;
+    }
+
+    .tg .tg-xsp9 {
+        font-style: italic;
+        font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+        
+        color: #000000;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .tg .tg-d59p {
+        font-weight: bold;
+        font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+        
+        color: #000000;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .tg .tg-xpe4 {
+        font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+        
+        color: #000000;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .tg .tg-p3wb {
+        font-weight: bold;
+        font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+        
+        color: #000000;
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+    }
+
+@media screen and (max-width: 767px) {
+    .tg {
+        width: auto !important;
+    }
+
+        .tg col {
+            width: auto !important;
+        }
+
+    .tg-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: auto 0px;
+    }
+}
+
+.modal-dialog-grande {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 15px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+tg  {border-collapse:collapse;border-spacing:0;border-color:#aaa;margin:0px auto;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aaa;color:#333;background-color:#fff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f38630;}
+.tg .tg-nto1{background-color:#000000;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-ntt9{background-color:#ffffff;color:#ffffff;border-color:#ffffff;text-align:left;vertical-align:top}
+.tg .tg-78p4{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;border-color:#656565;text-align:left}
+.tg .tg-vf7l{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;text-align:left;vertical-align:top}
+.tg .tg-8mvc{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;color:#000000;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-yaja{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;border-color:inherit;text-align:center;vertical-align:top}
+.tg .tg-qluj{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;background-color:#ffce93;color:#333333;border-color:#ffcb2f;text-align:center}
+.tg .tg-glst{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;border-color:inherit;text-align:left}
+.tg .tg-llng{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-mk0f{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;border-color:inherit;text-align:center}
+.tg .tg-yjuq{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;color:#330001;border-color:inherit;text-align:left}
+.tg .tg-t85z{font-size:14px;font-family:"Comic Sans MS", cursive, sans-serif !important;color:#330001;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+@media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}
+

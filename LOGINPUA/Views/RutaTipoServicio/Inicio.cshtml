@@ -1,0 +1,577 @@
+﻿@model IEnumerable<ENTIDADES.CC_CORREDOR>
+@{
+    ViewBag.Title = "RegistroPicoPlaca";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+}
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+
+    .cuadrado {
+        width: 50px;
+        height: 23px;
+    }
+</style>
+
+@{
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+    //
+    List<ENTIDADES.CC_MODALIDAD_TRANSPORTE> listModalidades = new List<ENTIDADES.CC_MODALIDAD_TRANSPORTE>();
+    listModalidades = ViewBag.modalidadTransporte;
+}
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Tipo Servicio&nbsp;&nbsp;&nbsp;
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="abrirModalRegistroRutaTipoServ();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectRuta" onchange="getTipoServicioByRuta();"></select>
+        </div>
+    </div>
+
+    @*<div class="col-md-4 text-right">
+            <button class="btn btn-success btn-sm">
+                <a href="" id="exportar" data-toggle="modal" onclick="exportarTabla();">Exportar</a>
+            </button>
+        </div>*@
+</div>
+<hr />
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" id="tbRutatipoServicio" style="width:100%;">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 20px;">N</th>
+                    <th class="text-center" style="width:100px;">TIPO DE SERVICIO</th>
+                    <th class="text-center" style="width:100px;">SRV OPERACIONAL</th>
+                    <th class="text-center" style="width:100px;">NOMBRE</th>
+                    <th style="width:50px;">COLOR</th>
+                    <th style="width:100px;">CREADO POR</th>
+                    <th style="width:200px;">FECHA CREA</th>
+                    <th colspan="2" class="text-center" style="width:35 0px;">RECORRIDOS</th>
+
+                    @if (ideliminar == 1)
+                    {
+                        <th style="width:50px;"></th>
+                    }
+
+                    @if (ideliminar == 1)
+                    {
+                        <th style="width:50px;"></th>
+                    }
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+@Html.Partial("_RegistroRutaTipoServ")
+@Html.Partial("_RegistroParaderos")
+@Html.Partial("_EditarRutaTipoServ")
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAZ6IMcXD3mxet5U9_yB7t_GlblGBUy5Og" type="text/javascript"></script>
+<script src="~/Scripts/googleMapsUtil/richmarker.js"></script>
+
+<script>
+    var Utilidades = new Util();
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_TIPOOPER_X_RUTA = "@Url.Action("getTiposServicioByIdRuta", "RutaTipoServicio")";
+    var URL_GET_TIPO_SERVICIO = "@Url.Action("getTiposServicio", "RutaTipoServicio")";
+    var URL_GET_TIPO_SERVICIO_OPER = "@Url.Action("getTiposServicioOperacional", "RutaTipoServicio")";
+    var URL_REGISTRA_RUTA_TSERVICIO = "@Url.Action("registrarRutaTipoServicio", "RutaTipoServicio")";
+    var URL_ANULAR_RUTA_TSERVICIO = "@Url.Action("anularRutaTipoServicio", "RutaTipoServicio")";
+    var URL_REGISTRA_RECORRIDO_TSERVICIO = "@Url.Action("registraRecorridoServicioOperacional", "RutaTipoServicio")";
+    var URL_GET_PARADERO_BY_RECORRIDOTSERV = "@Url.Action("getParaderoByIdRecorridTServ", "RutaTipoServicio")";
+    var URL_ACTUALIZA_PARADEROTSERV = "@Url.Action("actualizarParaderoTservic", "RutaTipoServicio")";
+    var URL_EDITAR_RUTA_TIPO_SERV = "@Url.Action("editarRutaTservic", "RutaTipoServicio")";
+
+    //
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var modalidadUsuario = '@ViewBag.modalidadUsuario';
+    //
+    var map;
+    var JSON_PARADEROS = [];
+    var PARADEROS_GMAP = [];
+    var NOMBRE_PARADERO_GMAP = [];
+    $(document).ready(function () {
+        //$('#selectModalidadTransporte').val(Number(modalidadUsuario))
+        inicializarMapa();
+        getTipoServicios();
+        getTiposServicioOperacional();
+        getCorredoresByModalidad();
+        getTipoServiciosEditar();
+        getTiposServicioOperacionalEditar();
+    });
+    //
+    function getCorredoresByModalidad() {
+        //var modalidadTransporteSelecionado = $('#selectModalidadTransporte').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+        $.each(JSON_DATA_CORREDORES, function () {
+            //if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+            if (this.ID_MODALIDAD_TRANS == Number($('#mod').val())) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        //
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRutatipoServicio tbody').empty();
+            var strHTMLtb = '<tr>' +
+                                 '<td colspan="8" style="padding-left: 0;padding-right: 0;">' +
+                                     'No hay información para mostrar' +
+                                 '</td>' +
+                              '</tr>';
+            $('#tbRutatipoServicio tbody').append(strHTMLtb);
+            return false
+        }
+        getRutaPorCorredor();
+    }
+
+    function inicializarMapa() {
+        map = new google.maps.Map(document.getElementById('divMapa'), {
+            center: { lat: -12.03750987324338, lng: -77.04015518045355 },
+            zoom: 10
+        });
+    }
+
+    function abrirModalRegistroRutaTipoServ() {
+        $('#txtNombreRutaTipoServicio').val('');
+        $("#selectTipoServicio").val($("#selectTipoServicio option:first").val());
+        $("#selectTipoServicioOperacional").val($("#selectTipoServicioOperacional option:first").val());
+        //
+        $('#modalRegistroRutaTipoServ').modal('show');
+        $('#txtNombreRutaTipoServicio').focus();
+    }
+
+    function getRutaPorCorredor() {
+        cargandoTablaPrincipal();
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRuta').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRuta').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRuta').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                    getTipoServicioByRuta();
+                }
+            }
+        }, JSON);
+    }
+
+    function getTipoServicios() {
+        $.ajax({
+            url: URL_GET_TIPO_SERVICIO,
+            dataType: 'json',
+            data: {},
+            success: function (result) {
+                $('#selectTipoServicio').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectTipoServicio').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectTipoServicio').append('<option value="' + this.ID_TIPO_SERVICIO + '">' + this.TIPO_SERVICIO + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+    function getTipoServiciosEditar() {
+        $.ajax({
+            url: URL_GET_TIPO_SERVICIO,
+            dataType: 'json',
+            data: {},
+            success: function (result) {
+                $('#selectTipoServicioEditar').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectTipoServicioEditar').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectTipoServicioEditar').append('<option value="' + this.ID_TIPO_SERVICIO + '">' + this.TIPO_SERVICIO + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+    function getTiposServicioOperacional() {
+        $.ajax({
+            url: URL_GET_TIPO_SERVICIO_OPER,
+            dataType: 'json',
+            data: {},
+            success: function (result) {
+                $('#selectTipoServicioOperacional').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectTipoServicioOperacional').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectTipoServicioOperacional').append('<option value="' + this.ID_TIPOSERVICIO_OPER + '">' + this.TIPO_SERVICIO + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+    function getTiposServicioOperacionalEditar() {
+        $.ajax({
+            url: URL_GET_TIPO_SERVICIO_OPER,
+            dataType: 'json',
+            data: {},
+            success: function (result) {
+                $('#selectTipoServicioOperacionalEditar').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectTipoServicioOperacionalEditar').append('<option value="0">' + '--No hay información--' + '</option>');
+                } else {
+                    $.each(result, function () {
+                        $('#selectTipoServicioOperacionalEditar').append('<option value="' + this.ID_TIPOSERVICIO_OPER + '">' + this.TIPO_SERVICIO + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+    function getTipoServicioByRuta() {
+        // PERMISOS
+        //1= EDITAR || 2==ELIMINAR
+        var permiso_edit = $('#permisoActualiza').val();
+        var permiso_eliminar = $('#permisoEliminar').val();
+
+        cargandoTablaPrincipal();
+        $.ajax({
+            url: URL_GET_TIPOOPER_X_RUTA,
+            dataType: 'json',
+            data: { idRuta: $('#selectRuta').val() },
+            success: function (result) {
+                $('#tbRutatipoServicio tbody').empty();
+                var strHTMLtabla = '';
+                if (result.length == 0) {
+                    strHTMLtabla += '<tr>' +
+                                        '<td colspan="8" style="padding-left: 0;padding-right: 0;">' +
+                                            'No hay información para mostrar' +
+                                        '</td>' +
+                                     '</tr>';
+                    $('#tbRutatipoServicio tbody').append(strHTMLtabla);
+                    return;
+                }
+                //return;
+                console.log('result', result)
+                $.each(result, function (i) {
+                    var tieneLadoRegistrado = false;
+                    var encuentraElementSplit = (this.LADOS ? (this.LADOS.indexOf("|") == -1 ? false : true) : false);
+                    var arrLados = [];
+                    //
+                    if (encuentraElementSplit) {
+                        arrLados = this.LADOS.split('|');
+                    } else {
+                        arrLados.push(this.LADOS);
+                    }
+
+                    strHTMLtabla += '   <tr ' +
+                                                 'data-idRutatipoServicio="' + this.ID_RUTA_TIPO_SERVICIO + '" ' +
+                                                'data-tipoServicio="' + this.ID_TIPO_SERVICIO + '" ' +
+                                                'data-tipoServicioOper="' + this.ID_TIPOSERVICIO_OPER + '" ' +
+                                                'data-nombreTipoServicioOper="' + this.NOMBRE + '" ' +
+                                                'data-color="' + this.COLOR + '" ' +
+                                            ' onclick="seleccionaFila($(this))" >' +
+                                            '<td>' + (i + 1) + '</td>' +
+                                            '<td class="text-center" >' + this.TIPO_SERVICIO + '</td>' +
+                                            '<td class="text-center" >' + this.TIPO_OPERACIONAL + '</td>' +
+                                            '<td class="text-center" >' + (this.NOMBRE ? this.NOMBRE : '') + '</td>' +
+                                             '<td class="text-center"><div class="cuadrado" style="margin-left: 26%;background:' + (this.COLOR ? this.COLOR : '') + '"></div></td>' +
+                                            '<td>' + (this.USU_REG ? this.USU_REG : '') + '</td>' +
+                                            '<td>' + (this.FECHA_REG ? this.FECHA_REG : '') + '</td>' +
+                                            getHTMLLados(this.LADOS, this.ID_RUTA_TIPO_SERVICIO) +
+                                         (permiso_edit == 1 ? '<td class="text-center" style="font-size:17px;" >' + '<span class="far fa-edit" aria-hidden="true" style="cursor:pointer;" onclick="abrirEditarRutaTservic($(this).parent().parent());" ></span>' + '</td>' : '') +
+                                         (permiso_eliminar == 1 ? '<td class="text-center" style="font-size:17px;" >' + '<span  class="far fa-trash-alt" aria-hidden="true" style="cursor:pointer;"  onclick="anularRutaTipoServicio(' + this.ID_RUTA_TIPO_SERVICIO + ');" ></span>' + '</td>' : '') +
+                                        '</tr>';
+                });
+                $('#tbRutatipoServicio tbody').append(strHTMLtabla);
+                util.activarEnumeradoTabla('#tbRutatipoServicio', $('#btnBusquedaEnTabla'));
+
+            }
+        }, JSON);
+    }
+
+    function getHTMLLados(dataLadosSerializado, idRutaTipoServicio) {
+        var rpta = '<td style="width: 25px;" >' +
+                        '' +
+                   '</td>' +
+                   '<td style="width: 25px;" >' +
+                        '' +
+                   '</td>';
+        var arrData = null;
+
+        if (dataLadosSerializado) {
+            rpta = '';
+            if (dataLadosSerializado.indexOf('|') != -1) { //hay mas de 2 lados
+                arrData = [];
+                arrData = dataLadosSerializado.split('|');
+
+                for (var i = 0; i < arrData.length; i++) {
+                    var datosLado = arrData[i].split('~');
+                    rpta += '<td style="width: 25px;" >';
+                    rpta += '<button class="btnic" type="button" data-idrecorridotservicio="' + datosLado[1] + '" data-sentido="' + datosLado[0] + '"  onclick="mostrarParaderosByIdRecorrido($(this).parent().parent(), $(this));" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;background-color: #00a69f;color: white;font-size: 12px;border-radius: 61%;cursor:pointer;">' + datosLado[0] + '</button>';
+                    rpta += '</td>';
+                }
+
+            } else { //no hay lado o puede haber 1
+                console.log('---->', dataLadosSerializado.indexOf('~'));
+                if (dataLadosSerializado.indexOf('~') != -1) {// hay un lado
+                    var datosLado = dataLadosSerializado.split('~');
+                    rpta += '<td style="width: 25px;"  data-idrecorridotservicio="' + datosLado[1] + '" >' +
+                                '<button class="btnic" type="button" data-idrecorridotservicio="' + datosLado[1] + '" data-sentido="' + datosLado[0] + '"  onclick="mostrarParaderosByIdRecorrido($(this).parent().parent(), $(this),' + idRutaTipoServicio + ' );" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;background-color: #00a69f;color: white;font-size: 12px;border-radius: 61%;cursor:pointer;">' + datosLado[0] + '</button>';
+                    rpta += '</td>';
+
+                    rpta += '<td style="width: 25px;" >' +
+                                '' +
+                            '</td>';
+                }
+            }
+        }
+        return rpta;
+    }
+
+    function cargandoTablaPrincipal() {
+        $('#tbRutatipoServicio tbody').empty();
+        $('#tbRutatipoServicio tbody').append('<tr>' +
+                                        '<td colspan="11">' +
+                                            'Cargando <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">' +
+                                        '</td>' +
+                                      '</tr>');
+    }
+
+
+
+    function anularRutaTipoServicio(idRutaServicioOperacional) {
+        Swal.fire({
+            text: "Estas seguro que deseas anular el registro ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: URL_ANULAR_RUTA_TSERVICIO,
+                    dataType: 'json',
+                    data: { idRutaServicioOperacional: idRutaServicioOperacional },
+                    success: function (result) {
+                        getTipoServicioByRuta();
+                        Swal.fire({
+                            type: (result.COD_ESTADO == 1 ? 'success' : 'error'),
+                            title: result.DES_ESTADO,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                }, JSON);
+            }
+        });
+    }
+
+    function seleccionaFila(elementFila) {
+        $.each($('#tbRutatipoServicio tbody > tr'), function () {
+            $(this).css('background-color', '');
+        });
+        elementFila.css('background-color', '#17a2b838');
+    }
+
+    function abrirEditarRutaTservic(element) {
+        $('#idRutaTipoServicio').val('');
+
+        //getTipoServiciosEditar();
+        //getTiposServicioOperacionalEditar();
+        var idrutatiposervicio = element.attr('data-idrutatiposervicio');
+
+        var idTipoServicio = element.attr('data-tipoServicio');
+        var idTipoServicioOper = element.attr('data-tipoServicioOper');
+        var nombreTipoServicio = element.attr('data-nombreTipoServicioOper');
+        var color = element.attr('data-color');
+        if (color == "null") {
+            color = "#FFFFFF"
+        }
+
+
+
+        $('#idRutaTipoServicio').val(idrutatiposervicio);
+        $('#selectTipoServicioEditar').val(idTipoServicio);
+        $('#selectTipoServicioOperacionalEditar').val(idTipoServicioOper);
+        $('#txtNombreRutaTipoServicioEditar').val(nombreTipoServicio);
+
+
+        $('#txtcolorEditar').val(color);
+
+        $('#EditarRutaTipoServ').modal('show');
+
+    }
+
+</script>
+
+<script>
+
+    function getHTMLproductoPagination(jsonProductos) {
+
+        var container = jQuery('#pagination-demo1');
+        var sources = function () {
+            var result = [];
+            for (var i = 0; i < jsonProductos.length; i++) {
+                var item = jsonProductos[i];
+                result.push(item);
+            }
+            return result;
+        }();
+
+        //console.log('sources->',sources);
+        var options = {
+            dataSource: sources,
+            pageSize: 15,
+            callback: function (response, pagination) {
+                // window.console && console.log(response, pagination);
+                //var dataHtml = '<ul>';
+                var dataHtml = '';
+                jQuery.each(response, function (index, item) {
+                    var urlImagen = (item.UrlImagen ? 'http://www.abexacloud.com/XBest/Adjunto/imagenproducto/20602732402/' + item.UrlImagen : "http://www.its-print.co.uk/global/images/PublicShop/ProductSearch/prodgr_default_300.png");
+                    dataHtml += '<li class="post-2603 product type-product status-publish has-post-thumbnail product_cat-audio-speakers first instock shipping-taxable purchasable product-type-simple">' +
+                    '<div class="product-outer product-item__outer">' +
+                       '<div class="product-inner product-item__inner">' +
+                          '<div class="product-loop-header product-item__header">' +
+                             '<span class="loop-product-categories"><a href="#" data-href="https://demo2.madrasthemes.com/electro-wide/product-category/tv-audio/audio-speakers/" rel="tag">' + item.Marca + '</a></span>' +
+                             '<a href="' + URL_BASE + 'web/Producto?codProducto=' + item.CodProducto + '" data-href="https://demo2.madrasthemes.com/electro-wide/product/wireless-audio-system-multiroom-360/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">' +
+                                '<h2 class="woocommerce-loop-product__title">' + item.NomProducto + " (" + item.Marca + ")" + '</h2>' +
+                            //     '<div class="product-thumbnail product-item__thumbnail"><img width="300" height="300" src="https://demo2.madrasthemes.com/electro-wide/wp-content/uploads/2016/03/WirelessSound-300x300.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""></div>' +
+                                '<div class="product-thumbnail product-item__thumbnail"><img width="300" height="300" src="' + urlImagen + '" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt=""></div>' +
+                             '</a>' +
+                          '</div>' +
+                          '<div class="product-loop-body product-item__body">' +
+                             '<span class="loop-product-categories"><a href="#" data-href="https://demo2.madrasthemes.com/electro-wide/product-category/tv-audio/audio-speakers/" rel="tag">Audio Speakers</a></span>' +
+                             '<a href="' + URL_BASE + 'web/Producto?codProducto=' + item.CodProducto + '" data-href="https://demo2.madrasthemes.com/electro-wide/product/wireless-audio-system-multiroom-360/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">' +
+                                '<h2 class="woocommerce-loop-product__title">Wireless Audio System Multiroom 360</h2>' +
+                                '<div class="product-rating">' +
+                                   '(0)' +
+                                '</div>' +
+                               '<div class="product-short-description">' +
+                                   '<ul>' +
+                                      '<li><span class="a-list-item">360 Omnidirectional Sound</span></li>' +
+                                      '<li><span class="a-list-item">Easy Intuitive Control</span></li>' +
+                                      '<li><span class="a-list-item">Multiroom App</span></li>' +
+                                   '</ul>' +
+                                '</div>' +
+                                '<div class="product-sku">SKU: 5487FB8/25</div>' +
+                             '</a>' +
+                          '</div>' +
+                          '<div class="product-loop-footer product-item__footer">' +
+                             '<div class="price-add-to-cart">' +
+                                '<span class="price"><span class="electro-price"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">$</span>' + item.PrecioVenta.toFixed(2) + '</span></span></span>' +
+                                  '<div class="add-to-cart-wrap" data-toggle="tooltip" data-title="Ver mas acerca del producto" data-original-title="" title="" aria-describedby="tooltip168935">' +
+                                     '<a href="' + URL_BASE + 'web/Producto?codProducto=' + item.CodProducto + '" data-quantity="1" class=""  rel="nofollow"><span style="font-size: 2rem;" class="fa fa-arrow-circle-right"></span></a>' +
+                                  '</div>' +
+                             '</div>' +
+
+                          '</div>' +
+                       '</div>' +
+                    '</div>' +
+                 '</li>';
+
+                    //dataHtml += '<li data-codigo="'+ item.id +'" >' + item.apellido + ' ' + item.id + '</li>';
+                });
+                //dataHtml += '</ul>';
+                container.prev().html(dataHtml);
+            }
+        };
+
+        //$.pagination(container, options);
+
+        container.addHook('beforeInit', function () {
+            //window.console && console.log('beforeInit...');
+        });
+        container.pagination(options);
+
+        container.addHook('beforePageOnClick', function () {
+            //window.console && console.log('beforePageOnClick...');
+            //return false
+        });
+    }
+</script>

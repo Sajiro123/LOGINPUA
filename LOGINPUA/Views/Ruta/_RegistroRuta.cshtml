@@ -1,0 +1,42 @@
+﻿
+<div class="modal fade" id="modalRegistroRuta">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registro Tipo de servicio</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="width:310px;font-weight:100;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><strong>N° Ruta</strong></label>
+                        <input id="txtNroRuta" autofocus style="width:100% !important" type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label><strong>Nombre</strong></label>
+                        <input id="txtNombreRuta" style="width:100% !important" type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label><strong>Distritos</strong></label>
+                        <input id="txtDistritos" style="width:100% !important" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="btnGuardarRuta" onclick="registraRuta()" class="btn btn-info" type="button">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 

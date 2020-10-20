@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "Reportes_Despacho";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    int i = 0;
+    string date_now = DateTime.Now.ToString("dd/MM/yyyy").Replace('-', '/');
+
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+}
+<br />
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Formato Despacho Supervisión de Buses&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg><!-- <span class="fa fa-search"></span> -->
+            </button>
+        </h4>
+    </div>
+</div>
+<br />
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" name="id_corredor" id="selectCorredores"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-4" style="margin-bottom:0px !important">
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><svg class="svg-inline--fa fa-calendar fa-w-14" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="calendar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M12 192h424c6.6 0 12 5.4 12 12v260c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V204c0-6.6 5.4-12 12-12zm436-44v-36c0-26.5-21.5-48-48-48h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v36c0 6.6 5.4 12 12 12h424c6.6 0 12-5.4 12-12z"></path></svg><!-- <span class="fa fa-calendar"></span> --></span>
+                </div>
+
+                <input id="txtFechaConsultaFin" value="@date_now" name="fecha" style="display:unset;width:70%" type="text" class="form-control form-control-sm" />
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-info btn-sm" onclick="ConsultarFecha()" id="consultar">Consultar</button>
+    </div>
+
+</div>
+
+<hr />
+
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" id="tbDescargarDespacho" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th>N°</th>
+                    <th>PLACA</th>
+                    <th>CONCESIONARIO</th>
+                    <th>DIRECCION_INSPECCION</th>
+                    <th>ESTADO_BUS</th>
+                    <th>USU_REG</th>
+                    <th>FECHA_REG</th>
+
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+               <tr>
+                   <td colspan="8">Presionar el button consultar para obtener la información .</td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/Content/js/js_supervisor/js_supervisor.js"></script>
+
+
+@if (ViewBag.Message == "Se ha actualizado Correctamente")
+{
+    <script>
+        $(document).ready(function () {
+
+            Swal.fire({
+                type: 'success',
+                title: 'Se ha actualizado Correctamente',
+                showConfirmButton: false,
+            });
+        });
+
+    </script>
+
+}
+
+
+
+
+
+<script>
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_CONSULTAR_FECHA = "@Url.Action("Listar_Maestro_Filtros", "Supervisor")";
+    var URL_GET_EDITAR_FORMATO = "@Url.Action("Estado_Bus_consulta", "Supervisor")";
+    var URL_GET_UBICACION = "@Url.Action("Ubicacion_Despachador", "Supervisor")";
+
+
+
+
+ 
+
+
+    $(document).ready(function () {
+        getCorredoresByModalidad();
+
+
+
+
+
+    });
+    function getCorredoresByModalidad() {
+        $('#selectCorredores').empty();
+
+
+        var cantidadRegistros = 0;
+        $.each(JSON_DATA_CORREDORES, function () {
+            $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+
+        });
+
+        getRutaPorCorredor();
+    }
+
+
+
+
+
+    function getRutaPorCorredor() {
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRutaConsulta').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRutaConsulta').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRutaConsulta').append('<option value="' + this.ID_RUTA + '" >' + this.NRO_RUTA + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+
+
+
+
+    $('#txtFechaConsultaFin').datepicker({ format: "dd/mm/yyyy" });
+
+    $(document).ready(function () {
+        util.activarEnumeradoTabla('#tbDescargarDespacho', $('#btnBusquedaEnTabla'));
+    });
+
+</script>
+
+@*@if (@ViewBag.Message == "Error Archivo")
+    {
+        <script>
+            var closable = alertify.alert().setting('closable');
+            alertify.alert()
+             .setting({
+                 'label': 'Cerrar',
+                 'message': @ViewBag.error +(closable ? ' ' : ' not ') + '',
+                 'onok': function () {
+                     ;
+                 }
+             }).show();
+
+        </script>
+    }*@
+
+@*@if (ViewBag.Message == "Abrir Archivo")
+    {
+        <script>
+            window.open("@Url.Content("~/"+ Model.archivo)");
+        </script>
+    }*@
+

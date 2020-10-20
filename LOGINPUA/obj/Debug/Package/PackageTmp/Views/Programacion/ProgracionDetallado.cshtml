@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "ProgracionDetallado";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    //Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_RUTA_CORREDOR> Lista_Ruta = ViewBag.Rutas as List<ENTIDADES.CC_RUTA_CORREDOR>;
+}
+
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+
+ 
+@*<script src="~/Content/js/js_programacion_bus/js_PrgDetall.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>*@
+<link href="~/Content/css/css_programacion/LoadingMobil.css" rel="stylesheet" />
+
+<script src="~/Content/js/js_programacion_bus/js_PrgDetall.js"></script>
+<br />
+<div class="row">
+    <div style="width: 32%;margin-left: 7%;">
+             <label for="select-native-1" style="margin-right: -3px;">Ruta: </label>
+            <select name="select-native-1" id="txtRuta" class="form-control">
+                @foreach (var item in Lista_Ruta)
+                {
+                    <option value="@item.ID_RUTA">@item.NRO_RUTA</option>
+                }
+            </select>
+     </div>
+    <div style="width: 28%;margin-left: 10%;">
+             <label for="select-native-1" style="margin-right: -3px;">Lado: </label>
+        <select name="select-native-1" id="txtlado" class="form-control"></select>
+
+     </div>
+    <div style="width: 21%;">
+        <button id="idsearch" style="margin-top: 33px;width: 60%;margin-left: 22%;height: 52%;" type="button" class="btn btn-info btn-sm" onclick="getListarProgramacionUnidades()">
+            <svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg><!-- <span class="fa fa-search"></span> -->
+        </button>
+     </div>
+</div>
+<br />
+
+<hr style="margin-top: auto;" />
+<div class="table-responsive">
+    <div id="tablaProg">
+        <table id="tbProDet" class="table table-bordered  table-striped responsive-table table-sm">
+            <thead>
+                <tr>
+                    <th>CP</th>
+                    <th>S</th>
+                    <th>F.INICIO</th>
+                    <th>DESPACHO</th>
+                    <th>SIN DESPACHO</th>
+                 </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6" class="text-center" style="font-size: 13px;">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+ 
+<input type="text" name="name" value="@ViewBag.id_perfilcc" id="id_perfil" hidden />
+
+
+
+
+@Html.Partial("_ModalDespacho/_RegistroProgDetall")
+@Html.Partial("_ModalDespacho/_RegistroDetallSalida")
+@Html.Partial("_ModalDespacho/_ActualizarIncidencias")
+
+
+
+<script>
+
+    var URL_GET_LADO_X_RUTA = "@Url.Action("getLado_X_Ruta", "Programacion")";
+
+    var URL_GET_PLACAS = "@Url.Action("getPlaca_Buses", "Programacion")";
+    var URL_GET_CONDUCTORES = "@Url.Action("getConductores", "Programacion")";
+
+    var URL_GET_RUTATIPO_SERVICIO = "@Url.Action("getRutaSerOpe_X_modalidad", "Programacion")";
+    var URL_GET_GETVIAJES_PROGRUNIDADES = "@Url.Action("getViajes_ProgrUnidades", "Programacion")";
+    var URL_GET_GETVIAJES_PROGRX_SERVICIO = "@Url.Action("getviajesProgrServ", "Programacion")";
+    var URL_ACTUALIRZAR_VIAJES_PROGR = "@Url.Action("Actulizar_ViajeTiempoReal", "Programacion")";
+    var URL_ACTUALIRZAR_OBSERV = "@Url.Action("Actualizar_Incidencias", "Programacion")";
+    var URL_LIMPIAR_VIAJE= "@Url.Action("Limpiar_ViajeDet", "Programacion")";
+
+
+
+    
+
+</script>

@@ -1,0 +1,53 @@
+﻿
+
+<div class="modal fade" id="modal_enviar_correo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-left: 110px;">
+            <form id="formEnviarCorreo" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="tituloDialog">Enviar Correo</h6>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <div class="form-group container">
+
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-light">Para</button>
+                            </div>
+                            <div class="col-sm-11">
+                                <input required type="text" id="Para" class="form-control" placeholder="usuario@example.com,usuario2@example.com,.....,usuarion@example.com" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-light">CC</button>
+                            </div>
+                            <div class="col-sm-11">
+                                <textarea type="text" id="Copia" style="height:86px;" class="form-control" placeholder="usuario@example.com,usuario2@example.com,.....,usuarion@example.com"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input required type="text" id="Asunto" class="form-control" placeholder="Agrega un asunto" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <textarea type="text" id="CuerpoMensaje" class="form-control" placeholder="Escribe un mensaje" style="height: 280px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btnEnviarCorreo" class="btn btn-primary" type="submit">Enviar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

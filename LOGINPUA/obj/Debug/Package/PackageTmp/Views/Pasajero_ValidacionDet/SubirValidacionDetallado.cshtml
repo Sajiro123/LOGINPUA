@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "SubirValidacionDetallado";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    DateTime fecha = DateTime.Now;
+    string fecha_actual = fecha.ToString("MM/yyyy");
+
+
+}
+
+
+<script src="~/Content/js/js_paraderos_validacionesdet/SubirArchivo_det.js"></script>
+
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Subir Detalle de Validaciones&nbsp;&nbsp;&nbsp;
+
+            <button type="button" id="btnRegistrarArchivo" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                <span class="fa fa-plus"></span>
+            </button>
+
+            @*@foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }*@
+
+        </h4>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectRutaConsulta"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="mes_año" value="@fecha_actual" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+
+
+    <div class="col-md-1">
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</button>
+    </div>
+
+</div>
+<hr />
+
+<div class="table-responsive">
+
+    <table id="tbPasajeroVal" class="text-center responsive-table" style="width:100%">
+        <thead>
+            <tr>
+                <th width="30" class="text-center">N</th>
+                <th>F. PROG</th>
+                <th>NRO_RUTA</th>
+                <th width="100" class="text-center" scope="col">USUARIO</th>
+                <th style="width: 22%;" class="text-center" scope="col">F. SUBIDA</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@Html.Partial("_RegistroParaderoDet")
+<script>
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+     var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_AGREGAR_CAMPOS_POG = "@Url.Action("AgregarCamposPOG", "Programacion")";
+
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("cargarArchivo", "Pasajero_ValidacionDet")";
+    var URL_GET_REPORTE_FECHA = "@Url.Action("listarMaestroPasajeros", "Pasajero_ValidacionDet")";
+
+
+    $(document).ready(function () {
+        getCorredoresByModalidad();
+
+    });
+
+
+    function getCorredoresByModalidad() {
+        $('#selectCorredores, #selectRuta').empty();
+        $('#selectCorredor, #selectRuta').empty();
+
+        var cantidadRegistros = 0;
+        $.each(JSON_DATA_CORREDORES, function () {
+            $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+          
+            $('#selectCorredor').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+
+        });
+
+        getRutaPorCorredor();
+        getRutaPorCorredores();
+    }
+
+
+    function getRutaPorCorredor() {
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRutaConsulta').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRutaConsulta').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRutaConsulta').append('<option value="' + this.ID_RUTA + '" >' + this.NRO_RUTA + '</option>');
+                    });
+                }
+            }
+        }, JSON);
+    }
+
+
+    
+//function getTipoServicioByRuta() {
+
+//    $.ajax({
+//        url: URL_GET_TIPOOPER_X_RUTA,
+//        dataType: 'json',
+//        data: { idRuta: $('#selectRutaConsulta').val() },
+//        success: function (result) {
+//            //console.log('result-->', result);
+//            $('#selectRutaTipoServicio').empty();
+//            if (result.length == 0) {
+//                $('#selectRutaTipoServicio').append('<option value="0">' + '--No hay información--' + '</option>');
+//                return false;
+//            }
+
+//            $.each(result, function () {
+//                $('#selectRutaTipoServicio').append('<option value="' + this.ID_RUTA_TIPO_SERVICIO + '">' + this.TIPO_OPERACIONAL + ' ' + this.NOMBRE + '</option>');
+//            });
+//            getResumenProgramacion();
+//        }
+//    }, JSON);
+//}
+</script>

@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="01">Nombre del Acceso</label>
+        <input type="text" class="form-control" id="01" ng-model="Objeto.ACCNOM">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="03">Direccion de la Funcion</label>
+        <input type="text" class="form-control" id="03" ng-model="Objeto.ACCDIR">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="04">Grupo</label>
+        <select class="form-control" ng-model="Objeto.ACCGRU">
+            <option ng-repeat="Grupo in ListaGrupos" value="{{Grupo.GRUNOM}}">{{Grupo.GRUNOM}}</option>
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="04">Empresa</label>
+        <select class="form-control" ng-model="Objeto.EMPCOD">
+            <option ng-repeat="Empresa in ListaEmpresas" value="{{Empresa.EMPCOD}}">{{Empresa.EMPNOM}}</option>
+        </select>
+    </div>
+    <div class="col-md-3 mb-3"></div>
+    <div class="col-md-6 mb-3">
+        <label for="02">Icono</label>
+        @*<input type="file" class="form-control-file" file-model="Objeto.accico" />*@
+        <input type="file" name="attachment" class="form-control-file"
+               data-ak-file-model="Objeto.accico" />
+        @*<input type="text" class="form-control" id="02" ng-model="Objeto.accico">*@
+    </div>
+    <div class="col-md-3 mb-3"></div>
+    <div class="col-md-3 mb-3"></div>
+    <div class="col-md-6 mb-3">
+        <img ng-src="{{Objeto.ACCICO}}">
+    </div>
+</div>

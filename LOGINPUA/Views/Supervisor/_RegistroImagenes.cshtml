@@ -1,0 +1,68 @@
+﻿<style>
+       .custom-file {
+    width:80%;
+    }
+
+</style>
+<div class="modal fade " id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAdd" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document" style="max-width: 100%;margin: 1.75rem auto;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Imagenes</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+             
+             
+            <div class="modal-body mx-2">
+ 
+                        <table class="table">
+                            <tr>
+                                <td style="text-align:right"><h5>Ingresar Foto:</h5></td>
+                                <td>
+                                    <div class="custom-file" style="text-align:left">
+                                        <input type="file" class="custom-file-input" accept=".jpg,.gif,.png" onchange="subirArchivoTemp($(this))" name="Foto_Cargar1" id="validatedCustomFile">
+                                        <label class="custom-file-label" for="validatedCustomFile">Seleccionar Imagen</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right"> <h5>Ingresar Foto:</h5></td>
+                                <td style="width:70%">
+                                    <div class="custom-file" style="text-align:left">
+                                        <input type="file" class="custom-file-input" accept=".jpg,.gif,.png" onchange="subirArchivoTemp($(this))" name="Foto_Cargar2" id="validatedCustomFile">
+                                        <label class="custom-file-label" for="validatedCustomFile">Seleccionar Imagen</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right"><h5>Ingresar Foto:</h5> </td>
+                                <td style="width:70%">
+
+                                    <div class="custom-file" style="text-align:left">
+                                        <input type="file" class="custom-file-input" accept=".jpg,.gif,.png" onchange="subirArchivoTemp($(this))" name="Foto_Cargar3" id="validatedCustomFile">
+                                        <label class="custom-file-label" for="validatedCustomFile">Seleccionar Imagen</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right"><h5>Ingresar Foto:</h5> </td>
+                                <td style="width:70%">
+
+                                    <div class="custom-file" style="text-align:left">
+                                        <input type="file" class="custom-file-input" accept=".jpg,.gif,.png" onchange="subirArchivoTemp($(this))" name="Foto_Cargar4" id="validatedCustomFile">
+                                        <label class="custom-file-label" for="validatedCustomFile">Seleccionar Imagen</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+            </div>
+
+            <div class="modal-footer">
+                     <button type="button" class="btn btn-info" data-dismiss="modal">Guardar</button> 
+                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>

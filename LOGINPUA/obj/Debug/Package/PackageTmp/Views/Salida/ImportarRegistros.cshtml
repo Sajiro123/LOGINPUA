@@ -1,0 +1,217 @@
+﻿@model IEnumerable<ENTIDADES.CC_CORREDOR>
+@{
+    ViewBag.Title = "RegistroPicoPlaca";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    DateTime fecha = DateTime.Now;
+    string fecha_actual = fecha.ToString("MM/yyyy");
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+}
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+
+<script src="~/Content/js/js_registro_despacho/js_registroDespacho.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+@{
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+}
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Despacho&nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalRegistroPicoPlaca();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredores_inicial();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor">
+                @*@foreach (var item in listRutas)
+                    {
+                        <option value="@item.ID_RUTA">@item.ABREV_CORREDOR   @item.NRO_RUTA</option>
+
+                    }*@
+            </select>
+
+        </div>
+    </div>
+
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="mes_año" value="@fecha_actual" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+    <div class="col-md-1">
+        @*<a href="#" id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</a>*@
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</button>
+    </div>
+    <div class="col-md-4 text-right">
+        @*<a href="#" id="exportar" class="btn btn-success btn-sm" data-toggle="modal" onclick="exportarTabla();">Exportar</a>*@
+        <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" onclick="exportarTabla();">Exportar</button>
+    </div>
+
+    @*tabla*@
+</div>
+<hr />
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" id="tbReporteDespacho" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="text-center">NRO_RUTA</th>
+                    <th class="text-center">FECHA</th>
+                    <th class="text-center" style="vertical-align:middle;">CANTIDAD_VIAJES</th>
+                    <th class="text-center">USU_REG</th>
+                    <th class="text-center">FECHA_REG</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@Html.Partial("_RegistroDespacho")
+
+<script>
+    $(document).ready(function () {
+        getRutaPorCorredores_inicial();
+
+    });
+
+
+
+    var Utilidades = new Util();
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_IMPORTAR_DATA_DESPACHO = "@Url.Action("importarExcelDespachos", "Salida")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("subir_archivo", "Salida")"
+    var URL_GET_REPORTE_FECHA = "@Url.Action("Consultar_ReporteFechas", "Salida")";
+    var URL_ACTION_UPLOAD_FILE_TEST = "@Url.Action("importarExcelDespachosDepura", "Salida")";
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+    $("#mes_año").datepicker({
+        format: "mm/yyyy",
+        viewMode: "months",
+        minViewMode: "months"
+    });
+
+    function getCorredoresByModalidad() {
+        var modalidadTransporteSelecionado = $('#mod').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+        //
+        $.each(JSON_DATA_CORREDORES, function () {
+            if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRutatipoServicio tbody').empty();
+            return false
+        }
+        $('#selectCorredores').find('option').clone().appendTo('#selectCorredor');
+        getRutaPorCorredor();
+
+    }
+
+    function getRutaPorCorredores_inicial() {
+
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRutaCorredor').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRutaCorredor').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRutaCorredor').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                }
+
+            }
+        }, JSON);
+    }
+</script>
+

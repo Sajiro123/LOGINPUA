@@ -1,0 +1,1097 @@
+﻿@{
+    ViewBag.Title = "Reporte Comparativo";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+@*<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">*@
+@*<link href="~/Content/plugins/sweetAlert/sweetalert2.css" rel="stylesheet" />*@
+@*<link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />*@
+<script src="~/Content/js/js_pico_placa/pico_placa.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+@*<script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>*@
+@*<script src="~/Scripts/Utilidades/Util.js"></script>*@
+@*<script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>*@
+
+<style>
+    input, select, textarea {
+        max-width: none !important;
+    }
+
+    .thead-azul-claro th {
+        color: white;
+        background-color: #2f6f9dd9;
+        border-color: #777;
+    }
+
+    .thead-verde-claro th {
+        color: white;
+        background-color: rgb(0, 163, 156);
+        border-color: #777;
+    }
+
+    .titulo {
+        font-size: 13px;
+    }
+
+    .table {
+        margin-bottom: 0 !important;
+    }
+
+    .dropdown a {
+        color: white !important;
+    }
+
+    .dropdown-menu a {
+        color: black !important;
+    }
+
+    .dropdown-item {
+        color: black !important;
+    }
+
+    .nav-tabs a {
+        color: black !important;
+    }
+</style>
+
+<div id="divEmp">
+    <br /><br />
+    <h4 class="text-center" id="txtNombreCorredor">Reporte comparativo por tramos</h4>
+    <br />
+    <div class="row" style="padding-bottom: 16px;">
+
+        <div class="col-md-1">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="selectRuta" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectRutas" onchange="cambioDeRuta();">
+                    @*@foreach (var item in Model)
+                    {
+                        <option value="@item.ID_RUTA">@item.ABREV_CORREDOR   @item.NRO_RUTA</option>
+                    }*@
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="input-group mb-3" style="border-bottom: 2px solid #004eff75;">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Seleccionar fechas para el comparativo" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+                </div>
+                <input type="text" id="txtFechasMuestraIni" value="01/01/2019" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="input-group mb-3" style="border-bottom: 2px solid #00a39cab;">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Seleccionar fechas para el comparativo" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+                </div>
+                <input type="text" name="txtFechasMuestraFin" id="txtFechasMuestraFin" value="01/01/2019" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Lado"><span class="fas fa-project-diagram" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectLado" onchange="getParaderosxRuta($('#selectRutas').val())">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Paradero inicial"><span class="fab fa-product-hunt" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectParaderoIni"></select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Paradero final"><span class="fab fa-product-hunt" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectParaderoFin"></select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Salto de horas consulta" id="basic-addon1"><span class="fas fa-clock" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectHoraSalto">
+                    <option value="15">15 Minutos</option>
+                    <option value="30">30 Minutos</option>
+                    <option value="60" selected>1 Hora</option>
+                    <option value="120">2 Horas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button style="width:100%;display:flex" class="btn btn-info btn-sm centrado" id="btnConsultaHoras" onclick="cargarHorasComparativo()">&nbsp;&nbsp; Consultar</button>
+        </div>
+        <div class="col-md-1">
+            <button style="width: 100%; background-color: green; border-color: #54c1bd;" class="btn btn-danger btn-sm centrado" id="exportar" type="button" onclick="exportarPDF();">
+                Excel <i class="fas fa-file-pdf"></i>
+            </button>
+        </div>
+
+        <div class="col-md-1">
+            <button style="width:100%" class="btn btn-danger btn-sm centrado" id="exportarPDF" type="button" onclick="exportarPDF();">
+                Pdf <i class="fas fa-file-pdf"></i>
+            </button>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <nav>
+                    <div class="nav nav-tabs" id="tabLista" role="tablist">
+                    </div>
+                </nav>
+                <div class="tab-content" id="tabContenedor">
+                    <br />
+                    <div class="alert alert-primary text-center">
+                        Presionar el botón <strong>consultar</strong>  para cargar la información
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var fechaConsulta = '10/09/2019';//fecha temp para calculos del timestamp
+    var HORA_OPERACIONES = {
+        inicio: '04:00:00',
+        fin: '23:59:00'
+    };
+    var util = new Util();
+    var JSONparaderos = [];
+    //
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+    $(document).ready(function () {
+        mostrarBoton1();
+        $('#txtFechasMuestraIni, #txtFechasMuestraFin').val('01/01/2019');// para pruebas
+        getCorredoresByModalidad();
+    });
+
+    function cambioDeRuta() {
+        getParaderosxRuta($('#selectRutas').val())
+    }
+
+    function getParaderosxRuta(idRuta) {
+        JSONparaderos = [];
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getParaderosByIdRuta", "Salida")",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: {
+                id_ruta: idRuta,
+            },
+            success: function (data) {
+                $('#selectParaderoIni').empty();
+                $('#selectParaderoFin').empty();
+                if (data.length == 0) {
+                    $('#btnConsultaHoras, #exportar').prop('disabled', true);
+                    $('#selectParaderoIni, #selectParaderoFin').append('<option value="0">-- No hay información para mostrar --</option>');
+                    return;
+                }
+                $('#btnConsultaHoras, #exportar').prop('disabled', false);
+                $('#exportar').prop('disabled', true);                    //QUITAR SOLO PARA DESARROLLO
+
+                var agrupadoPorLados = _.groupBy(data, function (d) { return d.LADO })  //agrupado por fechas la data del comparativo A
+                $.each(agrupadoPorLados[$('#selectLado').val()], function (i) {
+                    var item = {
+                        ID_PARADERO: this.ID_PARADERO,
+                        NRO_ORDEN: (this.NRO_ORDEN - 1),
+                        NOMBRE: this.NOMBRE,
+                        LADO: this.LADO,
+                        ETIQUETA_NOMBRE: this.ETIQUETA_NOMBRE,
+                        DISTANCIA_PARCIAL: this.DISTANCIA_PARCIAL
+                    }
+                    JSONparaderos.push(item);//nuevo json para paradero con el nro orden -1 por el terminal
+                    $('#selectParaderoIni').append('<option value="' + this.ID_PARADERO + '">' + (this.NRO_ORDEN - 1) + '.- ' + this.NOMBRE + '</option>');
+                    $('#selectParaderoFin').append('<option value="' + this.ID_PARADERO + '"  ' + (agrupadoPorLados[$('#selectLado').val()].length - 1 == i ? ' selected ' : '') + ' >' + (this.NRO_ORDEN - 1) + '.- ' + this.NOMBRE + '</option>');
+                });
+                //cargarHorasComparativo();//carga comparativo !!!!!
+            }
+        });
+    }
+
+    function cargarHorasComparativo() {
+
+        if ($('#txtFechasMuestraFin').val().length == 0 || $('#txtFechasMuestraIni').val().length == 0) {
+            Swal.fire({
+                type: 'warning',
+                text: 'Verificar las fechas ingresadas',
+                showConfirmButton: false,
+                timer: 2000
+            });
+            return;
+        }
+
+        var dataHoras = util.obtenerHorasEnTimestamp(fechaConsulta + ' ' + HORA_OPERACIONES.inicio, fechaConsulta + ' ' + HORA_OPERACIONES.fin, $('#selectHoraSalto').val());
+        var fechaInicioSeleccionada = $('#txtFechasMuestraIni').val().replace(/\ /g, '').replace(/\-/g, '|');
+        var fechaFinSeleccionada = $('#txtFechasMuestraFin').val().replace(/\ /g, '').replace(/\-/g, '|');
+
+        $('#btnConsultaHoras').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando');//boton load
+        $('#tabContenedor').empty();
+        $('#tabContenedor').append('<br />' +
+                                    '<div class="alert alert-primary text-center">' +
+                                        'Cargando <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">' +
+                                    '</div>');
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getDataComparativa", "Salida")",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: {
+                idRuta : $('#selectRutas').val(),
+                fechaComparativaA: fechaInicioSeleccionada,
+                fechaComparativaB: fechaFinSeleccionada
+            },
+            success: function (data) {
+                $('#tabLista').empty();
+                $('#tabContenedor').empty();
+                var cantidadRegistrosTotal = 0;
+
+                $.each(data, function (key, arrDataComparativa) {
+                    cantidadRegistrosTotal += arrDataComparativa.length;
+                });
+                if (cantidadRegistrosTotal == 0) {
+                    $('#tabContenedor').append('<br />' +
+                                '<div class="alert alert-warning text-center">' +
+                                    'No hay información para las fechas <strong style="color:#004eff75" >' + $('#txtFechasMuestraIni').val() + '</strong>' + ' y ' + ' <strong style="color:#00a39cab"  >' + $('#txtFechasMuestraFin').val() + '</strong>' +
+                                '</div>');
+                    $('#btnConsultaHoras').prop('disabled', false).html('&nbsp;&nbsp; Consultar');//boton load
+                    return;
+                }
+                generarTabs(data, dataHoras);
+            }
+        });
+    }
+
+    var PROMEDIADO_COMPARATIVO = {
+        COMPARATIVO_A: {
+            A: [],
+            B: []
+        },
+        COMPARATIVO_B: {
+            A: [],
+            B: []
+        }
+    }
+
+    var DATA_VIAJES = {
+        TURNO: {
+            MAÑANA: {
+                arr: [],
+                minimo: null,
+                maximo: null
+            },
+            TARDE: {
+                arr: [],
+                minimo: null,
+                maximo: null
+            }
+        }
+    };
+
+    var TIPO_COMPARATIVO = {
+        COMPARATIVO_A: {
+            NOMBRE: 'COMPARATIVO A',
+            ETIQUETA: 'COMPARATIVO_A'
+        },
+        COMPARATIVO_B: {
+            NOMBRE: 'COMPARATIVO B',
+            ETIQUETA: 'COMPARATIVO_B'
+        }
+    };
+
+    //OCULTAR Y MOSTRAR PDF
+
+    var btn_1 = document.getElementById('btnConsultaHoras');
+    var btn_2 = document.getElementById('exportarPDF');
+
+
+    function mostrarBoton1() {
+        btn_2.style.display = 'none';
+        btn_1.style.display = 'flex';
+    }
+
+    function mostrarBoton2() {
+        btn_1.style.display = 'flex';
+        btn_2.style.display = 'flex';
+    }
+
+    function generarTabs(dataComparativas, dataRangoHoras) {
+        //console.log('dataRangoHoras-->', dataRangoHoras);
+
+        var strHTMLTabList = '';
+        var strHTMLTabContenedor = '';
+        var arrFechasComparativoA = $('#txtFechasMuestraIni').val().split('-');
+        var arrFechasComparativoB = $('#txtFechasMuestraFin').val().split('-');
+        var nroOrdenParaderoIniSelec = Number($("#selectParaderoIni option:selected").text().split('.-')[0]);
+        var nroOrdenParaderoFinSelec = Number($("#selectParaderoFin option:selected").text().split('.-')[0]);
+        //
+        var dataComparativo_a_por_fechas = _.groupBy(dataComparativas['dt0'], function (d) { return d.FECHA })  //agrupado por fechas la data del comparativo A
+        var dataComparativo_b_por_fechas = _.groupBy(dataComparativas['dt1'], function (d) { return d.FECHA })  //agrupado por fechas la data del comparativo B
+        //
+        var registrosComparativoA = dataComparativas['dt0'].length;
+        var registrosComparativoB = dataComparativas['dt1'].length;
+        //
+        var textoParaderoInicio = $("#selectParaderoIni option:selected").text().split('.-')[1];
+        var textoParaderoFin = $("#selectParaderoFin option:selected").text().split('.-')[1];
+        //
+        $('#tabLista').empty();
+        $('#tabContenedor').empty();
+        PROMEDIADO_COMPARATIVO = {
+            COMPARATIVO_A: {
+                A: [],
+                B: []
+            },
+            COMPARATIVO_B: {
+                A: [],
+                B: []
+            }
+        }
+        DATA_VIAJES = { //para obtener todas las salidas en timestamp agrupados por turno mañana o tarde
+            TURNO: {
+                MAÑANA: {
+                    arr: [],
+                    minimo: null,
+                    maximo: null
+                },
+                TARDE: {
+                    arr: [],
+                    minimo: null,
+                    maximo: null
+                }
+            }
+        };
+        //
+        if (registrosComparativoA > 0) {
+            //llenando fecha de comparativo A
+            arrFechasComparativoA.forEach(function (fecha, i) {
+                var aux_id_tab = fecha.split('/')[0] + fecha.split('/')[1];
+                aux_id_tab = aux_id_tab.trim();
+                var fechaConsulta = fecha.trim();
+                var dataComparativoAxFecha = dataComparativo_a_por_fechas[fechaConsulta];
+                //
+                strHTMLTabList += '<a class="nav-item nav-link' + (i == 0 ? ' active' : '') + '" data-toggle="tab"  href="#nav_' + aux_id_tab + '"  role="tab" aria-controls="nav-home" >' +
+                                    '<strong style="color: #004eff75;" >' + fecha + '</strong>' +
+                                  '</a>';
+                strHTMLTabContenedor += '<div class="tab-pane fade' + (i == 0 ? ' show active' : '') + '" id="nav_' + aux_id_tab + '" role="tabpanel" >' +
+                                            '<p class="text-center" style="padding-bottom: 0; margin-bottom: 4px; padding-top: 9px; color: black; text-decoration: underline;" >' +
+                                                (dataComparativoAxFecha ? 'REPORTE DE VELOCIDAD Y TIEMPO DEL DIA ' + fechaConsulta + ' DE ' + '<strong style="font-weight:bold"> ' + textoParaderoInicio + '</strong>' + ' A ' + '<strong style="font-weight:bold">' + textoParaderoFin + '</strong>' : ' No hay información para mostrar. ') +
+                                            '</p>' +
+                                                (dataComparativoAxFecha ? getPromediadoFranjaHorarias(fechaConsulta, dataComparativo_a_por_fechas[fechaConsulta], dataRangoHoras, nroOrdenParaderoIniSelec, nroOrdenParaderoFinSelec, TIPO_COMPARATIVO.COMPARATIVO_A.ETIQUETA) : '') +
+                                        '</div>';
+
+            });
+        }
+        //
+        if (registrosComparativoB > 0) {
+            //llenando fecha de comparativo B
+            arrFechasComparativoB.forEach(function (fecha, i) {
+                //console.log('dataComparativo_b_por_fechas[fechaConsulta]->', dataComparativo_b_por_fechas[fechaConsulta], ' fechaConsulta-->', fechaConsulta);
+                var aux_id_tab_lado_b = fecha.split('/')[0] + fecha.split('/')[1];
+                aux_id_tab_lado_b = aux_id_tab_lado_b.trim();
+                var fechaConsulta = fecha.trim();
+                var dataComparativoBxFecha = dataComparativo_b_por_fechas[fechaConsulta];
+                //
+                strHTMLTabList += '<a class="nav-item nav-link" data-toggle="tab"  href="#nav_' + aux_id_tab_lado_b + '"  role="tab" aria-controls="nav-home" >' +
+                                    '<strong style="color: #54c1bd;" >' + fecha + '</strong>' +
+                                  '</a>';
+                strHTMLTabContenedor += '<div class="tab-pane fade" id="nav_' + aux_id_tab_lado_b + '" role="tabpanel" >' +
+                                            '<p class="text-center" style="padding-bottom: 0; margin-bottom: 4px; padding-top: 9px; color: black; text-decoration: underline;" >' +
+                                                (dataComparativoBxFecha ? 'REPORTE DE VELOCIDAD Y TIEMPO DEL DIA ' + fechaConsulta + ' DE ' + '<strong style="font-weight:bold"> ' + textoParaderoInicio + '</strong>' + ' A ' + '<strong style="font-weight:bold">' + textoParaderoFin + '</strong>' : ' No hay información para mostrar. ') +
+                                            '</p>' +
+                                                (dataComparativoBxFecha ? getPromediadoFranjaHorarias(fechaConsulta, dataComparativoBxFecha, dataRangoHoras, nroOrdenParaderoIniSelec, nroOrdenParaderoFinSelec, TIPO_COMPARATIVO.COMPARATIVO_B.ETIQUETA) : '') +
+                                        '</div>';
+            });
+        }
+        //return false;
+        $('#btnConsultaHoras').prop('disabled', false).html('&nbsp;&nbsp; Consultar');//boton load
+        //return false;
+        /******************************** COMPARATIVO *********************************************/
+        //
+        DATA_VIAJES.TURNO.MAÑANA.minimo = Math.min.apply(Math, DATA_VIAJES.TURNO.MAÑANA.arr);
+        DATA_VIAJES.TURNO.TARDE.minimo = Math.min.apply(Math, DATA_VIAJES.TURNO.TARDE.arr);
+        //
+        DATA_VIAJES.TURNO.MAÑANA.maximo = Math.max.apply(Math, DATA_VIAJES.TURNO.MAÑANA.arr);
+        DATA_VIAJES.TURNO.TARDE.maximo = Math.max.apply(Math, DATA_VIAJES.TURNO.TARDE.arr);
+        //
+        strHTMLTabList += '<a class="nav-item nav-link" data-toggle="tab"  href="#nav_comparativo"  role="tab" aria-controls="nav-home" >' +
+                            "COMPARATIVO" +
+                          '</a>';
+
+        strHTMLTabContenedor += '<div class="tab-pane fade" id="nav_comparativo" role="tabpanel" >' +
+                                    '<div class="row" >' +
+                                        '<div class="col-md-12" >' +
+                                            '<br>' +
+                                            '<h5 class="text-center" >HORA MAÑANA</h5>' +
+                                        '</div>' +
+                                        '<div class="col-md-12 text-center" style="padding-bottom: 8px;" >' +
+                                            getHTMLselectHoraComparativa(dataRangoHoras, DATA_VIAJES.TURNO.MAÑANA.minimo, DATA_VIAJES.TURNO.MAÑANA.maximo, 'manana') +
+                                        '</div>' +
+                                        '<div class="col-md-6" >' +
+                                            '<div style="background-color:white;border: 1px solid black;border-color: #717572;">' +
+                                                '<table class="table table-sm table_responsive" id="tbReporteComparativo_tiempo_mañana">' +
+                                                    '<thead class="thead-azul-claro">' +
+                                                        '<tr>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">OBS  </th>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">FECHA</th>' +
+                                                            '<th width="100" colspan="2" class="text-center titulo">T VIAJE PROMEDIO</th>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th class="text-center titulo">' + textoParaderoInicio + ' - ' + textoParaderoFin + '</th>' +
+                                                            //'<th class="text-center titulo"> VUELTA</th>'+
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody></tbody>' +
+                                                '</table>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="col-md-6" >' +
+                                            '<div style="background-color:white;border: 1px solid black;border-color: #717572;">' +
+                                                '<table class="table table-sm table_responsive" id="tbReporteComparativo_velocidad_mañana">' +
+                                                    '<thead class="thead-verde-claro">' +
+                                                        '<tr>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">OBS  </th>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">FECHA</th>' +
+                                                            '<th width="100" colspan="2" class="text-center titulo">VL PROMEDIO</th>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th class="text-center titulo">' + textoParaderoInicio + ' - ' + textoParaderoFin + '</th>' +
+                                                            //'<th class="text-center titulo">VUELTA</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody></tbody>' +
+                                                '</table>' +
+                                            '</div>' +
+                                        '</div>' +
+
+                                        '<div class="col-md-12" >' +
+                                            '<br>' +
+                                            '<h5 class="text-center" >HORA TARDE</h5>' +
+                                        '</div>' +
+
+                                        '<div class="col-md-12 text-center" style="padding-bottom: 8px;" >' +
+                                            getHTMLselectHoraComparativa(dataRangoHoras, DATA_VIAJES.TURNO.TARDE.minimo, DATA_VIAJES.TURNO.TARDE.maximo, 'tarde') +
+                                        '</div>' +
+
+                                        '<div class="col-md-6" >' +
+                                            '<div style="background-color:white;border: 1px solid black;border-color: #717572;">' +
+                                                '<table class="table table-sm table_responsive" id="tbReporteComparativo_tiempo_tarde">' +
+                                                    '<thead class="thead-azul-claro">' +
+                                                        '<tr>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">OBS  </th>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">FECHA</th>' +
+                                                            '<th width="100" colspan="2" class="text-center titulo">T VIAJE PROMEDIO</th>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th class="text-center titulo">' + textoParaderoInicio + ' - ' + textoParaderoFin + '</th>' +
+                                                            //'<th class="text-center titulo"> + textoParaderoInicio + ' - '+  textoParaderoFin+VUELTA</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody></tbody>' +
+                                                '</table>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="col-md-6" >' +
+                                            '<div style="background-color:white;border: 1px solid black;border-color: #717572;">' +
+                                                '<table class="table table-sm table_responsive" id="tbReporteComparativo_velocidad_tarde">' +
+                                                    '<thead class="thead-verde-claro">' +
+                                                        '<tr>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">OBS  </th>' +
+                                                            '<th rowspan="2" class="titulo text-center" style="vertical-align:middle;">FECHA</th>' +
+                                                            '<th width="100" colspan="2" class="text-center titulo">VL PROMEDIO</th>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th class="text-center titulo">' + textoParaderoInicio + ' - ' + textoParaderoFin + '</th>' +
+                                                            //'<th class="text-center titulo">VUELTA</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody></tbody>' +
+                                                '</table>' +
+                                            '</div>' +
+                                        '</div>' +
+
+                                        '<div class="col-md-12 text-center" >' +
+                                            '<br>' +
+                                            '<button class="btn btn-info btn-sm centrado" data-toggle="modal" id="btnConsulta" onclick="cargarReporteComparativo();"> <i class="fas fa-search"></i>&nbsp;&nbsp; Consultar</button>' +
+                                        '</div>' +
+
+                                    '</div>' +
+                                '</div>';
+        $('#tabLista').append(strHTMLTabList);
+        $('#tabContenedor').append(strHTMLTabContenedor);
+    }
+
+    function getPromediadoFranjaHorarias(fecha, dataJSON, dataFranjaHoraria, ordenIni, ordenFin, etiquetaComparativo) {
+        var agrupadoDataDetallePorViajes = _.groupBy(dataJSON, function (d) { return d.ID_SALIDAEJECUTADA });  //agrupado por fechas la data del comparativo A
+        var idParaderoInicialSeleccionado = Number($('#selectParaderoIni').val());
+        //recorriendo data por viajes
+        var viajesFiltrados = [];
+
+        $.each(agrupadoDataDetallePorViajes, function (idViaje, data) {
+            var itemViaje = {
+                idViaje: idViaje,
+                objPasoInicio: null,
+                objPasoFin: null
+            }
+
+            $.each(data, function () { //recorriendo el detalle del viaje
+                //aqui se valida el tramo solicitado
+                var nroOrdenParaderoPaso = getNroOrdenByIdParadero(this.ID_PARADERO); //obtiene el nro de orden del paradero paso para validar los tramos de busqueda
+                nroOrdenParaderoPaso = (nroOrdenParaderoPaso ? nroOrdenParaderoPaso.NRO_ORDEN : null);
+
+                if (ordenIni == nroOrdenParaderoPaso) { //paradero inicial
+                    itemViaje.objPasoInicio = this;
+                }
+
+                if (ordenFin == nroOrdenParaderoPaso) {
+                    itemViaje.objPasoFin = this;
+                }
+            });
+            viajesFiltrados.push(itemViaje); //aqui se almacena el viaje su hora inicio y hora fin segun la consulta por paraderos (ini - fin)
+        });
+        //obteniendo el menor viaje por lado
+        var minMenorViaje = getMenorHoraDeViajeMinutos(viajesFiltrados);//viaje min por lado + 2H y 30
+        //
+        limpiarContenedorDeViajesxFranja(dataFranjaHoraria);
+        //
+        $.each(viajesFiltrados, function (n) { //recorriendo nueva lista de viajes filtrados
+            //console.log(this.objPasoInicio, this.objPasoFin)
+            if (this.objPasoInicio && this.objPasoFin) {
+                if (this.objPasoInicio.HORA_PASO != null && this.objPasoInicio.HORA_PASO != null) { //llenos porque sino no se puede calcular el tiempo de viaje
+                    verificaViajePorFranjaHoraria(this, dataFranjaHoraria, fecha);
+                }
+            }
+        });
+        //
+        var distancias = {
+            A: 0,
+            B: 0
+        }
+        //
+        /***** get distancias segun paradero ini y fin *****/
+        $.each(JSONparaderos, function () {
+            var nroOrdenBusquedaIni = Number($('#selectParaderoIni option:selected').text().split('.-')[0]);
+            var nroOrdenBusquedaFin = Number($('#selectParaderoFin option:selected').text().split('.-')[0]);
+            var nroOrdenParaderoLista = this.NRO_ORDEN;
+            var distanciaParcial = this.DISTANCIA_PARCIAL;
+            if (idParaderoInicialSeleccionado == this.ID_PARADERO) {
+                distanciaParcial = 0;
+            }
+
+            if ($('#selectLado').val() == this.LADO) { //verificando el LADO
+                if (nroOrdenParaderoLista >= nroOrdenBusquedaIni && nroOrdenParaderoLista <= nroOrdenBusquedaFin) { //verificando el rango de busqueda tramo
+                    distancias[$('#selectLado').val()] += distanciaParcial;
+                }
+            }
+        });
+        /****************************/
+        distancias.B = Number(distancias.B.toFixed(3)); //dbee tener un solo formato 2 o 3 QUITARRR!!
+
+        return getHTMLPromediadoPorFecha(distancias, dataFranjaHoraria, fecha, minMenorViaje, etiquetaComparativo);
+    }
+
+    function getHTMLPromediadoPorFecha(dataDistanciasxRecorrido, dataFranjaHoraria, fecha, minutosViajeMin, etiquetaComparativo) {
+        var ladoSeleccionado = $('#selectLado').val();
+        var corredorSeleccionado = $('#selectCorredores option:selected').text();
+        var rutaSelecionada = $('#selectRutas option:selected').text();
+        var distanciaRecorridoSeleccionado = dataDistanciasxRecorrido[$('#selectLado').val()];
+        var promediadoPorFranjaHoraria =
+        {
+            fecha: fecha,
+            detalle: []
+        };
+        //
+        var strHTML = "";
+        /*armando HTML tabla*/
+        strHTML += '<table style="width:100%">' +
+                        '<thead class="thead-azul-claro text-center">' +
+                            '<tr>' +
+                                '<th rowspan="2" style="vertical-align:middle;">FECHA</th>' +
+                                '<th rowspan="2" style="vertical-align:middle;">CORREDOR</th>' +
+                                '<th rowspan="2" class="text-center" style="vertical-align:middle;">RUTA</th>' +
+                                '<th colspan="2" class="text-center">HORA</th>' +
+                                '<th colspan="1" class="text-center">DISTANCIA</th>' +
+                                '<th colspan="1" class="text-center">VELOCIDAD PROM</th>' +
+                                '<th colspan="1" class="text-center">TIEMPO PROM</th>' +
+                            '</tr>' +
+
+                            '<tr>' +
+                                '<th class="text-center">INI</th>' +
+                                '<th class="text-center">FIN</th>' +
+                                '<th class="text-center"  >AB</th>' +
+                                '<th class="text-center"  >AB</th>' +
+                                '<th class="text-center"  >AB</th>' +
+                            '</tr>' +
+                        '</thead>';
+
+        strHTML += '<tbody class="text-center" >';
+
+        $.each(dataFranjaHoraria, function () {
+
+            // if (this.inicioTimestamp == 1568116800000) { //analizando rango de  7:00 - 7:59
+
+            var franjaHorariaInicioTimestamp = this.inicioTimestamp;
+            var turnoFranja = this.turno;
+            var velocidadKMPromedio = 0;
+            var tiempoPromedio = 0;
+            var tiempoPromedioMinutos = 0;
+            var cantidadViajesValidos = 0;
+            var item = {
+                inicio: this.hInicio,
+                fin: this.hFin,
+                tiempo_promedio: null,
+                velocidad_promedio: null
+            }
+            //
+            strHTML += '<tr>' +
+                            '<td>' + fecha + '</td>' +
+                            '<td class="text-center" >' + corredorSeleccionado + '</td>' +
+                            '<td class="text-center" >' + rutaSelecionada + '</td>' +
+                            '<td class="text-center" style="background-color: #cae8e6;" >' + this.hInicio.split(':')[0] + ':' + this.hInicio.split(':')[1] + '</td>' +
+                            '<td class="text-center" style="background-color: #cae8e6;" >' + this.hFin.split(':')[0] + ':' + this.hFin.split(':')[1] + '</td>';
+            //console.log("################### " + this + " ########################");
+            $.each(this.arrViajes, function () {
+                var timestampFechaHoraInicio = (this.objPasoInicio.HORA_PASO ? util.convertDatetoTimeStamp(this.objPasoInicio.FECHA + ' ' + this.objPasoInicio.HORA_PASO) : null);
+                var timestampFechaHoraFin = (this.objPasoFin.HORA_PASO ? util.convertDatetoTimeStamp(this.objPasoFin.FECHA + ' ' + this.objPasoFin.HORA_PASO) : null);
+                var diferenciaMilisegundos = null;
+                var diferenciaMinutos = null;
+                var diferenciaHoras = null;
+                var velocidadKM = null;
+                //
+                if (timestampFechaHoraInicio && timestampFechaHoraFin) {
+                    diferenciaMilisegundos = timestampFechaHoraFin - timestampFechaHoraInicio;
+                    if (diferenciaMilisegundos < 0) { //si es negativo
+                        diferenciaMilisegundos = 0;
+                        timestampFechaHoraFin = (timestampFechaHoraFin + 86400000);// 86400; //le agrega un dia
+                        diferenciaMilisegundos = timestampFechaHoraFin - timestampFechaHoraInicio;
+                    }
+                    diferenciaMinutos = ((diferenciaMilisegundos / 1000) / 60);//minutos
+
+                    //if (diferenciaMinutos <= minutosViajeMin && diferenciaMinutos >= 30) {//diferencia de minutos debe ser mayor de los minutos minimospor viaje y mayorigual a 30 minutos
+                    if (diferenciaMinutos <= minutosViajeMin) {//diferencia de minutos debe ser mayor de los minutos minimospor viaje y mayorigual a 30 minutos
+                        if (diferenciaMinutos > 0) {
+                            //console.log('--->', this.objPasoInicio.FECHA + ' ' + this.objPasoInicio.HORA_PASO, this.objPasoFin.FECHA + ' ' + this.objPasoFin.HORA_PASO, diferenciaMinutos);
+                            DATA_VIAJES.TURNO[turnoFranja].arr.push(franjaHorariaInicioTimestamp);
+                            diferenciaHoras = (diferenciaMinutos / 60);
+
+                            velocidadKM = (diferenciaHoras == 0 ? 0 : (distanciaRecorridoSeleccionado / diferenciaHoras));
+                            velocidadKMPromedio += velocidadKM;
+                            tiempoPromedio += diferenciaHoras;
+                            tiempoPromedioMinutos += diferenciaMinutos;
+                            cantidadViajesValidos++;
+                        }
+                    }
+                }
+            });
+            //console.log('tiempoPromedio--->', tiempoPromedio)
+            velocidadKMPromedio = (cantidadViajesValidos == 0 ? 0 : velocidadKMPromedio / cantidadViajesValidos);
+            tiempoPromedio = (cantidadViajesValidos == 0 ? 0 : tiempoPromedio / cantidadViajesValidos);
+            //console.log('velocidadKMPromedio', velocidadKMPromedio, 'cantidadViajesValidos', cantidadViajesValidos, 'velocidadKMPromedio', velocidadKMPromedio)
+            strHTML += '<td class="text-center"  >' + distanciaRecorridoSeleccionado.toFixed(2) + '</td>';
+            if (velocidadKMPromedio <= 0 && tiempoPromedio <= 0) {
+                strHTML += '<td colspan="2" style="background: #e9ecef;">' + "No hay información para mostrar" + '</td>';
+            } else {
+                strHTML += '<td>' + velocidadKMPromedio.toFixed(2) + '</td>';
+                strHTML += '<td>' + util.decimalTommss(tiempoPromedio.toFixed(1)) + '</td>';
+            }
+
+            strHTML += '</tr>';
+
+            if (tiempoPromedio > 0 && velocidadKMPromedio > 0) {
+                item.tiempo_promedio = tiempoPromedio;
+                item.velocidad_promedio = velocidadKMPromedio;
+                //
+                promediadoPorFranjaHoraria.detalle.push(item);
+            }
+            //return false;
+            //}
+        });
+        PROMEDIADO_COMPARATIVO[etiquetaComparativo][ladoSeleccionado].push(promediadoPorFranjaHoraria);
+        strHTML += '</tbody>';
+        strHTML += '</table>';
+        console.log('------------------------------------')
+        return strHTML;
+    }
+
+    function verificaViajePorFranjaHoraria(objSalida, dataFranjaHoraria, fechaTemp) {
+        //console.log('viaje a verificar -', objSalida);
+        //console.log('----')
+
+        $.each(dataFranjaHoraria, function () {
+            //if (this.hInicio == '07:00:00') {
+            var tmstmIniRango = util.convertDatetoTimeStamp(fechaTemp + ' ' + this.hInicio);
+            var tmstmFinRango = util.convertDatetoTimeStamp(fechaTemp + ' ' + this.hFin);
+            var tmstmFecSalida = util.convertDatetoTimeStamp(objSalida.objPasoInicio.FECHA + ' ' + objSalida.objPasoInicio.HORA_PASO);
+            //
+            if (tmstmFecSalida >= tmstmIniRango && tmstmFecSalida <= tmstmFinRango) {
+                var item = objSalida;
+                this.arrViajes.push(item);
+            }
+            //}
+        });
+    }
+
+    function getNroOrdenByIdParadero(idParadero) {
+        var rpta = null;
+        $.each(JSONparaderos, function () {
+            if (idParadero == this.ID_PARADERO) {
+                rpta = this;
+                return false;
+            }
+        });
+        return rpta;
+    }
+
+    function getMenorHoraDeViajeMinutos(viajesFiltrados) {
+        var HORAS_MINUTOS = 60;
+        var ladoSeleccionado = $('#selectLado').val();
+        var arrTiempoViajes = {
+            A: [],
+            B: []
+        }
+
+        $.each(viajesFiltrados, function () {
+            var timestampFechaHoraInicio = this.objPasoInicio ? (this.objPasoInicio.HORA_PASO ? util.convertDatetoTimeStamp(this.objPasoInicio.FECHA + ' ' + this.objPasoInicio.HORA_PASO) : null) : null;
+            var timestampFechaHoraFin = this.objPasoFin ? (this.objPasoFin.HORA_PASO ? util.convertDatetoTimeStamp(this.objPasoFin.FECHA + ' ' + this.objPasoFin.HORA_PASO) : null) : null;
+            var tiempoViajeMinutos = 0;
+            var _diferenciaMilisegundos = 0;
+            var _diferenciaMinutos = 0;
+            //
+            if (timestampFechaHoraInicio && timestampFechaHoraFin) {
+                if (this.objPasoInicio.LADO == ladoSeleccionado) {
+                    _diferenciaMilisegundos = timestampFechaHoraFin - timestampFechaHoraInicio;
+                    if (_diferenciaMilisegundos < 0) { //si es negativo
+                        _diferenciaMilisegundos = 0;
+                        timestampFechaHoraFin = (timestampFechaHoraFin + 86400000);// 86400; //le agrega un dia
+                        _diferenciaMilisegundos = timestampFechaHoraFin - timestampFechaHoraInicio;
+                    }
+                    _diferenciaMinutos = ((_diferenciaMilisegundos / 1000) / 60); //minutos
+                    if (_diferenciaMinutos >= 30) {
+                        arrTiempoViajes[this.objPasoInicio.LADO].push(_diferenciaMinutos);
+                    }
+                }
+            }
+        });
+        var cantidadMinutosMin = (Math.min.apply(Math, arrTiempoViajes[ladoSeleccionado]) + (HORAS_MINUTOS * 2.5));
+        return cantidadMinutosMin;
+    }
+
+    function getHTMLselectHoraComparativa(dataFranja, franjaMinima, franjaMaxima, id_select) {
+        var htmlSelectConsulta = '';
+        var htmlSelectInicio = '<select id="select_rango_' + id_select + '_ini' + '" >';
+        var htmlSelectFin = '<select id="select_rango_' + id_select + '_fin' + '" >';
+        //
+        $.each(dataFranja, function () {
+            var horaFin = '';
+            if (this.inicioTimestamp >= franjaMinima && this.inicioTimestamp <= franjaMaxima) {
+                horaFin = util.convertTimestampToDate(this.finTimestamp);
+                horaFin = horaFin.split(' ')[1];
+                htmlSelectInicio += '<option value="' + this.inicioTimestamp + '" >' + this.hInicio.split(':')[0] + ':' + this.hInicio.split(':')[1] + '</option>';
+                htmlSelectFin += '<option value="' + (this.finTimestamp) + '" >' + horaFin.split(':')[0] + ':' + horaFin.split(':')[1] + '</option>';
+            }
+        });
+        htmlSelectInicio += '</select>';
+        htmlSelectFin += '</select>';
+        //
+        htmlSelectConsulta += htmlSelectInicio + '-' + htmlSelectFin;
+        //
+        return htmlSelectConsulta;
+    }
+
+    function cargarReporteComparativo() {
+        mostrarBoton2();
+        var timestampIniManana = $('#select_rango_manana_ini').val();
+        var timestampFinMana = $('#select_rango_manana_fin').val();
+        //
+        var timestampIniTarde = $('#select_rango_tarde_ini').val();
+        var timestampFinTarde = $('#select_rango_tarde_fin').val();
+        var ladoSeleccionado = $('#selectLado').val();
+
+        //PROMEDIADO_COMPARATIVO
+        //armando data del comparativo A y B para las tablas
+        var dataComparativoA = PROMEDIADO_COMPARATIVO.COMPARATIVO_A[ladoSeleccionado]; //data comparativo A
+        var dataComparativoB = PROMEDIADO_COMPARATIVO.COMPARATIVO_B[ladoSeleccionado]; //data comparativo B
+        //
+        var _htmlTablaTurnomanana = getHTMLComparativa(dataComparativoA, dataComparativoB, 'mañana', timestampIniManana, timestampFinMana);
+        var _htmlTablaTurnoTarde = getHTMLComparativa(dataComparativoA, dataComparativoB, 'mañana', timestampIniTarde, timestampFinTarde);
+
+        $('#tbReporteComparativo_tiempo_mañana tbody, #tbReporteComparativo_velocidad_mañana tbody, #tbReporteComparativo_tiempo_tarde tbody, #tbReporteComparativo_velocidad_tarde tbody').empty();
+        $('#tbReporteComparativo_tiempo_mañana tbody').append(_htmlTablaTurnomanana.tiempos);
+        $('#tbReporteComparativo_velocidad_mañana tbody').append(_htmlTablaTurnomanana.velocidades);
+        $('#tbReporteComparativo_tiempo_tarde tbody').append(_htmlTablaTurnoTarde.tiempos);
+        $('#tbReporteComparativo_velocidad_tarde tbody').append(_htmlTablaTurnoTarde.velocidades);
+    }
+
+    //REPORTE
+    var contador = 0;
+    var comparativo_a = "";
+    var comparativo_b = "";
+
+    var fechasA = "";
+    var fechasB = "";
+
+    var sumaTiemposViajeA_M = 0;
+    var sumaTiemposViajeA_T = 0
+
+    var sumaTiemposViajeB_M = 0.0
+    var sumaTiemposViajeB_T = 0.0
+
+    var promedioVelocidadesA_M = 0;
+    var promedioVelocidadesA_T = 0;
+
+    var promedioVelocidadesB_M = 0;
+    var promedioVelocidadesB_T = 0;
+
+
+
+    //util.decimalTommss(comparativoResumen.COMPARATIVO_A.promedioTiemposViaje.toFixed(2)))
+    //.COMPARATIVO_A.promedioVelocidades.toFixed(2))
+
+
+    var URL_EXPORTAR_PDF = "@Url.Action("exportarPDF", "Programacion")";
+
+    function exportarPDF() {
+
+        var textoParadero = $("#selectParaderoIni option:selected").text().split('.-')[1] + ' - ' + $("#selectParaderoFin option:selected").text().split('.-')[1];
+
+        //fechas
+        fechasA = comparativo_a.COMPARATIVO_A.fechas
+        fechasB = comparativo_a.COMPARATIVO_B.fechas
+        //velocidades
+        promedioVelocidadesA_M = comparativo_a.COMPARATIVO_A.sumaVelocidades
+        promedioVelocidadesB_M = comparativo_a.COMPARATIVO_B.sumaVelocidades
+
+        promedioVelocidadesA_T = comparativo_b.COMPARATIVO_A.sumaVelocidades
+        promedioVelocidadesB_T = comparativo_b.COMPARATIVO_B.sumaVelocidades
+
+        //TIEMPO
+        sumaTiemposViajeA_M = util.decimalTommss(comparativo_a.COMPARATIVO_A.promedioTiemposViaje.toFixed(2))
+        sumaTiemposViajeB_M = util.decimalTommss(comparativo_a.COMPARATIVO_B.promedioTiemposViaje.toFixed(2))
+
+        sumaTiemposViajeA_T = util.decimalTommss(comparativo_b.COMPARATIVO_A.promedioTiemposViaje.toFixed(2))
+        sumaTiemposViajeB_T = util.decimalTommss(comparativo_b.COMPARATIVO_B.promedioTiemposViaje.toFixed(2))
+
+        var urlExportarpdf = URL_EXPORTAR_PDF + '/?fechasA=' + fechasA +
+            '&fechasB=' + fechasB +
+            '&promedioVelocidadesA_M=' + promedioVelocidadesA_M +
+            '&promedioVelocidadesB_M=' + promedioVelocidadesB_M +
+            '&promedioVelocidadesA_T=' + promedioVelocidadesA_T +
+            '&promedioVelocidadesB_T=' + promedioVelocidadesB_T +
+            '&sumaTiemposViajeA_M=' + sumaTiemposViajeA_M +
+            '&sumaTiemposViajeB_M=' + sumaTiemposViajeB_M +
+            '&sumaTiemposViajeA_T=' + sumaTiemposViajeA_T +
+            '&sumaTiemposViajeB_T=' + sumaTiemposViajeB_T +
+            '&CORREDOR=' + textoParadero;
+
+        window.open(urlExportarpdf, '_blank');
+
+        //$('#frmExportaPDF').submit();
+    }
+
+    function getHTMLComparativa(dataComparativoA, dataComparativoB, turno, rangoMinimo, rangoMaximo) {
+        var strHTMLtbComparativoManana = '';
+        //
+        var comparativoResumen = {
+            COMPARATIVO_A: {
+                nombre: 'COMP A',
+                fechas: '',
+                sumaVelocidades: 0,
+                sumaTiemposViaje: 0,
+                promedioVelocidades: 0,
+                promedioTiemposViaje: 0,
+                cantidadRegistros: 0
+            },
+            COMPARATIVO_B: {
+                nombre: 'COMP B',
+                fechas: '',
+                sumaVelocidades: 0,
+                sumaTiemposViaje: 0,
+                promedioVelocidades: 0,
+                promedioTiemposViaje: 0,
+                cantidadRegistros: 0
+            }
+        }
+        $.each(dataComparativoA, function () {//recorriendo el comparativo A
+            comparativoResumen.COMPARATIVO_A.fechas += this.fecha + ' - ';
+            $.each(this.detalle, function () { //recorre detalle de data en franja horaria
+
+                var timestampRangoConsulta = util.convertDatetoTimeStamp(fechaConsulta + ' ' + this.inicio);//los rangos que hay en la data
+                var velocidad = this.velocidad_promedio;
+                var tiempoViaje = this.tiempo_promedio;
+                //
+                if (Number(timestampRangoConsulta) >= Number(rangoMinimo) && Number(timestampRangoConsulta) <= Number(rangoMaximo)) {
+                    comparativoResumen.COMPARATIVO_A.sumaVelocidades += velocidad;
+                    comparativoResumen.COMPARATIVO_A.sumaTiemposViaje += tiempoViaje;
+                    comparativoResumen.COMPARATIVO_A.cantidadRegistros++;
+                }
+                //
+            });
+        });
+        console.log("comparativo B-->", dataComparativoB);
+        $.each(dataComparativoB, function () {//recorriendo el comparativo B
+            comparativoResumen.COMPARATIVO_B.fechas += this.fecha + ' - ';
+            $.each(this.detalle, function () { //recorre detalle de data en franja horaria comparativo B
+                var timestampRangoConsulta = util.convertDatetoTimeStamp(fechaConsulta + ' ' + this.inicio);//los rangos que hay en la data
+                var velocidad = this.velocidad_promedio;
+                var tiempoViaje = this.tiempo_promedio;
+                //
+                if (Number(timestampRangoConsulta) >= Number(rangoMinimo) && Number(timestampRangoConsulta) <= Number(rangoMaximo)) {
+                    comparativoResumen.COMPARATIVO_B.sumaVelocidades += velocidad;
+                    comparativoResumen.COMPARATIVO_B.sumaTiemposViaje += tiempoViaje;
+                    comparativoResumen.COMPARATIVO_B.cantidadRegistros++;
+                }
+                //
+            });
+        });
+
+        if (contador == 0) {
+            comparativo_a = comparativoResumen;
+
+        } else {
+            comparativo_b = comparativoResumen;
+
+        }
+        contador++;
+        $.each(dataComparativoB, function () {//recorriendo el comparativo B}
+            $.each(this.detalle, function () { //recorre detalle de data en franja horaria comparativo B
+                var timestampRangoConsulta = util.convertDatetoTimeStamp(fechaConsulta + ' ' + this.inicio);//los rangos que hay en la data
+                var velocidad = this.velocidad_promedio;
+                var tiempoViaje = this.tiempo_promedio;
+                //
+                if (Number(timestampRangoConsulta) >= Number(rangoMinimo) && Number(timestampRangoConsulta) <= Number(rangoMaximo)) {
+                    comparativoResumen.COMPARATIVO_B.sumaVelocidades += velocidad;
+                    comparativoResumen.COMPARATIVO_B.sumaTiemposViaje += tiempoViaje;
+                    comparativoResumen.COMPARATIVO_B.cantidadRegistros++;
+                }
+                //
+            });
+        });
+
+        comparativoResumen.COMPARATIVO_A.promedioTiemposViaje = (comparativoResumen.COMPARATIVO_A.sumaTiemposViaje / comparativoResumen.COMPARATIVO_A.cantidadRegistros);
+        comparativoResumen.COMPARATIVO_A.promedioVelocidades = (comparativoResumen.COMPARATIVO_A.sumaVelocidades / comparativoResumen.COMPARATIVO_A.cantidadRegistros);
+
+        comparativoResumen.COMPARATIVO_B.promedioTiemposViaje = comparativoResumen.COMPARATIVO_B.sumaTiemposViaje / comparativoResumen.COMPARATIVO_B.cantidadRegistros;
+        comparativoResumen.COMPARATIVO_B.promedioVelocidades = comparativoResumen.COMPARATIVO_B.sumaVelocidades / comparativoResumen.COMPARATIVO_B.cantidadRegistros;
+
+        comparativoResumen.COMPARATIVO_A.fechas = comparativoResumen.COMPARATIVO_A.fechas.trim();
+        comparativoResumen.COMPARATIVO_A.fechas = comparativoResumen.COMPARATIVO_A.fechas.substring(0, comparativoResumen.COMPARATIVO_A.fechas.length - 1);
+
+        comparativoResumen.COMPARATIVO_B.fechas = comparativoResumen.COMPARATIVO_B.fechas.trim();
+        comparativoResumen.COMPARATIVO_B.fechas = comparativoResumen.COMPARATIVO_B.fechas.substring(0, comparativoResumen.COMPARATIVO_B.fechas.length - 1);
+
+
+        var strHMTLTablaTiempos = '';
+        var strHTMLTablaVelocidad = '';
+        var htmlTablas = {
+            tiempos: '',
+            velocidades: ''
+        }
+
+        strHMTLTablaTiempos += '<tr>' +
+                                        '<td  class="text-center" >' + comparativoResumen.COMPARATIVO_A.nombre + '</td>' +
+                                        '<td  class="text-center"  id="ruta">' + (comparativoResumen.COMPARATIVO_A.cantidadRegistros == 0 ? $('#txtFechasMuestraIni').val() : comparativoResumen.COMPARATIVO_A.fechas) + '</td>' +
+                                        '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_A.cantidadRegistros == 0 ? 'No hay información' : util.decimalTommss(comparativoResumen.COMPARATIVO_A.promedioTiemposViaje.toFixed(2))) + '</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td  class="text-center" >' + comparativoResumen.COMPARATIVO_B.nombre + '</td>' +
+                                        '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_B.cantidadRegistros == 0 ? $('#txtFechasMuestraFin').val() : comparativoResumen.COMPARATIVO_B.fechas) + '</td>' +
+                                        '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_B.cantidadRegistros == 0 ? 'No hay información' : util.decimalTommss(comparativoResumen.COMPARATIVO_B.promedioTiemposViaje.toFixed(2))) + '</td>' +
+                                    '</tr>';
+
+        strHTMLTablaVelocidad += '<tr>' +
+                                     '<td  class="text-center" >' + comparativoResumen.COMPARATIVO_A.nombre + '</td>' +
+                                     '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_A.cantidadRegistros == 0 ? $('#txtFechasMuestraIni').val() : comparativoResumen.COMPARATIVO_A.fechas) + '</td>' +
+                                     '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_A.cantidadRegistros == 0 ? 'No hay información' : comparativoResumen.COMPARATIVO_A.promedioVelocidades.toFixed(2)) + '</td>' +
+                                 '</tr>' +
+                                 '<tr>' +
+                                     '<td  class="text-center" >' + comparativoResumen.COMPARATIVO_B.nombre + '</td>' +
+                                     '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_B.cantidadRegistros == 0 ? $('#txtFechasMuestraFin').val() : comparativoResumen.COMPARATIVO_B.fechas) + '</td>' +
+                                     '<td  class="text-center" >' + (comparativoResumen.COMPARATIVO_B.cantidadRegistros == 0 ? 'No hay información' : comparativoResumen.COMPARATIVO_B.promedioVelocidades.toFixed(2)) + '</td>' +
+                                 '</tr>';
+        htmlTablas.tiempos = strHMTLTablaTiempos;
+        htmlTablas.velocidades = strHTMLTablaVelocidad;
+
+        return htmlTablas;
+    }
+
+    function limpiarContenedorDeViajesxFranja(dataFranja) {
+        $.each(dataFranja, function () {
+            this.arrViajes = [];
+        });
+    }
+
+    function getCorredoresByModalidad() {
+        var modalidadTransporteSelecionado = $('#mod').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+        //
+        $.each(JSON_DATA_CORREDORES, function () {
+            if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRutatipoServicio tbody').empty();
+            return false
+        }
+        getRutaPorCorredor();
+    }
+
+    function getRutaPorCorredor() {
+
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRutas').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRutas').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRutas').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                    getParaderosxRuta($('#selectRutas').val());
+                }
+            }
+        }, JSON);
+    }
+</script>

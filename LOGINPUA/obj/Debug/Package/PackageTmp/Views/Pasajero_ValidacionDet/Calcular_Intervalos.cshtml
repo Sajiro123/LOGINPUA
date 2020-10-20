@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "Calcular_Intervalos";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    var fecha_actual = DateTime.Now.ToString("dd/MM/yyyy");
+}
+
+
+<script src="~/Content/js/js_paraderos_validacionesdet/Calcular_Intervalos.js"></script>
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+<script src="~/Scripts/bootstrap-slider.js"></script>
+
+
+<script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+<script src="~/Scripts/exportar_excel/Blob.js"></script>
+<script src="~/Scripts/exportar_excel/xls.core.min.js"></script>
+<script src="~/Scripts/exportar_excel/tableexport.js"></script>
+
+
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Calcular Intervalos de Viaje&nbsp;&nbsp;&nbsp;
+
+
+            @*@foreach (var item in Lista_acciones)
+                {
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                    {
+                        <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    }
+
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                    {
+                        idmodificar = 1;
+                        <input type="text" id="permisoActualiza" value="1" hidden />
+                    }
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                    {
+                        ideliminar = 1;
+                        <input type="text" id="permisoEliminar" value="1" hidden />
+                    }
+                }*@
+
+        </h4>
+    </div>
+</div>
+<br />
+
+<div class="row" id="row_filtros">
+
+
+    
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select name="id_corredor" class="form-control form-control-sm" id="selectRutaConsulta"></select>
+        </div>
+    </div>
+
+   
+    @*<div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input class="form-control form-control-sm" id="rangoFechaConsulta">
+        </div>
+    </div>*@
+
+    <div class="col-md-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Seleccionar fechas para el comparativo" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" name="txtFechasMuestraFin" id="txtFechasMuestraFin" value="01/05/2020" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+    </div>
+
+    <div class="col-md-1">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="idlado">
+                <option value="A">A</option>
+                <option value="B">B</option>
+
+            </select>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-2">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Salto de horas consulta" id="basic-addon1"><svg class="svg-inline--fa fa-clock fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm57.1 350.1L224.9 294c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v137.7l63.5 46.2c5.4 3.9 6.5 11.4 2.6 16.8l-28.2 38.8c-3.9 5.3-11.4 6.5-16.8 2.6z"></path></svg><!-- <span class="fas fa-clock" aria-hidden="true"></span> --></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectHoraSalto">
+                 <option value="60" selected>60 Minutos</option>
+
+            </select>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-1">
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="Listarvalida_filtro_franjas();">Consultar</button>
+    </div>
+    @*<p><a href="#">Do it.</a></p>*@
+</div>
+
+<hr />
+
+<div class="table-responsive">
+    <table class="text-center responsive-table" style="width:100%" id="tablaGeneral">
+        <thead class="thead-azul-claro">
+            <tr></tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+    </table>
+</div>
+
+<script>
+
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_CALCULAR_FRANJA = "@Url.Action("Calcular_franja", "Pasajero_ValidacionDet")";
+    var URL_GETLISTAR_DIAS_FRANJA = "@Url.Action("Listarfechas_ruta_franjas", "Pasajero_ValidacionDet")";
+    var URL_GETLISTAR_PARADEROS_FRANJA = "@Url.Action("listar_paraderos_ruta_val", "Pasajero_ValidacionDet")";
+    var URL_GETREGISTRAR_TEMPORALPOG= "@Url.Action("Guardar_Temporal_POG", "Pasajero_ValidacionDet")";
+
+
+
+
+
+    
+
+
+
+</script>
+
+

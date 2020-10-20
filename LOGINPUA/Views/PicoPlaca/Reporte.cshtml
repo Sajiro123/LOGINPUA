@@ -1,0 +1,701 @@
+﻿@model List<ENTIDADES.CC_RUTA_CORREDOR>
+@{
+    ViewBag.Title = "Reporte";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+@*<link href="~/Content/plugins/sweetAlert/sweetalert2.css" rel="stylesheet" />
+<link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />*@
+<script src="~/Content/js/js_pico_placa/pico_placa.js"></script>
+@*<script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/Utilidades/Util.js"></script>
+<script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>*@
+
+<style>
+    input, select, textarea {
+        max-width: none !important;
+    }
+
+    .thead-azul-claro th {
+        color: white;
+        background-color: #2f6f9dd9;
+        border-color: #777;
+    }
+
+    .thead-verde-claro th {
+        color: white;
+        background-color: rgb(0, 163, 156);
+        border-color: #777;
+    }
+
+    .titulo {
+        font-size: 13px;
+    }
+</style>
+
+@*<input type="button" id="btn-1" value="Botón 1" onclick="mostrarBoton2()"/>
+    <input type="button" id="btn-2" value="Botón 2" onclick="mostrarBoton1()" style="display: none;"/>
+
+    <script>
+        var btn_1 = document.getElementById('btn-1');
+        var btn_2 = document.getElementById('   ');
+
+
+        function mostrarBoton1 () {
+            btn_2.style.display = 'none';
+            btn_1.style.display = 'inline';
+        }
+    </script>*@
+<div id="divEmp">
+
+    <br /><br />
+    <h4 class="text-center" id="txtNombreCorredor">Reporte comparativo</h4>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="selectRuta" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+                </div>
+
+
+                <select class="form-control form-control-sm" id="selectRutas">
+                    @foreach (var item in Model)
+                    {
+                    <option value="@item.ID_RUTA">@item.ABREV_CORREDOR   @item.NRO_RUTA</option>
+
+                    }
+                </select>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Seleccionar fechas para el comparativo" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+                </div>
+                <input type="text" id="txtFechasMuestraIni" value="" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Seleccionar fechas para el comparativo" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+                </div>
+                <input type="text" name="txtFechasMuestraFin" id="txtFechasMuestraFin" value="" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-xs-1">
+            <button class="btn btn-info btn-sm centrado" id="btnConsultaHoras" onclick="cargarHorasComparativo()"> Consultar</button>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+        <div class="col-xs-1">
+            <button class="btn btn-danger btn-sm centrado" id="exportar" type="button" onclick="exportarPDF();">
+                Exportar <i class="fas fa-file-pdf"></i>
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <br />
+    <h5 class="text-center">
+        HORA MAÑANA
+
+        <div class="text-center">
+            <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <select class="form-control-sm " id="MAÑANA_IDA" style="padding:.25rem .1rem;display:none;"></select>-
+            <select class="form-control-sm" id="MAÑANA_VUELTA" style="padding:.25rem .1rem ;display:none;"></select>
+
+        </div>
+
+
+    </h5>
+    <br />
+    <div class="row">
+        <div class="col-sm-6">
+            <div style="background-color:white;border: 1px solid black;border-color: #717572;">
+                <table class="table table-sm table_responsive" id="tbReporteComparativo_tiempo_mañana">
+                    <thead class="thead-azul-claro">
+                        <tr>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">OBS  </th>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">FECHA</th>
+                            <th width="100" colspan="4" class="text-center titulo">T VIAJE PROMEDIO</th>
+
+                        </tr>
+                        <tr>
+                            <th class="text-center titulo"> IDA</th>
+                            <th class="text-center titulo"> VUELTA</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <div style="background-color:white;border: 1px solid black;border-color: #717572;">
+                <table class="table table-sm table_responsive" id="strHTMLtabla_velocidad_mañana">
+                    <thead class="thead-verde-claro">
+                        <tr>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">OBS  </th>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">FECHA</th>
+                            <th width="100" colspan="4" class="text-center titulo">VL PROMEDIO</th>
+
+                        </tr>
+                        <tr>
+                            <th class="text-center titulo">IDA</th>
+                            <th class="text-center titulo">VUELTA</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <br /><br /><br />
+    <h5 class="text-center">
+        HORA TARDE
+        <div class="text-center">
+            <br />    &nbsp;&nbsp;&nbsp;
+
+            <select class="form-control-sm titulo" id="TARDE_IDA" style="padding:.25rem .1rem; display: none;"></select> -
+            <select class="form-control-sm titulo" id="TARDE_VUELTA" style="padding:.25rem .1rem; display: none;"></select>
+
+        </div>
+    </h5>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div style="background-color:white;border: 1px solid black;border-color: #717572;">
+
+
+                <table class="table table-sm table_responsive" id="tbReporteComparativo_tiempo_tarde">
+                    <thead class="thead-azul-claro">
+                        <tr>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">OBS  </th>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle;">FECHA</th>
+                            <th width="100" colspan="4" class="text-center titulo">T VIAJE PROMEDIO</th>
+
+                        </tr>
+                        <tr>
+                            <th class="text-center titulo"> IDA</th>
+                            <th class="text-center titulo">VUELTA</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <div style="background-color:white;border: 1px solid black;border-color: #717572;">
+                <table class="table table-sm table_responsive" id="strHTMLtabla_velocidad_tarde">
+                    <thead class="thead-verde-claro">
+                        <tr>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle" class="titulo">OBS  </th>
+                            <th rowspan="2" class="titulo" style="vertical-align:middle">FECHA</th>
+                            <th width="100" colspan="4" class="text-cente titulo">VL PROMEDIO</th>
+
+                        </tr>
+                        <tr>
+                            <th class="text-center titulo"> IDA</th>
+                            <th class="text-center titulo">VUELTA</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 text-center">
+            <br /><br />
+            <br /><br />
+
+            <button class="btn btn-info btn-sm centrado" data-toggle="modal" id="btnConsulta" onclick="cargarReporteComparativo();" style="display: none;"> <i class="fas fa-search"></i>Consultar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    //getFranjaHoraria();
+
+    var utilidades=new Util();
+
+
+    var btn_1 = document.getElementById('btnConsultaHoras');
+    var btn_2 = document.getElementById('btnConsulta');
+
+    var mananaida = document.getElementById('MAÑANA_IDA');
+    var mananavuelta = document.getElementById('MAÑANA_VUELTA');
+    var tardeida = document.getElementById('TARDE_IDA');
+    var tardevuelta = document.getElementById('TARDE_VUELTA');
+
+
+    var rangoHorario = [
+        "04:00:00 AM-04:29:00 AM", "04:30:00 AM-04:59:00 AM",
+        "05:00:00 AM-05:29:00 AM", "05:30:00 AM-05:59:00 AM",
+        "06:00:00 AM-06:29:00 AM", "06:30:00 AM-06:59:00 AM",
+        "07:00:00 AM-07:29:00 AM", "07:30:00 AM-07:59:00 AM",
+        "08:00:00 AM-08:29:00 AM", "08:30:00 AM-08:59:00 AM",
+        "09:00:00 AM-09:29:00 AM", "09:30:00 AM-09:59:00 AM",
+        "10:00:00 AM-10:29:00 AM", "10:30:00 AM-10:59:00 AM",
+        "11:00:00 AM-11:29:00 AM", "11:30:00 AM-11:59:00 AM",
+        "12:00:00 PM-12:29:00 PM", "12:30:00 PM-12:59:00 PM",
+        "01:00:00 PM-01:29:00 PM", "01:30:00 PM-01:59:00 PM",
+        "02:00:00 PM-02:29:00 PM", "02:30:00 PM-02:59:00 PM",
+        "03:00:00 PM-03:29:00 PM", "03:30:00 PM-03:59:00 PM",
+        "04:00:00 PM-04:29:00 PM", "04:30:00 PM-04:59:00 PM",
+        "05:00:00 PM-05:29:00 PM", "05:30:00 PM-05:59:00 PM",
+        "06:00:00 PM-06:29:00 PM", "06:30:00 PM-06:59:00 PM",
+        "07:00:00 PM-07:29:00 PM", "07:30:00 PM-07:59:00 PM",
+        "08:00:00 PM-08:29:00 PM", "08:30:00 PM-08:59:00 PM",
+        "09:00:00 PM-09:29:00 PM", "09:30:00 PM-09:59:00 PM",
+        "10:00:00 PM-10:29:00 PM", "10:30:00 PM-10:59:00 PM",
+        "11:00:00 PM-11:29:00 PM", "11:30:00 PM-11:59:00 PM"
+    ];
+
+     var URL_EXPORTAR_PDF = "@Url.Action("exportarPDF", "Programacion")";
+
+    function exportarPDF() {
+         
+        var urlExportarExcel = URL_EXPORTAR_PDF + '/?VEL_PROMEDIO_A_MANANA_IDA=' + VEL_PROMEDIO_A_MAÑANA_IDA +
+               '&VEL_PROMEDIO_A_MANANA_VUELTA=' + VEL_PROMEDIO_A_MAÑANA_VUELTA +
+               '&TIEMPO_PROM_A_1=' + TIEMPO_PROM_A_1 +
+               '&TIEMPO_PROM_B_1=' + TIEMPO_PROM_B_1 +
+               '&VEL_PROMEDIO_B_MANANA_IDA=' + VEL_PROMEDIO_B_MAÑANA_IDA +
+               '&VEL_PROMEDIO_B_MANANA_VUELTA=' + VEL_PROMEDIO_B_MAÑANA_VUELTA +
+                '&TIEMPO_PROM_A_2=' + TIEMPO_PROM_A_2 +
+               '&TIEMPO_PROM_B_2=' + TIEMPO_PROM_B_2 +
+               '&VEL_PROMEDIO_A_TARDE_IDA=' + VEL_PROMEDIO_A_TARDE_IDA +
+               '&VEL_PROMEDIO_A_TARDE_VUELTA=' + VEL_PROMEDIO_A_TARDE_VUELTA +
+
+               '&TIEMPO_PROM_A_3=' + TIEMPO_PROM_A_3 +
+               '&TIEMPO_PROM_B_3=' + TIEMPO_PROM_B_3 +
+               '&VEL_PROMEDIO_B_TARDE_IDA=' + VEL_PROMEDIO_B_TARDE_IDA +
+               '&VEL_PROMEDIO_B_TARDE_VUELTA=' + VEL_PROMEDIO_B_TARDE_VUELTA +
+               '&TIEMPO_PROM_A_4=' + TIEMPO_PROM_A_4 +
+               '&TIEMPO_PROM_B_4=' + TIEMPO_PROM_B_4 +
+               '&FECHA_INICIO=' + FECHA_INICIO +
+               '&FECHA_FIN=' + FECHA_FIN +
+               '&M_IDA=' + M_IDA +
+               '&M_VUELTA=' + M_VUELTA +
+               '&T_IDA=' + T_IDA +
+               '&T_VUELTA=' + T_VUELTA;
+
+        window.open(urlExportarExcel, '_blank');
+
+        //$('#frmExportaPDF').submit();
+    }
+    var VEL_PROMEDIO_A_MAÑANA_IDA = null;
+    var VEL_PROMEDIO_A_MAÑANA_VUELTA = null;
+    var TIEMPO_PROM_A_1 = null;
+    var TIEMPO_PROM_B_1 = null;
+
+    var VEL_PROMEDIO_B_MAÑANA_IDA = null;
+    var VEL_PROMEDIO_B_MAÑANA_VUELTA = null;
+    var VEL_PROMEDIO_A_TARDE_IDA = null;
+    var TIEMPO_PROM_A_2 = null;
+    var TIEMPO_PROM_B_2 = null;
+
+    var VEL_PROMEDIO_A_TARDE_IDA = null;
+    var VEL_PROMEDIO_A_TARDE_VUELTA = null;
+    var TIEMPO_PROM_A_3 = null;
+    var TIEMPO_PROM_B_3 = null;
+
+    var VEL_PROMEDIO_B_TARDE_IDA = null;
+    var VEL_PROMEDIO_B_TARDE_VUELTA = null;
+    var TIEMPO_PROM_A_4 = null;
+    var TIEMPO_PROM_B_4 = null;
+
+    var FECHA_INICIO = null;
+    var FECHA_FIN = null;
+    var CORREDOR = null;
+
+    var M_IDA = null;
+    var M_VUELTA = null;
+    var T_IDA = null;
+    var T_VUELTA = null;
+
+
+
+
+    function minTommss(minutes) {
+        var sign = minutes < 0 ? "-" : "";
+        var min = Math.floor(Math.abs(minutes));
+        var sec = Math.floor((Math.abs(minutes) * 60) % 60);
+        return sign + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+    }
+
+
+    function mostrarBoton1() {
+        btn_2.style.display = 'inline';
+        btn_1.style.display = 'inline';
+
+        mananaida.style.display = 'inline';
+
+    }
+
+    function cargarHorasComparativo() {
+
+        mostrarBoton2();
+        $('#btnConsultaHoras').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando...');
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ConsultarHoras", "PicoPlaca")",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { fechaInicio: $('#txtFechasMuestraIni').val(), fechaFin: $('#txtFechasMuestraFin').val(), id_ruta: $('#selectRutas').val() },
+            success: function (data) {
+                $('#btnConsultaHoras').prop('disabled', false).html('Consultar');
+
+                //if (data.mañanaida != null || data.mañanavuelta != null || data.tardeida != null || data.tardevuelta != null) {
+
+
+                    getMayorMenorFranjaHoraria(data);
+                //}
+
+
+
+            }
+
+        })
+
+    }
+
+    function cargarReporteComparativo() {
+        mostrarBoton1();
+        $('#btnConsulta').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando...');
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Reporte_Comparativo", "PicoPlaca")",
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { fechaInicio: $('#txtFechasMuestraIni').val(), fechaFin: $('#txtFechasMuestraFin').val(), id_ruta: $('#selectRutas').val(), MAÑANA_IDA: $('#MAÑANA_IDA').val(), MAÑANA_VUELTA: $('#MAÑANA_VUELTA').val(), TARDE_IDA: $('#TARDE_IDA').val(), TARDE_VUELTA: $('#TARDE_VUELTA').val() },
+            success: function (data) {
+                $('#btnConsulta').prop('disabled', false).html('Consultar');
+                $('#tbReporteComparativo_tiempo_mañana tbody').empty();
+                var strHTMLtabla = "";
+                if (Number(data.TIEMPO_PROM_A_2) == 0) {
+                    strHTMLtabla += '<tr>' +
+                                        '<td class="text-center" colspan="4">No hay información para mostrar</td>' +
+                                    '</tr>';
+                } else {
+
+                    M_IDA = data.M_IDA;
+                    M_VUELTA = data.M_VUELTA;
+                    T_IDA = data.T_IDA;
+                    T_VUELTA = data.T_VUELTA;
+
+                    VEL_PROMEDIO_A_MAÑANA_IDA = Number(data.VEL_PROMEDIO_A_MAÑANA_IDA).toFixed(2);
+                    VEL_PROMEDIO_A_MAÑANA_VUELTA = Number(data.VEL_PROMEDIO_A_MAÑANA_VUELTA).toFixed(2);
+                    TIEMPO_PROM_A_1 = minTommss(data.TIEMPO_PROM_A_1);
+                    TIEMPO_PROM_B_1 = minTommss(data.TIEMPO_PROM_B_1);
+
+                    VEL_PROMEDIO_B_MAÑANA_IDA = Number(data.VEL_PROMEDIO_B_MAÑANA_IDA).toFixed(2);
+                    VEL_PROMEDIO_B_MAÑANA_VUELTA = Number(data.VEL_PROMEDIO_B_MAÑANA_VUELTA).toFixed(2);
+                    TIEMPO_PROM_A_2 = minTommss(data.TIEMPO_PROM_A_2);
+                    TIEMPO_PROM_B_2 = minTommss(data.TIEMPO_PROM_B_2);
+
+                    VEL_PROMEDIO_A_TARDE_IDA = Number(data.VEL_PROMEDIO_A_TARDE_IDA).toFixed(2);
+                    VEL_PROMEDIO_A_TARDE_VUELTA = Number(data.VEL_PROMEDIO_A_TARDE_VUELTA).toFixed(2);
+                    TIEMPO_PROM_A_3 = minTommss(data.TIEMPO_PROM_A_3);
+                    TIEMPO_PROM_B_3 = minTommss(data.TIEMPO_PROM_B_3);
+
+                    VEL_PROMEDIO_B_TARDE_IDA = Number(data.VEL_PROMEDIO_B_TARDE_IDA).toFixed(2);
+                    VEL_PROMEDIO_B_TARDE_VUELTA = Number(data.VEL_PROMEDIO_B_TARDE_VUELTA).toFixed(2);
+                    TIEMPO_PROM_A_4 = minTommss(data.TIEMPO_PROM_A_4);
+                    TIEMPO_PROM_B_4 = minTommss(data.TIEMPO_PROM_B_4);
+
+                    FECHA_INICIO = data.FECHA_INICIO;
+                    FECHA_FIN = data.FECHA_FIN;
+
+                    CORREDOR = data.CORREDOR;
+                    strHTMLtabla += '<tr>' +
+                                           '<td class="tablas">COMP A</td>' +
+                                           '<td class="tablas">' + data.FECHA_INICIO + '</td>' +
+                                           '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_A_1) + '</td>' +
+                                            '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_B_1) + '</td>' +
+                                        '</tr>';
+
+                    strHTMLtabla += '<tr>' +
+                                            '<td class="tablas">COMP B</td>' +
+                                         '<td class="tablas">' + data.FECHA_FIN + '</td>' +
+
+                                         '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_A_2) + '</td>' +
+                                          '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_B_2) + '</td>'
+                    '</tr>';
+                }
+
+
+
+                $('#strHTMLtabla_velocidad_mañana tbody').empty();
+                var strHTMLtabla_velocidad_mañana = "";
+
+                if (Number(data.TIEMPO_PROM_A_2) == 0) {
+                    strHTMLtabla_velocidad_mañana += '<tr>' +
+                                        '<td class="text-center" colspan="4">No hay información para mostrar</td>' +
+                                    '</tr>';
+                } else {
+                    strHTMLtabla_velocidad_mañana += '<tr>' +
+                                            '<td class="tablas">COMP A</td>' +
+                                            '<td class="tablas">' + data.FECHA_INICIO + '</td>' +
+                                            '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_A_MAÑANA_IDA).toFixed(2) + '</td>' +
+                                             '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_A_MAÑANA_VUELTA).toFixed(2) + '</td>' +
+                                         '</tr>';
+
+                    strHTMLtabla_velocidad_mañana += '<tr>' +
+                                            '<td class="tablas">COMP B</td>' +
+                                         '<td class="tablas">' + data.FECHA_FIN + '</td>' +
+                                         '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_B_MAÑANA_IDA).toFixed(2) + '</td>' +
+                                          '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_B_MAÑANA_VUELTA).toFixed(2) + '</td>'
+                    '</tr>';
+                }
+
+                $('#tbReporteComparativo_tiempo_tarde tbody').empty();
+                var tbReporteComparativo_tiempo_tarde = "";
+
+                if (Number(data.TIEMPO_PROM_A_2) == 0) {
+                    tbReporteComparativo_tiempo_tarde += '<tr>' +
+                                        '<td class="text-center" colspan="4">No hay información para mostrar</td>' +
+                                    '</tr>';
+                } else {
+                    tbReporteComparativo_tiempo_tarde += '<tr>' +
+                                            '<td  class="tablas">COMP A</td>' +
+                                            '<td class="tablas">' + data.FECHA_INICIO + '</td>' +
+                                            '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_A_3) + '</td>' +
+                                             '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_B_3) + '</td>' +
+                                         '</tr>';
+
+                    tbReporteComparativo_tiempo_tarde += '<tr>' +
+                                            '<td class="tablas">COMP B</td>' +
+                                         '<td class="tablas">' + data.FECHA_FIN + '</td>' +
+                                         '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_A_4) + '</td>' +
+                                          '<td class="text-center tablas">' + minTommss(data.TIEMPO_PROM_B_4) + '</td>'
+                    '</tr>';
+                }
+
+
+                $('#strHTMLtabla_velocidad_tarde tbody').empty();
+                var strHTMLtabla_velocidad_tarde = "";
+
+                if (Number(data.TIEMPO_PROM_A_2) == 0) {
+                    strHTMLtabla_velocidad_tarde += '<tr>' +
+                                        '<td class="text-center" colspan="4">No hay información para mostrar</td>' +
+                                    '</tr>';
+                } else {
+                    strHTMLtabla_velocidad_tarde += '<tr>' +
+                                            '<td class="tablas">COMP A</td>' +
+                                            '<td class="tablas">' + data.FECHA_INICIO + '</td>' +
+                                            '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_A_TARDE_IDA).toFixed(2) + '</td>' +
+                                             '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_A_TARDE_VUELTA).toFixed(2) + '</td>' +
+                                         '</tr>';
+
+                    strHTMLtabla_velocidad_tarde += '<tr>' +
+                                            '<td  class="tablas">COMP B</td>' +
+                                         '<td  class="tablas">' + data.FECHA_FIN + '</td>' +
+                                         '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_B_TARDE_IDA).toFixed(2) + '</td>' +
+                                          '<td class="text-center tablas">' + Number(data.VEL_PROMEDIO_B_TARDE_VUELTA).toFixed(2) + '</td>'
+                    '</tr>';
+                }
+
+                $('#tbReporteComparativo_tiempo_mañana tbody').append(strHTMLtabla);
+                $('#strHTMLtabla_velocidad_mañana tbody').append(strHTMLtabla_velocidad_mañana);
+                $('#tbReporteComparativo_tiempo_tarde tbody').append(tbReporteComparativo_tiempo_tarde);
+                $('#strHTMLtabla_velocidad_tarde tbody').append(strHTMLtabla_velocidad_tarde);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+            }
+        })
+    }
+
+
+    function mostrarBoton2() {
+        btn_1.style.display = 'inline';
+        btn_2.style.display = 'inline';
+
+        mananaida.style.display = 'inline';
+        mananavuelta.style.display = 'inline';
+        tardeida.style.display = 'inline';
+        tardevuelta.style.display = 'inline';
+
+    }
+
+
+    function getMayorMenorFranjaHoraria(data) {
+
+        console.log(data);
+        var fechaTemporal = "08/11/2019";
+        var dateFechaTemp = new Date(fechaTemporal);
+        var arrTiempos_mañana = [];
+        var arrTiempos_tarde = [];
+
+
+
+        $.each(data.d_manana_ida,function(){
+            var nuevaFechaHoraTemp = fechaTemporal + " " + this.mañanaida;
+            var dateFechaTemp = new Date(nuevaFechaHoraTemp);
+            var timestampFechaTemp = dateFechaTemp.getTime();
+            arrTiempos_mañana.push(timestampFechaTemp)
+        });
+
+        $.each(data.d_tarde_vuelta,function(){
+            var nuevaFechaHoraTemp = fechaTemporal + " " + this.mañanaida;
+            var dateFechaTemp = new Date(nuevaFechaHoraTemp);
+            var timestampFechaTemp = dateFechaTemp.getTime();
+            arrTiempos_tarde.push(timestampFechaTemp)
+        });
+
+        var maximo_manana_ida=Math.max.apply(Math,arrTiempos_mañana); //mayor
+        var minimo_manana_vuelta =Math.min.apply(Math,arrTiempos_mañana); //menor
+
+        var maximo_tarde_ida=Math.max.apply(Math,arrTiempos_tarde); //mayor
+        var minimo_tarde_vuelta =Math.min.apply(Math,arrTiempos_tarde); //menor
+
+
+        var minimo_d_manana_vuelta= utilidades.convertTimestampToDate(minimo_manana_vuelta).split(' ')[1];
+        var maximo_d_manana_ida= utilidades.convertTimestampToDate(maximo_manana_ida).split(' ')[1];
+
+        var maximo_d_tarde_ida= utilidades.convertTimestampToDate(maximo_tarde_ida).split(' ')[1];
+        var minimo_d_tarde_vuelta= utilidades.convertTimestampToDate(minimo_tarde_vuelta).split(' ')[1];
+
+
+
+
+
+        getFranjaHoraria(minimo_d_manana_vuelta,maximo_d_manana_ida ,minimo_d_tarde_vuelta,maximo_d_tarde_ida);
+
+    }
+
+    function getFranjaHoraria(mañanaida, mañanavuelta, tardeida, tardevuelta) {
+
+
+
+
+		if (mañanaida=="NaN:NaN:NaN") {
+                 Swal.fire({
+                    type: 'warning',
+                    title: '',
+                    text: 'Ingresar la Fecha',
+                });
+                return false;
+
+        }
+
+        var Utilidades=new Util();
+        //llena select mañana
+        for (var i = 0; i < rangoHorario.length; i++) {
+            var horaInicio = rangoHorario[i].split('-')[0];
+            var horafin = rangoHorario[i].split('-')[1];
+            $((rangoHorario[i].indexOf('AM') != -1 ? '#MAÑANA_IDA' : '#TARDE_IDA')).append('<option value="' + horaInicio + '">' + Utilidades.ConvertTimeformat24H(horaInicio) + '</option>');
+            $((rangoHorario[i].indexOf('AM') != -1 ? '#MAÑANA_VUELTA' : '#TARDE_VUELTA')).append('<option value="' + horafin + '">' + Utilidades.ConvertTimeformat24H(horafin) + '</option>');
+        }
+
+        //aqui de delimita
+        $.each($('#MAÑANA_IDA > option'), function () { //mañana ida
+
+            if ($(this).val() == mañanaida) {
+                return false;
+            }
+
+        });
+        var aux = false;
+        var nTemporal = 0;
+
+        $.each($('#MAÑANA_VUELTA > option'), function (n) { //mañana ida
+            if ($(this).val() == mañanavuelta) {
+                aux = true;
+                nTemporal = n;
+            }
+            if (aux && nTemporal != n) {
+                $(this).remove();
+            }
+        });
+
+        var aux = false;
+        var nTemporal = 0;
+        $.each($('#MAÑANA_VUELTA > option'), function (n) { //mañana ida
+            if ($(this).val() == mañanavuelta) {
+                aux = true;
+                nTemporal = n;
+            }
+            if (aux && nTemporal != n) {
+             }
+        });
+
+        $.each($('#TARDE_IDA > option'), function () { //mañana ida
+
+            if ($(this).val() == tardeida) {
+                return false;
+            }
+         });
+
+        var aux = false;
+        var nTemporal = 0;
+        $.each($('#TARDE_VUELTA > option'), function (n) { //mañana ida
+
+            if ($(this).val() == tardevuelta) {
+                aux = true;
+                nTemporal = n;
+            }
+            if (aux && nTemporal != n) {
+                $(this).remove();
+            }
+        });
+    }
+</script>
+
+
+
+<script>
+
+    $("#exportar").click(function (e) {
+
+        var fechain = $("#txtFechasMuestraIni").val();
+        var fechafin = $("#txtFechasMuestraFin").val();
+        var mananavuelta = document.getElementById('MAÑANA_VUELTA');
+
+        var fechainf = $("#VEL_PROMEDIO_B_TARDE_VUELTA").val();
+        console.log(fechainf);
+
+        if ("@ViewBag.Message" ==null || fechain == "" || fechafin == "" || typeof fechainf == 'undefined') {
+            Swal.fire({
+                type: 'error',
+                title: 'Error...',
+                text: 'Ingresar Correctamente los datos',
+            });
+        }
+
+    });
+
+
+
+</script>

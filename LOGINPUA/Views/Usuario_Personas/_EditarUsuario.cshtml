@@ -1,0 +1,149 @@
+﻿
+<style>
+    .ms-options {
+        min-height: 0;
+    }
+
+
+    legend.scheduler-border {
+        width: inherit; /* Or auto */
+        padding: 0 10px; /* To give a bit of padding on the left and right */
+        border-bottom: none;
+    }
+</style>
+
+<div class="modal fade" id="EditarModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Usuario</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+
+                <fieldset class="border p-1">
+                    <legend class="scheduler-border" style="font-size:18px">USUARIO</legend>
+                    <div class="control-group">
+                        <div class="form-group row">
+
+
+                            <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                            <div class="col-sm-3">
+                                <input type="password" class="form-control" placeholder="Nueva Contraseña" style="width:118%" id="clave_edit" name="name" value="" />
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <h3 class="col-sm-2 col-form-label">Estado</h3>
+                            <div class="col-sm-3">
+                                <select id="idestado_edit" class="form-control" style="width:120%">
+                                    <option value="1">ACTIVO</option>
+                                    <option value="2">DESACTIVADO</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </fieldset>
+
+                <br />
+
+                <fieldset class="border p-1">
+                    <legend class="scheduler-border" style="font-size:18px">PERFIL POR MODALIDAD</legend>
+                    <br />
+                    <div class="control-group">
+                        <div class="" id="txtmodalidad_perfil">
+
+
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <div id="fieldset_buton_edit">
+                     <fieldset class="border p-1">
+                        <legend class="scheduler-border" style="font-size:18px">PROVEEDOR CUENTA</legend>
+
+                        <div id="div_abexa_edit">
+                            <div class="control-group">
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Proveedor</h3>
+                                    <div class="col-sm-3">
+                                        <select id="txtAbexaSelect_EDIT" style="width:137%" class="form-control" data-live-search="true">
+                                            <option value="1">ABEXA</option>
+                                        </select>
+                                    </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Corredores</h3>
+                                    <div class="col-sm-3" id="div_context_ABEXA"> 
+                                        </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                                    <div class="col-sm-3">
+                                        <input type="text" disabled class="form-control" id="txtabexa_usuario_edit" name="name" value="" />
+                                    </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                                    <div class="col-sm-3"><input id="txtabexa_contraseña_edit" disabled type="text" class="form-control" name="name" value="" /></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div id="div_matrix_edit" >
+                            <div class="control-group">
+                                <div class="form-group row">
+                                    <h3 class="col-sm-2 col-form-label">Proveedor</h3>  
+                                    <div class="col-sm-3">
+                                        <select id="txtMatrixSelect_EDIT" style="width:137%" class="form-control" data-live-search="true">
+                                            <option value="2">MATRIX</option>
+                                        </select>
+                                    </div><div class="col-sm-1"></div>
+
+                                    <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                                    <div class="col-sm-3">
+                                        <input id="txtUsuarioProvMATRIX_EDIT" class="form-control" data-live-search="true" disabled>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="control-group">
+                                <div class="form-group row">
+                                         <h3 class="col-sm-2 col-form-label">Corredores</h3>
+                                        <div class="col-sm-3" id="div_context_MATRIX">
+                                        </div><div class="col-sm-1"></div>
+ 
+                                    <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                                    <div class="col-sm-3">
+                                        <input type="text" disabled class="form-control" id="txtcontraseña_MATRIX_edit" name="name" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+
+
+
+                <div class="modal-footer">
+                    <button id="consultar" onclick="Update_Usuario()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

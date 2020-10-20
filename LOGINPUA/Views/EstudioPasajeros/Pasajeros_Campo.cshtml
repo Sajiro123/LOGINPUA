@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Pasajeros_Campo";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+
+<script src="~/Content/js/js_estudio_pasajeros/js_PasajerosCampo.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+<br /> 
+<style>
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+	width: 100%;
+}
+</style>
+<form id="sectionParametrosPasajerosCampo" autocomplete="off">
+    <div class="modal-body">
+        <div class="row">
+            <div style="width: 34%;margin-left: 14px;">
+                <label for="select-native-1" style="margin-right: -3px;">Corredor: </label>
+                <select id="selectCorredores" class="form-control" name="ID_CORREDOR" onchange="getRutaPorCorredor();"></select>
+            </div>
+            <div style="width: 29%;margin-left: 10px;">
+                <label for="select-native-1">Ruta :</label>
+                <select id="selectRuta" class="form-control" name="ID_RUTA" onchange="getRecorridoXRuta();"></select>
+            </div>
+            <div style="width: 24%;margin-left: 10px;">
+                <label for="select-native-1"> Lado:</label>
+                <select id="selectLado" class="form-control" onchange="getListaParadero();"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div style="width: 48.3%;margin-left: 14px;">
+                <label for="select-native-1" style="margin-right: -3px;">Paradero: </label>
+                <select name="ID_PARADERO" class="form-control" id="selectParadero"></select>
+            </div>
+            <div style="width: 39.5%;margin-left: 10px;margin-right: 10px;">
+                <label for="select-native-1">Placa: </label>
+                <select id="filter-menu" class="selectpicker" data-live-search="true" name="PLACA_BUS"></select>
+            </div>
+        </div>
+
+        <input id="txt_horainicio" type="text" name="HORA_INICIO" style="display:none">
+        <input id="txt_horafin" type="text" name="HORA_FIN" style="display:none">
+
+        <div class="row">
+            <div style="width: 21%;margin-left: 14px;">
+                <label for="select-native-1" style="margin-right: -3px;">Servicio</label>
+                <input id="txt_num_serv" class="form-control" type="number" data-clear-btn="false" name="NUMERO_SERVICIO" value="">
+            </div>
+            <div style="width: 21%;margin-left: 10px;">
+                <label for="select-native-1" style="margin-right: -3px;">Suben:</label>
+                <input id="txt_suben" class="form-control" type="number" data-clear-btn="false" name="PASAJ_SUBEN" value="0">
+            </div>
+            <div style="width: 21%;margin-left: 10px;">
+                <label for="select-native-1">Bajan:</label>
+                <input id="txt_bajan" class="form-control" type="number" data-clear-btn="false" name="PASAJ_BAJAN" value="0">
+            </div>
+            <div style="width: 21%;margin-left: 10px;">
+                <label for="select-native-1">Cola:</label>
+                <input id="txt_cola" class="form-control" type="number" data-clear-btn="false" name="PASAJ_COLA" value="0">
+            </div>
+        </div>
+
+        <div class="row">
+            <div style="width: 29%;margin-left: 14px;">
+                <label for="select-native-1">Cap. Llegada:</label>
+                <div class="input-group-append">
+                    <input id="txt_capacidad_llegada" class="form-control" type="number" data-clear-btn="false" name="CAPACIDAD_LLEGADA" value="">
+                    <span class="input-group-text" id="basic-addon2">%</span>
+                </div>
+            </div>
+            <div style="width: 29%;margin-left: 10px;">
+                <label for="select-native-1">Cap. Salida:</label>
+                <div class="input-group-append">
+                    <input id="txt_capacidad_salida" class="form-control" type="number" data-clear-btn="false" name="CAPACIDAD_SALIDA" value="">
+                    <span class="input-group-text" id="basic-addon2">%</span>
+                </div>
+            </div>
+            <div style="width: 29%;margin-left: 10px;margin-right: 10px;">
+                <label for="select-native-1">As. Libres</label>
+                <input id="txt_as_libres" class="form-control" type="number" data-clear-btn="false" name="ASIENTOS_LIBRES" value="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div style="width: 54%;margin-left: 14px;">
+                <label for="select-native-1" style="margin-right: -3px;">Observaciones:</label>
+                <textarea name="OBSERVACIONES" class="form-control" id="txtarea_observaciones"></textarea>
+            </div>
+            <div style="width: 30%;margin-left: 32px;margin-top: 25px">
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="Tipo_Observ custom-control-input" name="TIPO_OBSERVACION" id="radio-choice-h-2a" value="Leve" checked>
+                    <label class="custom-control-label" for="radio-choice-h-2a" style="color: #08a90d;font-weight: bold;">Leve</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="Tipo_Observ custom-control-input" name="TIPO_OBSERVACION" id="radio-choice-h-2b" value="Moderado">
+                    <label class="custom-control-label" for="radio-choice-h-2b" style="color: rgb(191, 169, 12);font-weight: bold;">Moderado</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="Tipo_Observ custom-control-input" name="TIPO_OBSERVACION" id="radio-choice-h-2c" value="Grave">
+                    <label class="custom-control-label" for="radio-choice-h-2c" style="color: #ec4141;font-weight: bold;">Grave</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="width: 97%;margin-left: 14px; margin-top:12px">
+                <button class="btn btn-info" style="width:98%" id="reg_pasaj_campo_btn" type="submit">Registrar</button>
+            </div>
+        </div>
+    </div>
+</form>
+ 
+
+    <script>
+        var Utilidades = new Util();
+        var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+        var URL_GET_RECORRIDO_X_RUTA = "@Url.Action("getRecorridoByRuta", "Paradero")";
+         var URL_GET_VIAS = "@Url.Action("getVias", "Paradero")";
+        var URL_GET_PARADEROS = "@Url.Action("getListaParaderos", "Paradero")";
+        var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";
+        var URL_REG_PASAJEROS_CAMPO = "@Url.Action("registroPasajeros_Campo", "EstudioPasajeros")";
+
+       
+        @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+        var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+        var modalidadUsuario = '@ViewBag.modalidadUsuario';
+         var map;
+        var DATA_RECORRIDOS = [];
+        var TIPO_ACCION = {
+            REGISTRO: false,
+            EDICION: false
+        };
+
+    </script>

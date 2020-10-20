@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EBD3D24A-F878-4B89-8D43-31F161B2F200}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ENTIDADES</RootNamespace>
+    <AssemblyName>ENTIDADES</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Dapper.Contrib, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.1.50.0\lib\net45\Dapper.Contrib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BUSES_DESPACHO.cs" />
+    <Compile Include="CC_ACCESO_CORREDORES.cs" />
+    <Compile Include="CC_ESTUDIO_PASAJERO.CS" />
+    <Compile Include="CC_BUSES.CS" />
+    <Compile Include="CC_CONCESIONARIOS.cs" />
+    <Compile Include="CC_CORREDOR.cs" />
+    <Compile Include="CC_DATA_ANALISIS_PROG_CORREDORES.cs" />
+    <Compile Include="CC_DATA_ANALISIS_PROG_COSAC.cs" />
+    <Compile Include="CC_DATA_VIAJE_PROGRAMADO.cs" />
+    <Compile Include="CC_DATOS_CORREDOR.cs" />
+    <Compile Include="CC_CORRELATIVO_INFORME.cs" />
+    <Compile Include="CC_INCIDENCIA.cs" />
+    <Compile Include="CC_INFRACCION.cs" />
+    <Compile Include="CC_INGRESOUSUARIO.cs" />
+    <Compile Include="CC_MENUPERFIL_ACCION.cs" />
+    <Compile Include="CC_MENU_PERFIL.cs" />
+    <Compile Include="CC_MENU_USUARIO.cs" />
+    <Compile Include="CC_MODALIDAD.cs" />
+    <Compile Include="CC_MODALIDAD_TRANSPORTE.cs" />
+    <Compile Include="CC_MODULO.cs" />
+    <Compile Include="CC_PASAJEROSVAL.cs" />
+    <Compile Include="CC_PERFIL_USUARIO.cs" />
+    <Compile Include="CC_PERSONAL.cs" />
+    <Compile Include="CC_PERSONA_INCIDENCIA.CS" />
+    <Compile Include="CC_PROVEEDORSERV.cs" />
+    <Compile Include="CC_PROVEEDORSERV_USUARIO.cs" />
+    <Compile Include="CC_PROVSERV_USUARIO.cs" />
+    <Compile Include="CC_PROVUSU_CORREDOR.cs" />
+    <Compile Include="CC_RECORRIDO_TSERVICIO.cs" />
+    <Compile Include="CC_ROL.CS" />
+    <Compile Include="CC_TIPODOCUMENTO.CS" />
+    <Compile Include="CC_PERSONA.CS" />
+    <Compile Include="CC_HORAS.CS" />
+    <Compile Include="CC_PARADERO.cs" />
+    <Compile Include="CC_RECORRIDO.cs" />
+    <Compile Include="CC_REPORTE_DESPACHO.cs" />
+    <Compile Include="CC_REPORTE_PICO_PLACA.cs" />
+    <Compile Include="CC_RESUMEN_PROGRAMADO.cs" />
+    <Compile Include="CC_RUTA.cs" />
+    <Compile Include="CC_RUTAS_CONDUCTORES.cs" />
+    <Compile Include="CC_PROGRAMA_RUTA.cs" />
+    <Compile Include="CC_RUTA_CORREDOR.cs" />
+    <Compile Include="CC_RUTA_TIPO_SERVICIO.cs" />
+    <Compile Include="CC_TIPO_DIA.cs" />
+    <Compile Include="CC_VIA.cs" />
+    <Compile Include="CONADISPLACA.cs" />
+    <Compile Include="InnerJoin\InnerJoinAccesos.cs" />
+    <Compile Include="InnerJoin\InnerJoinLogin.cs" />
+    <Compile Include="InnerJoin\InnerJoinUsuario.cs" />
+    <Compile Include="InnerJoin\InnerJoinUsuariosAsignados.cs" />
+    <Compile Include="InnerJoin\InnerJoinValidacion.cs" />
+    <Compile Include="PasajeroVal.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CC_CONDUCTORES.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reporte_ComparativoV.cs" />
+    <Compile Include="RPTA_GENERAL.cs" />
+    <Compile Include="TB_EMPRESA.cs" />
+    <Compile Include="TB_LOGIN.cs" />
+    <Compile Include="TB_USUARIO.cs" />
+    <Compile Include="TL_LOG.cs" />
+    <Compile Include="TM_ACCESO.cs" />
+    <Compile Include="TM_EMPRESA.cs" />
+    <Compile Include="TM_LOGIN.cs" />
+    <Compile Include="CC_DISTANCIA_PARADEROS.cs" />
+    <Compile Include="TM_PROGRAMACION_IMG.cs" />
+    <Compile Include="TM_USUARIOS_EMPRESA.cs" />
+    <Compile Include="TV_ACC_EMP.cs" />
+    <Compile Include="TV_LOG_ACC.cs" />
+    <Compile Include="CC_USUARIO_PERSONA.cs" />
+    <Compile Include="VECINOSPLACA.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

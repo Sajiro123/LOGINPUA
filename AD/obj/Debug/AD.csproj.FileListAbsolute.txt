@@ -1,0 +1,15 @@
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\AD.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\AD.pdb
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Dapper.Contrib.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Dapper.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\ENTIDADES.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Oracle.DataAccess.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\REPOSITORIO.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Unity.Interception.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Unity.Abstractions.dll
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\ENTIDADES.pdb
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\REPOSITORIO.pdb
+C:\TFS\VS\2015\LOGINPUA\AD\bin\Debug\Dapper.xml
+C:\TFS\VS\2015\LOGINPUA\AD\obj\Debug\AD.csprojResolveAssemblyReference.cache
+C:\TFS\VS\2015\LOGINPUA\AD\obj\Debug\AD.dll
+C:\TFS\VS\2015\LOGINPUA\AD\obj\Debug\AD.pdb

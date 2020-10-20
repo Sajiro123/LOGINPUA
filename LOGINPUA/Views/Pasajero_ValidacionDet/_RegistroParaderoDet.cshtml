@@ -1,0 +1,52 @@
+﻿@{ DateTime fecha_Actual = DateTime.Now;
+    string fecha_Busqueda = fecha_Actual.ToString("dd/MM/yyyy");
+     }
+<div class="modal fade" id="ModalRegistrarArchivo">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="formSubirExcelDespacho" enctype="multipart/form-data">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h6 class="modal-title">Registro</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                   
+                    <div class="form-group">
+                        <label><strong>Corredor</strong></label>
+                        <select class="form-control" id="selectCorredor" onchange="getRutaPorCorredores();"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>Ruta</strong></label>
+                        <select class="form-control form-control-sm" id="selectRuta"></select>
+                    </div>
+
+                    <div class="form-group" id="sectionFecha">
+                        <label><strong>Fecha</strong></label>
+                        <input id="txtFechaRegistro" value="@fecha_Busqueda"  class="form-control" />
+                    </div>
+
+                    <div class="form-group custom-file">
+                        <input type="file" name="programacionArchivo" class="custom-file-input" onchange="subirArchivoTemp($(this), $('#selectTipocarga').val())" id="archivoSubido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                        <label class="custom-file-label" id="lblArchivoSubido" for="archivoSubido">Seleccionar Archivo</label>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id="btnSubirArchivo" class="btn btn-info" type="submit">
+                        Subir archivo
+                    </button>
+                    @*<button class="btn btn-info" type="submit" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Subiendo...
+                        </button>*@
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

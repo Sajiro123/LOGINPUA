@@ -1,0 +1,608 @@
+﻿@{
+    ViewBag.Title = "RegistroPicoPlaca";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+}
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+
+<script src="~/Content/plugins/numberValidador/numberValidador.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+@{
+    List<ENTIDADES.CC_MODALIDAD_TRANSPORTE> listModalidades = new List<ENTIDADES.CC_MODALIDAD_TRANSPORTE>();
+    listModalidades = ViewBag.modalidadTransporte;
+}
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Ruta&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="abrirModalRegistroRuta();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    @*<div class="col-md-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Modalidad Transporte"><span class="fas fa-building" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectModalidadTransporte" onchange="getCorredoresByModalidad();">
+                    @foreach (var item in listModalidades)
+                    {
+                        <option value="@item.ID_MODALIDAD_TRANS">@item.NOMBRE</option>
+                    }
+                </select>
+            </div>
+        </div>*@
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getListaRutas();"></select>
+        </div>
+    </div>
+
+</div>
+<hr />
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" id="tbRuta" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 10px;">N</th>
+                    <th class="text-center" style="width: 115px;">NRO RUTA</th>
+                    <th class="text-center" style="width: 320px;">NOMBRE</th>
+                    <th class="text-center" style="width: 220px;">DISTRITOS</th>
+                    <th style="width:150px;">CREADO POR</th>
+                    <th style="width:150px;">FECHA CREA</th>
+                     
+                    <th colspan="2" class="text-center" style="width: 250px;">RECORRIDOS</th>
+
+                    @if (idmodificar == 1)
+                    {
+                        <th style="width: 80px;"></th>
+                    }
+
+                    @if (ideliminar == 1)
+                    {
+                        <th style="width: 80px;"></th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_RegistroRuta")
+@Html.Partial("_EditarRuta")
+
+<script>
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var modalidadUsuario = '@ViewBag.modalidadUsuario';
+    //
+    var URL_GET_LISTA_RUTA = '@Url.Action("listarRutasByIdCorredor", "Ruta")';
+    var URL_REGISTRA_RUTA = '@Url.Action("registrarRuta", "Ruta")';
+    var URL_EDITAR_RUTA = '@Url.Action("editarRuta", "Ruta")';
+    var URL_ACTUALIZAR_RECORRIDO = '@Url.Action("ActualizarRecorrido", "Ruta")';
+
+    
+    var URL_REGISTRA_RECORRIDO = '@Url.Action("registrarRecorrido", "Ruta")';
+    var URL_ANULAR_RUTA = '@Url.Action("anularRuta", "Ruta")';
+    //
+    //
+    $(document).ready(function () {
+      
+
+        $('#selectModalidadTransporte').val(Number(modalidadUsuario))
+        getCorredoresByModalidad();
+    });
+    //
+
+
+    //CLICK
+    //$(document).on('click', '.btnic', function () {
+    //    alert(2)
+    //});
+    
+
+
+    function abrirModalRegistroRuta() {
+        $('#modalRegistroRuta').modal('show');
+    }
+
+
+    $("body").on("click", "#btnRegistrarPicoPlaca", function () {
+         //LIMPIAR LOS INPUTS DEL MODAL REGISTRO
+        $('#txtNroRuta').val('');
+        $('#txtNombreRuta').val('');
+        $('#txtDistritos').val('');
+        
+    });
+
+
+
+    function getCorredoresByModalidad() {
+
+        //var modalidadTransporteSelecionado = $('#selectModalidadTransporte').val();
+        $('#selectCorredores').empty();
+        var cantidadRegistros = 0;
+
+        $.each(JSON_DATA_CORREDORES, function () {
+            //console.log(this.ID_MODALIDAD_TRANS, Number(modalidadTransporteSelecionado))
+            //if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+            if (this.ID_MODALIDAD_TRANS == Number($('#mod').val())) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRuta tbody').empty();
+            var strHTMLtb = '<tr>' +
+                                 '<td colspan="9" style="padding-left: 0;padding-right: 0;">' +
+                                     'No hay información para mostrar' +
+                                 '</td>' +
+                              '</tr>';
+            $('#tbRuta tbody').append(strHTMLtb);
+            return false
+        }
+        getListaRutas();
+    }
+
+    function getListaRutas() {
+        
+        // PERMISOS
+        //1= EDITAR || 2==ELIMINAR
+        var permiso_edit = $('#permisoActualiza').val();
+        var permiso_eliminar = $('#permisoEliminar').val();
+
+        cargandoTablaPrincipal();
+        $.ajax({
+            url: URL_GET_LISTA_RUTA,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+ 
+
+
+                 $('#tbRuta tbody').empty();
+                var strHTMLtb = '';
+                if (result.length == 0) {
+                    strHTMLtb = '<tr>' +
+                                    '<td colspan="8" style="padding-left: 0;padding-right: 0;">' +
+                                        '<div class="alert alert-warning text-center">' +
+                                            'No hay información para mostrar' +
+                                        '</div>' +
+                                    '</td>' +
+                                 '</tr>';
+                } else {
+                    $.each(result, function (i) {
+
+                        var dataLadosSerializado = this.SENTIDOS
+                        if (dataLadosSerializado!=null) {
+                            var datosLado = dataLadosSerializado.split('~');
+                            var texto_ida = datosLado[0]
+                            var texto_vuelta = datosLado[1]
+                            texto_vuelta = texto_vuelta.split('|')[1]
+                        }
+                        
+                         
+                         
+
+                        strHTMLtb += '<tr onclick="seleccionaFila($(this))" ' +
+                                           ' data-idRuta="' + this.ID_RUTA + '" ' +
+                                            ' data-nroRuta="' + (this.NRO_RUTA == null ? "" : this.NRO_RUTA) + '" ' +
+                                            ' data-nombreRuta="' + (this.NOMBRE == null ? "" : this.NOMBRE) + '" ' +
+                                            ' data-distritosRuta="' + (this.DISTRITOS == null ? "" : this.DISTRITOS) + '" ' +
+                                            ' data-SentidoTextoIda="' + (texto_ida == null ? "" : texto_ida) + '" ' +
+                                            ' data-SentidoTextoVuelta="' + (texto_vuelta == null ? "" : texto_vuelta) + '" ' +
+
+
+                                        ' >' +
+                                        '<td>' + (i + 1) + '</td>' +
+                                        '<td class="text-center" >' + this.NRO_RUTA + '</td>' +
+                                        '<td class="text-center" >' + this.NOMBRE + '</td>' +
+                                        '<td>' + (this.DISTRITOS ? this.DISTRITOS : '') + '</td>' +
+                                        '<td>' + (this.USU_REG ? this.USU_REG : '') + '</td>' +
+                                        '<td>' + (this.FECHA_REG ? this.FECHA_REG : '') + '</td>' +
+                                        getHTMLSentido(this.SENTIDOS, this.ID_RUTA) +
+                                        (permiso_edit == 1 ? '<td class="text-center" style="font-size:17px;" >' + '<span class="far fa-edit" aria-hidden="true" style="cursor:pointer;" onclick="abrirEditarRuta($(this).parent().parent());" ></span>' + '</td>' :'') +
+                                        (permiso_eliminar == 1 ? '<td class="text-center" style="font-size:17px;" >' + '<span  class="far fa-trash-alt" aria-hidden="true" style="cursor:pointer;"  onclick="anularRuta(' + this.ID_RUTA + ');" ></span>' + '</td>' : '') +
+                                         
+                                     '</tr>';
+                    });
+                }
+                $('#tbRuta tbody').append(strHTMLtb);
+                util.activarEnumeradoTabla('#tbRuta', $('#btnBusquedaEnTabla'));
+
+            }
+        }, JSON);
+    }
+
+    function cargandoTablaPrincipal() {
+        $('#tbRuta tbody').empty();
+        $('#tbRuta tbody').append('<tr>' +
+                                        '<td colspan="11">' +
+                                            'Cargando <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">' +
+                                        '</td>' +
+                                      '</tr>');
+    }
+
+    function getHTMLSentido(dataLadosSerializado, idRuta) {
+        var ladoida="'A'"
+        var ladovuelta="'B'"
+        var rpta = '<td style="width: 25px;" >' +
+                        '<button class="btnic" type="button" onclick="registrarRecorridos($(this).parent().parent(), $(this),' + idRuta + ','+ladoida+');" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;font-size: 12px;border-radius: 61%;cursor:pointer;">' + '<span class="fas fa-plus" aria-hidden="true"></span>' + '</button>' +
+                   '</td>' +
+                   '<td style="width: 25px;" >' +
+                        '<button class="btnic" type="button" onclick="registrarRecorridos($(this).parent().parent(), $(this),' + idRuta + ',' + ladovuelta + ');" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;font-size: 12px;border-radius: 61%;cursor:pointer;">' + '<span class="fas fa-plus" aria-hidden="true"></span>' + '</button>' +
+                   '</td>';
+        var arrData = null;
+
+        if (dataLadosSerializado) {
+
+            rpta = '';
+            if (dataLadosSerializado.indexOf('|') != -1) { //hay mas de 2 lados
+                arrData = [];
+                arrData = dataLadosSerializado.split('|');
+                var lado = "";
+                for (var i = 0; i < arrData.length; i++) {
+                    if (i == 0) { lado = "'A'" } else { lado = "'B'" }
+                    var datosLado = arrData[i].split('~');
+                    rpta += '<td style="width: 25px;" >';
+                    rpta += '<button class="btnic click" type="button" onclick="EditarRecorridos($(this).parent().parent(), $(this),' + idRuta + ','+lado+' );" data-idrecorridotservicio="' + datosLado[1] + '" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;background-color: #00a69f;color: white;font-size: 12px;border-radius: 61%;cursor:pointer;">' + datosLado[0] + '</button>';
+                    rpta += '</td>';
+                }
+
+            } else { //no hay lado o puede haber 1
+                 if (dataLadosSerializado.indexOf('~') != -1) {// hay un lado
+                    var datosLado = dataLadosSerializado.split('~');
+                    rpta += '<td style="width: 25px;"  data-idrecorridotservicio="' + datosLado[1] + '" >' +
+                                '<button class="btnic" type="button" onclick="EditarRecorridos($(this).parent().parent(), $(this),' + idRuta + ');" data-idrecorridotservicio="' + datosLado[1] + '" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;background-color: #00a69f;color: white;font-size: 12px;border-radius: 61%;cursor:pointer;">' + datosLado[0] + '</button>';
+                    rpta += '</td>';
+
+                    rpta += '<td style="width: 25px;" >' +
+                                '<button class="btnic" type="button" onclick="registrarRecorridos($(this).parent().parent(), $(this),' + idRuta + ' );" style="padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;font-size: 12px;border-radius: 61%;cursor:pointer;">' + '<span class="fas fa-plus" aria-hidden="true"></span>' + '</button>' +
+                            '</td>';
+                }
+            }
+        }
+        return rpta;
+    }
+
+    function registrarRecorridos(elementoTR, elemento, idRuta,ladoInput) {
+
+
+        var lado = "";
+        var text = "";
+
+        if (ladoInput == "A") {
+            text= '<div class="col-md-4">' +
+                    '<div class="custom-control custom-radio">' +
+                    '<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="customRadio1" checked>' +
+                    '<label class="custom-control-label" for="customRadio1">Sentido A</label>' +
+                    '</div>' +
+                    '</div>' +""
+        }
+        else if (ladoInput == "B") {
+            text='<div class="col-md-4">' +
+                    '<div class="custom-control custom-radio">'+
+                    '<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" checked>' +
+                    '<label class="custom-control-label" for="customRadio2" value="customRadio2">Sentido B</label>' +
+                    '</div>' +
+                    '</div>' +""
+        }
+
+
+        var rutaSeleccionada = elementoTR.attr('data-nroRuta');
+        var corredorSeleccionado = $('#selectCorredores option:selected').text();
+        Swal.fire({
+            html:   "Estas apunto de crear el sentido para la ruta <strong>" + rutaSeleccionada + '</strong> del corredor <strong>' + corredorSeleccionado + '</strong>'+'<br>' +
+                    '<input id="txtSentidoRecorrido" style="text-align: center;margin-top: 10px;" autofocus class="form-control" type="text" placeholder="Ingresar el sentido" />' +
+                    '<p style="font-size: 14px;padding-bottom: 0;margin-bottom: 0;margin-top: 0;padding-top: 0;color: red;" id="lblValidaSentido" hidden ></p>' + '</br>' +
+                    
+
+                    '<div class="row">' +
+                    '<div class="col-md-4">' +
+                    '</div>' +text,
+
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                sentidoIngresado = $('#txtSentidoRecorrido').val();
+                if (sentidoIngresado.length == 0) {
+                    $('#lblValidaSentido').removeAttr('hidden');
+                    $('#lblValidaSentido').text('Debe ingresar el sentido');
+                    $('#txtSentidoRecorrido').focus();
+                    return false;
+                }
+
+            }
+
+        }).then((result) => {
+
+            if (result.value) {
+                if (document.getElementById('customRadio1').checked) {
+                    lado = "A";
+
+                } else if (document.getElementById('customRadio2').checked) {
+                    lado = "B";
+                }
+
+                $.ajax({
+                    url: URL_REGISTRA_RECORRIDO,
+                    dataType: 'json',
+                    data: {
+                        idRuta: idRuta,
+                        sentido: $('#txtSentidoRecorrido').val(),
+                        lado: lado
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                            title: result.DES_ESTADO,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        if (result.COD_ESTADO == 1) {
+                            getListaRutas();
+                        }
+                    }
+                }, JSON);
+            }
+        });
+    }
+
+    function anularRuta(idRuta) {
+        Swal.fire({
+            text: "Estas seguro que deseas anular el registro ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: URL_ANULAR_RUTA,
+                    dataType: 'json',
+                    data: { idRuta: idRuta },
+                    success: function (result) {
+                        getListaRutas();
+                        Swal.fire({
+                            type: (result.COD_ESTADO == 1 ? 'success' : 'error'),
+                            title: result.DES_ESTADO,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                }, JSON);
+            }
+        });
+    }
+
+
+
+
+    function EditarRecorridos(elementoTR, elemento, idRuta,lado) {
+
+
+        var sentido = "";
+        var elementosalida = "";
+        var sentidocheckedA = "";
+        var sentidocheckedB = "";
+
+        if (lado=="A") {
+            elementosalida = elementoTR.children()[6];
+            elementosalida = $(elementosalida).children();
+            sentido = elementoTR.attr('data-sentidotextoida')
+            sentidocheckedA = "checked"
+         } else if (lado=="B") {
+            elementosalida = elementoTR.children()[7];
+            elementosalida = $(elementosalida).children();
+            sentido = elementoTR.attr('data-sentidotextovuelta')
+            sentidocheckedB = "checked"
+
+        }
+ 
+        //ID_RECORRIDO POR SENTIDO
+        elementosalida = elementosalida.attr('data-idrecorridotservicio')
+
+  
+
+        var lado = "";
+
+
+        var rutaSeleccionada = elementoTR.attr('data-nroRuta');
+        var corredorSeleccionado = $('#selectCorredores option:selected').text();
+
+        Swal.fire({
+            html: "Estas apunto de crear el sentido para la ruta <strong>" + rutaSeleccionada + '</strong> del corredor <strong>' + corredorSeleccionado + '</strong>' + '<br>' +
+                    '<input id="txtSentidoRecorrido" style="font-weight: bold;text-align: center;margin-top: 10px;" autofocus class="form-control" type="text" value="' + sentido + '" />' +
+                    '<p style="font-size: 14px;padding-bottom: 0;margin-bottom: 0;margin-top: 0;padding-top: 0;color: red;" id="lblValidaSentido" hidden ></p>' + '</br>' +
+
+
+                    '<div class="row">' +
+                    '<div class="col-md-2">' +
+                    '</div>' +
+                    '<div class="col-md-4">' +
+                    '<div class="custom-control custom-radio">' +
+                    '<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="customRadio1" ' + sentidocheckedA + ' disabled>' +
+                    '<label class="custom-control-label" for="customRadio1">Sentido A</label>' +
+                    '</div>' +
+                    '</div>' +
+                     
+                    '<div class="col-md-4">' +
+                    '<div class="custom-control custom-radio">' +
+                    '<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" disabled ' +  sentidocheckedB+ '>' +
+                    '<label class="custom-control-label" for="customRadio2" value="customRadio2">Sentido B</label>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>',
+
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+
+            preConfirm: () => {
+                sentidoIngresado = $('#txtSentidoRecorrido').val();
+                if (sentidoIngresado.length == 0) {
+                    $('#lblValidaSentido').removeAttr('hidden');
+                    $('#lblValidaSentido').text('Debe ingresar el sentido');
+                    $('#txtSentidoRecorrido').focus();
+                    return false;
+                } 
+            } 
+        }
+         
+        ).then((result) => {
+
+            if (result.value) {
+                if (document.getElementById('customRadio1').checked) {
+                    lado = "A";
+
+                } else if (document.getElementById('customRadio2').checked) {
+                    lado = "B";
+                }
+
+                $.ajax({
+                    url: URL_ACTUALIZAR_RECORRIDO,
+                    dataType: 'json',
+                    data: {
+                        idRecorrido: elementosalida,
+                        nombre: $('#txtSentidoRecorrido').val(),
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                            title: result.DES_ESTADO,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        if (result.COD_ESTADO == 1) {
+                            getListaRutas();
+                        }
+                    }
+                }, JSON);
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    function abrirEditarRuta(element) {
+
+        var id_ruta = element.attr('data-idRuta');
+        var nroRuta = element.attr('data-nroRuta');
+        var nombreRuta = element.attr('data-nombreRuta');
+        var distritosRuta = element.attr('data-distritosRuta');
+
+        $('#txtIdRutaE').val(Number(id_ruta));
+        $('#txtNroRutaEditar').val(nroRuta);
+        $('#txtNombreRutaEditar').val(nombreRuta);
+        $('#txtDistritosEditar').val(distritosRuta);
+
+        $('#modalEditarRuta').modal('show');
+    }
+
+    function registraRuta() {
+        $.ajax({
+            url: URL_REGISTRA_RUTA,
+            dataType: 'json',
+            data: {
+                idCorredor: $('#selectCorredores').val(),
+                nombre: $('#txtNombreRuta').val(),
+                nroRuta: $('#txtNroRuta').val(),
+                distritos: $('#txtDistritos').val()
+            },
+            success: function (result) {
+                //
+                Swal.fire({
+                    type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                    title: result.DES_ESTADO,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                //
+                if (result.COD_ESTADO == 1) {
+                    $('#modalRegistroRuta').modal('hide');
+                    getListaRutas();
+                }
+            }
+        }, JSON);
+    }
+    function seleccionaFila(elementFila) {
+
+        $.each($('#tbRuta tbody > tr'), function () {
+            $(this).css('background-color', '');
+        });
+        elementFila.css('background-color', '#17a2b838');
+    }
+
+
+</script>
+

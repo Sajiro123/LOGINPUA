@@ -1,0 +1,33 @@
+﻿@model List<ENTIDADES.CC_RUTA_CORREDOR>
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+}
+<link href="~/Content/plugins/sweetAlert/sweetalert2.css" rel="stylesheet" />
+
+<link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
+<script src="~/Content/js/js_pico_placa/pico_placa.js"></script>
+<script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/Utilidades/Util.js"></script>
+<script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>
+
+ 
+
+    <script>
+        window.onload = function () {
+
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+             })  
+            
+        }
+        window.close();
+
+
+
+    </script>
+
+ 
+

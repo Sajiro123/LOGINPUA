@@ -1,0 +1,2622 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    //Layout = "~/Views/Shared/_LayoutPrincipal.cshtml";
+}
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    /*.thead-azul-claro th {
+        color: white;
+        background-color: #2f6f9dd9;
+        border-color: #777;
+    }
+
+    a {
+        color: white !important;
+    }
+
+    .dropdown-item {
+        color: black !important;
+    }*/
+
+    #my-popper, .tooltip {
+        position: absolute;
+        background: #FFC107;
+        color: black;
+        max-width: 1000px;
+        border-radius: 3px;
+        box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        padding: 10px;
+        text-align: center;
+        z-index: 9999;
+        padding-bottom: 0;
+    }
+    #my-popper .popper__arrow, .tooltip .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+}
+    #my-popper a{
+        margin: 2px;
+        font-size: 12px;
+        margin-right: 0;
+        padding-right: 3px;
+    }
+
+     #my-popper .popper__arrow {
+    border-color: #FFC107;
+}
+</style>
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+
+<script src="~/Content/plugins/moment/moment.js"></script>
+@*<script src="~/Scripts/Utilidades/Util.js"></script>*@
+<script src="~/Content/plugins/numberValidador/numberValidador.js"></script>
+<script src="~/Content/plugins/moment/moment.js"></script>
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+@{
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+    //
+    List<ENTIDADES.CC_MODALIDAD_TRANSPORTE> listModalidades = new List<ENTIDADES.CC_MODALIDAD_TRANSPORTE>();
+    listModalidades = ViewBag.modalidadTransporte;
+}
+<style>
+    #tooltiprafa {
+        display: none;
+        z-index: 1;
+    }
+
+    .fechadata:hover{
+        color:red !important;
+    }
+
+    .design-process-section .text-align-center {
+        line-height: 25px;
+        margin-bottom: 12px;
+    }
+    .design-process-content {
+        border: 1px solid #e9e9e9;
+        position: relative;
+        padding: 6px 13px 13px 13px;
+        height:100%;
+    }
+    .design-process-content img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+        max-height: 100%;
+    }
+    .design-process-content h3 {
+        margin-bottom: 16px;
+    }
+    .design-process-content p {
+        line-height: 26px;
+        margin-bottom: 12px;
+    }
+    .process-model {
+        list-style: none;
+        padding: 0;
+        position: relative;
+        max-width: 500px;
+
+        border: none;
+        z-index: 0;
+    }
+    .process-model li::after {
+        background: #e5e5e5 none repeat scroll 0 0;
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 4px;
+        margin: 0 auto;
+        position: absolute;
+        /* right: 14px; */
+        left: 21px;
+        top: 25px;
+        width: 46%;
+        z-index: -1;
+    }
+    .process-model li.visited::after {
+        background: #57b87b;
+    }
+    .process-model li:last-child::after {
+        width: 0;
+    }
+    .process-model li {
+        display: inline-block;
+        width: 18%;
+        text-align: center;
+        float: none;
+    }
+    .nav-tabs.process-model > li.active > a, .nav-tabs.process-model > li.active > a:hover, .nav-tabs.process-model > li.active > a:focus, .process-model li a:hover, .process-model li a:focus {
+        border: none;
+        background: transparent;
+
+    }
+    .process-model li a {
+        padding: 0;
+        border: none;
+        color: #606060;
+    }
+    .process-model li.active,
+    .process-model li.visited {
+        color: #57b87b;
+    }
+    .process-model li.active a,
+    .process-model li.active a:hover,
+    .process-model li.active a:focus,
+    .process-model li.visited a,
+    .process-model li.visited a:hover,
+    .process-model li.visited a:focus {
+        color: #57b87b;
+    }
+    .process-model li.active p,
+    .process-model li.visited p {
+        font-weight: 600;
+    }
+    .process-model li span {
+        display: block;
+        height: 68px;
+        width: 68px;
+        text-align: center;
+        margin: 0 auto;
+        background: #f5f6f7;
+        border: 2px solid #e5e5e5;
+        line-height: 65px;
+        font-size: 30px;
+        border-radius: 50%;
+    }
+    .process-model li.active svg, .process-model li.visited span  {
+        background: #00a39c;
+        border-color: #e9ecef;
+        color: white;
+    }
+    .process-model li p {
+        font-size: 14px;
+        margin-top: 11px;
+    }
+ 
+    .process-model.contact-us-tab li::after  {
+        display: none;
+    }
+    .process-model.contact-us-tab li.visited span{
+        border-color: #e5e5e5;
+    }
+
+    .item-icono-paso{
+        color: black;
+        font-size: 52px;
+        border: 2px solid #e5e5e5;
+        border-radius: 50%;
+        padding: 13px;
+        background-color: #f5f6f7;
+    }
+
+    .tab-pane{
+        height:100%
+    }
+
+    .iconocerrar:hover{
+        opacity: 1 !important;
+        cursor:pointer;
+    }
+    .tablaFixed:hover .tablaFixed{
+        
+        background-color:red;
+    }
+</style>
+<div id="tooltiprafa"></div>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4 id="lblAnalisisTiempoViaje" style="display: flex; margin-left: 35%;" >
+            Analisis de Tiempos de Viaje
+        </h4>
+    </div>
+</div>
+<br />
+<div id="contentParametros" style="padding-bottom: 14px;">
+    <div class="row">
+        <div class="col-md-3" hidden>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Modalidad Transporte"><span class="fas fa-building" aria-hidden="true"></span></span>
+                </div>
+
+                <select class="form-control form-control-sm" id="selectModalidadTransporte" onchange="getCorredoresByModalidad();">
+                    @foreach (var item in listModalidades)
+                    {
+                        <option value="@item.ID_MODALIDAD_TRANS">@item.NOMBRE</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectRuta" onchange="getTipoServicioByRuta();"></select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Tipos de servicio operacional"><span class="fas fa-road" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectRutaTipoServicio" onchange="getRecorridosTServByRutaServ($(this).val());"></select>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 32px; padding-left: 7px;" title="Lado"><span class="fas fa-project-diagram" aria-hidden="true"></span></span>
+                </div>
+                <select class="form-control form-control-sm" id="selectLado" onchange="getParadServByIdRecorridoServ($(this).val())"></select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" title="Seleccionar rango de fechas"><span class="fa fa-calendar" aria-hidden="true"></span></span>
+                </div>
+                <input class="form-control form-control-sm" id="rangoFechaConsulta" />
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            @*<a href="#" id="consultar"  class="btn btn-success btn-sm disabled" data-toggle="modal" onclick="getDataMuestra();">Consultar</a>*@
+            <a href="#" id="consultar" class="btn btn-success btn-sm disabled" data-toggle="modal" onclick="getDataModalidades();">Consultar</a>
+            
+        </div>
+        @*<div class="col-md-2">
+                <a href="" id="btnVerDias" class="btn btn-info btn-sm" data-toggle="modal" onclick="tooglePopper(event, this);">Ver Dias</a>
+                <div id="my-popper" class="" style="margin-bottom: 5px;" hidden  >
+
+                </div>
+            </div>*@
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Paradero inicial"><span class="fab fa-product-hunt" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectParaderoIni"></select>
+        </div>
+    </div>
+
+
+    <div class="col-md-2">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Paradero final"><span class="fab fa-product-hunt" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectParaderoFin"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Salto de horas consulta" id="basic-addon1"><span class="fas fa-clock" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectHoraSalto">
+                <option value="5">5 Minutos</option>
+                <option value="10" selected >10 Minutos</option>
+                <option value="20">20 Minutos</option>
+                <option value="30" >30 Minutos</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+@*<div class="row">*@
+    <section class="design-process-section" id="process-tab">
+            <div class="row">
+                <div style="width:100%" >
+                    <!-- design process steps-->
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs process-model more-icon-preocess" id="tabList" role="tablist" style="padding-top: 6px;padding-bottom: 9px;" >
+                        <li role="presentation" class="active" data-toggle="tab">
+                            <a href="#pasouno" aria-controls="pasouno" role="tab" data-toggle="tab">
+                                <span class="fas fa-chart-line item-icono-paso" title="Obtener data de muestra, quitar data atipicas y procesar gráfico." ></span>
+                            </a>
+                        </li>
+                        <li role="presentation" data-toggle="tab" >
+                            <a href="#pasodos" aria-controls="pasodos" role="tab" data-toggle="tab" onclick="crearFranjasHorariasEnTabla()">
+                                <span class="fas fa-table item-icono-paso" aria-hidden="true" title="definir franjas horarias con las que hay que trabajar." ></span>
+                            </a>
+                        </li>
+                        <li role="presentation" data-toggle="tab" >
+                            <a href="#pasotres" aria-controls="pasotres" role="tab" data-toggle="tab" title="Seleccionar tiempo de cada franja." >
+                                <span class="fas fa-check item-icono-paso" aria-hidden="true"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- end design process steps-->
+                    <!-- Tab panes -->
+                    <div id="tabContenido" class="tab-content" >
+                        <div role="tabpanel" class="tab-pane active" id="pasouno">
+                            <div class="design-process-content">
+                                <a href="#" id="btnVerDias" class="btn btn-info btn-sm disabled" style="margin-bottom: 6px;cursor:not-allowed" data-toggle="modal" onclick="tooglePopper(event, this);">Ver Dias</a>
+                                <div id="my-popper" class="" hidden>
+
+                                </div>
+                                <a href="" id="btnAgregarFranja" onclick="agregarFranjaEnGrafico($(this));" class="btn btn-info btn-sm disabled" title="Agregar Franja" style="margin-bottom: 6px;background-color: #28a745;border-color: #e5e5e5;" data-toggle="modal"><span class="fa fa-i-cursor"></span></a>
+                                @*<a href="" id="btnAgregarFranja" onclick="limpiarGrafico($(this));" class="btn btn-info btn-sm disabled" title="Agregar Franja" style="margin-bottom: 6px;background-color: #28a745;border-color: #e5e5e5;" data-toggle="modal"><span class="fa fa-i-cursor"></span></a>*@
+                                <div id="contextoGrafico" class="table-responsive" style="height:100%">
+
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+        .tablaFixed{
+            width: 100%;
+        }
+
+        .tablaFixed thead, .tablaFixed tbody, .tablaFixed tr, .tablaFixed td, .tablaFixed th { display: block; }
+
+        .tablaFixed tbody tr:after,.tablaFixed thead tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        .tablaFixed thead {
+            /* fallback */
+        }
+
+       .tablaFixed thead th {
+            width: 30.1%;
+            float: left;
+        }
+
+        .tablaFixed tbody td {
+            width: 33.1%;
+            float: left;
+            padding: 0;
+            text-align: left;
+            padding-left: 14px;
+        }
+        
+        .sombreaRow{
+            background-color: #007bffad !important;
+            color:white;
+        }
+                            </style>
+                        <div role="tabpanel" class="tab-pane" id="pasodos">
+                            <div class="design-process-content">
+                                <h5 id="txtFranjas" class="semi-bold" style="font-weight: 400;text-align:center;display: flex; margin-left: 29%;">Franjas</h5>
+                                <div style="width:100%;height:96%;border:1px solid #c1c1c1;display:flex" >
+                                    <div style="flex:1;box-shadow: 0 10px 10px -5px;">
+
+                                        <table id="tbFranjaGenerada" class="table table-sm" >
+                                            <thead style="background-color: #00a39c;color: white">
+                                                <tr>
+                                                    <th>FRNJ</th>
+                                                    <th>INICIO</th>
+                                                    <th>FIN</th>
+                                                    <th><span class="fas fa-clock" aria-hidden="true"></span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div id="contenidoFranjasTablas" style="width:75%;overflow-x:auto;display: -webkit-inline-box;margin: 13px;margin-left:8px;margin-top:0px;">
+                                             
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="pasotres">
+                            <div class="design-process-content">
+                                <h3 class="semi-bold">En desarollo.</h3>
+                                <p>En desarollo.</p>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+    </section>
+@*</div>*@
+<script src="https://unpkg.com/popper.js"></script>
+<script src="~/Content/plugins/raphael/raphael.js"></script>
+<script src="~/Content/dataPruebas/viajesCorredores.js"></script>
+<script>
+    var URL_REG_DATA_VIAJES = '@Url.Action("registrarViajesCosac", "AnalisisTiempoViaje")';
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_TIPOOPER_X_RUTA = "@Url.Action("getTiposServicioByIdRuta", "RutaTipoServicio")";
+    var URL_GET_DATA_MUESTRA_COSAC = "@Url.Action("getDataMuestraViajesCOSAC", "AnalisisTiempoViaje")";
+    var URL_GET_DATA_MUESTRA_CORREDORES = "@Url.Action("getDataMuestraViajesCORREDORES", "AnalisisTiempoViaje")";
+    //
+    var URL_GET_DATA_RECORRIDOTSERV = "@Url.Action("getRecorridosTServByRutaServ", "AnalisisTiempoViaje")";
+    var URL_GET_DATA_PARADEROTSERV = "@Url.Action("getParaderoTServByRecTserv", "AnalisisTiempoViaje")";
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var modalidadUsuario = '@ViewBag.modalidadUsuario';
+    var popperInstance = null;
+    var popper = null;
+
+    /*ctx*/
+    var contexto = null;
+    var ObjetosEnGrafico = { //aqui almaceno todos los elementos del gráfico para poder controlarlos
+        contenedor: null,
+        textoLoading : null,
+        //rectaHorizonal: null,
+        rectaVertical: {
+            textoMinutos : [],
+            rectaPequenia: [],
+            rectaGrande : null
+        },
+        rectaHorizontal: {
+            lineaRectaGrande: null,
+            rectaVerticalPequenia : [],
+            textoHoraSalidaPorSaltos: [],
+            rectaHorizontalGrande: null
+        },
+        elementosUnionHoraVsTiempo: {
+            lineaViaje: [],
+            lineaUnificada : null
+        },
+        elementosProgramado : {
+            puntosProgramados : []
+        }
+    }
+    var util = new Util();
+    var codModalidadTransporte = $('#mod').val();
+    $(document).ready(function () {
+        //registrarTVIAJECOSAC();
+        //return;
+        getHeightTabs();
+        contexto = Raphael('contextoGrafico', '100%', '100%');
+        inicializarGrafico();
+        //$('#selectModalidadTransporte').val(Number($('#mod').val()))
+        $('#rangoFechaConsulta').daterangepicker({
+            startDate: '01/01/2020',
+            endDate: '07/07/2020',
+            //startDate: '06/11/2019',
+            //endDate: '06/11/2019',
+            timePicker: false,
+            //startDate: moment().startOf('hour'),
+            //endDate: moment().startOf('hour').add(7, 'days'),
+            //"disabledDays": new Array('02/11/2019', '03/11/2019'),
+            "opens": "center",
+            locale: { format: 'DD/MM/YYYY',"daysOfWeek": ["Do","Lu","Ma","Mi","Ju","Vi","Sa"], "monthNames": ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"] }
+        });
+
+        $("#btnVerDias, #my-popper").on("click", function (event) {
+            event.stopPropagation();
+        });
+        getCorredoresByModalidad();
+    });
+
+    function getHeightTabs() {
+        var rpta = 0;
+        var heightContenedortab = $('html').height() - (40 + $('.imagen_logo').height() + $('#lblAnalisisTiempoViaje').height() + 63 + $('#contentParametros').height() + $('#tabList').height());
+        $('#tabContenido').height(heightContenedortab);
+    }
+
+    // script for tab steps
+    $('li[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var href = $(e.target).attr('href');
+        var $curr = $(".process-model  a[href='" + href + "']").parent();
+        $('.process-model li').removeClass();
+        $curr.addClass("active");
+    });
+
+    // end  script for tab steps
+    function inicializarGrafico() {
+        ObjetosEnGrafico.contenedor = contexto.rect(0, 0, "100%", '100%').attr({ "fill": "black", "stroke": "#ffffff" });
+        ObjetosEnGrafico.contenedor
+            .mousemove(function (event) {
+                if (OPCIONES_ACTIVAS.AGREGAR_FRANJA) {
+                    mostrarLineaVerticalTemp(event);
+                }
+            }, function () {
+                //ObjetosEnGrafico.contenedor.attr({ "cursor": "default" });
+            });
+    }
+
+    function getCorredoresByModalidad() {
+
+        var modalidadTransporteSelecionado = $('#mod').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+
+        $.each(JSON_DATA_CORREDORES, function () {
+            if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRutatipoServicio tbody').empty();
+            return false
+        }
+        //$('#selectCorredores').val(4); //DURACEL PARA PRUEBAS EN CORREDOR
+        getRutaPorCorredor();
+    }
+
+    function getRutaPorCorredor() {
+
+        $.ajax({
+            url: URL_GET_RUTA_X_CORREDOR,
+            dataType: 'json',
+            data: { idCorredor: $('#selectCorredores').val() },
+            success: function (result) {
+                $('#selectRuta').empty();
+                if (result.length == 0) { // si la lista esta vacia
+                    $('#selectRuta').append('<option value="0">' + '--No hay información--' + '</option>');
+                    return false;
+                } else {
+                    $.each(result, function () {
+                        $('#selectRuta').append('<option value="' + this.ID_RUTA + '">' + this.NRO_RUTA + '</option>');
+                    });
+                    getTipoServicioByRuta();
+                }
+            }
+        }, JSON);
+    }
+
+    function getTipoServicioByRuta() {
+        $('#consultar').addClass('disabled');
+        $.ajax({
+            url: URL_GET_TIPOOPER_X_RUTA,
+            dataType: 'json',
+            data: { idRuta: $('#selectRuta').val() },
+            success: function (result) {
+                $('#selectRutaTipoServicio').empty();
+                if (result.length == 0) {
+                    $('#selectRutaTipoServicio, #selectLado, #selectParaderoIni, #selectParaderoFin').html('<option>' + '-- No hay información --' + '</option>');
+                    return false;
+                }
+                $.each(result, function (i) {
+                    $('#selectRutaTipoServicio').append('<option value="' + this.ID_RUTA_TIPO_SERVICIO + '">' + $('#selectRuta option:selected').text() + ' ' + this.NOMBRE + '</option>');
+                });
+                getRecorridosTServByRutaServ($('#selectRutaTipoServicio').val());
+            }
+        }, JSON);
+    }
+
+    $(document).click(function () {
+        $('#my-popper').attr('hidden', '');
+    });
+
+    function tooglePopper(e, elemento) {
+        var offset = $(elemento).offset();
+        if ($("#my-popper").is(":visible")) {
+            $('#my-popper').attr('hidden', '');
+        } else {
+            $('#my-popper').removeAttr('hidden');
+            $("#my-popper").css({
+                left: -35,
+                top: -63,
+                position: 'absolute'
+            });
+        }
+    }
+
+    function registrarTVIAJECOSAC() {
+        $.ajax({
+            url: URL_REG_DATA_VIAJES,
+            type: "post",
+            data: { fechaRegistra: '01/01/2020', codModalidadTransporte : codModalidadTransporte },
+            dataType: "json"
+        }).done(function (respuesta) {
+            console.log("rpta----->>>", respuesta);
+        });
+    }
+
+    var JSON_VIAJES_AGRUPADOS_X_FECHA = [];
+    var diasSemana = [
+        {
+            nroDia: 0,
+            dia: 'Domingo',
+            abrevDia: 'DOM'
+        },
+        {
+            nroDia: 1,
+            dia: 'Lunes',
+            abrevDia: 'LUN'
+        },
+        {
+            nroDia: 2,
+            dia: 'Martes',
+            abrevDia: 'MAR'
+        },
+        {
+            nroDia: 3,
+            dia: 'Miercoles',
+            abrevDia: 'MIE'
+        },
+        {
+            nroDia: 4,
+            dia: 'Jueves',
+            abrevDia: 'JUE'
+        },
+        {
+            nroDia: 5,
+            dia: 'Viernes',
+            abrevDia: 'VIE'
+        },
+        {
+            nroDia: 6,
+            dia: 'Sábado',
+            abrevDia: 'SAB'
+        },
+    ];
+    //
+    var FECHA_ELEMENTOS_OCULTOS = [];
+    function filtrarPorTipoDia(elemento) {
+        var tipoDia = elemento.attr('data-tipodia');
+        var isChecked = elemento.is(':checked');
+        var estadosChecks = {
+            tipoDiasNoCheckeados: [],
+            tipoDiasCheckeados : []
+        }
+        $.each($('.tipodia'), function () {
+            var isCheckedTipoDia = $(this).is(':checked');
+            var tipodia = $(this).attr('data-tipodia');
+            if (!isCheckedTipoDia) {
+                estadosChecks.tipoDiasNoCheckeados.push(tipodia);
+            } else {
+                estadosChecks.tipoDiasCheckeados.push(tipodia);
+            }
+        });
+        //
+        var fechasOcultar = [];
+        $.each($('.fechaDiaHtml'), function () {
+            var fecha = $(this).attr('data-fecha');
+            var tipoDia = $(this).attr('data-tipodia');
+            var elemento = $(this);
+            //
+            if (elemento.find('.fechadata')[0]) { //solo los que estan activos
+                if (estadosChecks.tipoDiasNoCheckeados.indexOf(tipoDia) != -1) {
+                    fechasOcultar.push(fecha);
+                    $(this).addClass('disabled');
+                } else {
+                    $(this).removeClass('disabled');
+                }
+            }
+        });
+        //
+        var lineasEnGrafico = ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje;
+        FECHA_ELEMENTOS_OCULTOS = fechasOcultar;
+        $.each(lineasEnGrafico, function () { //eliminando el path de la fecha indicada
+            var fechaElemento = this.fecha;
+            if (fechasOcultar.indexOf(fechaElemento) != -1) {
+                this.elemento.hide();
+            } else {
+                this.elemento.show();
+            }
+        });
+    }
+
+    var DATA_CORREDOR = null;
+    function getDataMuestraCORREDOR() {
+        $('#my-popper').empty();
+        var fechasByData = [];
+        var fechaConsultaInicio = $('#rangoFechaConsulta').val().split('-')[0].trim();
+        var fechaConsultaFin = $('#rangoFechaConsulta').val().split('-')[1].trim();
+        $('#consultar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando');//boton load
+        limpiarGrafico();
+        ObjetosEnGrafico.textoLoading = contexto.text($('#contextoGrafico').width() / 2, $('#contextoGrafico').height() / 2, "Cargando ...").attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+            fill: 'white',
+            "font-size": 18,
+            "font-family": "Arial, Helvetica, sans-serif",
+        });
+        //
+        $.ajax({
+            url:  URL_GET_DATA_MUESTRA_CORREDORES,
+            type: "post",
+            data: {
+                idRutatipoServicio: $('#selectRuta').val(),
+                fechaConsultaIni: fechaConsultaInicio,
+                fechaConsultaFin: fechaConsultaFin
+            },
+            dataType: "json"
+        }).done(function (respuesta) {
+            
+            //return;   
+        //respuesta = dataViajes;//DURACELLLLLL
+            var jsonViajesFecha = [];
+            debugger;
+            $('#consultar').prop('disabled', false).html('Consultar');//boton load
+            if (respuesta.length == 0) {
+                $('#btnVerDias').addClass('disabled').css('cursor', 'not-allowed');
+                $('#btnAgregarFranja').addClass('disabled');//regresa el boton a su normalidad
+                ObjetosEnGrafico.textoLoading.attr({ text: "No hay información para mostrar, consultar otra fecha." });
+                return;
+            }
+            $('#txtFranjas').html('Franjas para Ruta ' + $('#selectRuta option:selected').text() + ', sentido ' + $('#selectLado option:selected').text() +
+                ', Desde <strong>' + $('#selectParaderoIni option:selected').text() + '</strong> hasta <strong>' + $('#selectParaderoFin option:selected').text() + '</strong>');
+            //
+            $('#btnVerDias').removeClass('disabled').css('cursor', 'default');
+            var agrupadoPorFechas = _.groupBy(respuesta, function (d) { return d.FECHA })  //agrupado por fechas la data del comparativo A
+  
+            $.each(agrupadoPorFechas, function (fecha, value) {
+                var item = {
+                    fecha: fecha,
+                    viajes: null
+                }
+                var agrupadoPorIdViaje = _.groupBy(value, function (d) { return d.ID_SALIDAEJECUTADA })  //agrupado por fechas la data del comparativo A
+                item.viajes = agrupadoPorIdViaje;
+                jsonViajesFecha.push(item);
+            });
+            //
+            var sentidoSeleccionado = $('#selectLado').find(':selected').attr('data-etiquetasentido');
+            var jsonViajesAgrupados = [];
+            var coloresGENERADOS = [];
+            //console.log('jsonViajesFecha---->', jsonViajesFecha);
+
+            $.each(jsonViajesFecha, function () { //recorriendo por fecha
+                var item = {
+                    fecha: this.fecha,
+                    color: getColorParaFecha(coloresGENERADOS),
+                    sentido: sentidoSeleccionado,
+                    viajes: []
+                };
+                fechasByData.push({ fecha: this.fecha, timestampfecha: util.convertDatetoTimeStamp(this.fecha + ' 00:00:00'), color: item.color });
+
+                $.each(this.viajes, function (idViaje, data) { //recorriendo los bloques de viaje
+                    var sentido = data[0].SENTIDO;
+                    if (sentido == sentidoSeleccionado) {
+                        item.viajes.push(data);//solo guarda los viajes del sentido seleccionado
+                    }
+                });
+                jsonViajesAgrupados.push(item);
+            });
+        //
+            //agregando las fechas al contendor de fechas HTML
+            var jsonViajesFechaOrdenados = _.orderBy(fechasByData, ['timestampfecha'], ['asc']); //viajes ordenados de menor a mayor
+            //console.log('jsonViajesFechaOrdenados-->', jsonViajesFechaOrdenados);
+            //
+            for (var i = 0; i < jsonViajesFechaOrdenados.length; i++) {
+                var fechaFormateada = jsonViajesFechaOrdenados[i].fecha.split('/')[0] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[1];
+                var fechaParaJavascript = jsonViajesFechaOrdenados[i].fecha.split('/')[1] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[0] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[2];
+                var fechaConsulta = new Date(fechaParaJavascript);
+                //
+                var nroDia = fechaConsulta.getDay();
+                var nombreDia = diasSemana[nroDia];
+                var tipoDia = "";
+
+                switch (nombreDia.dia) {
+                    case 'Sábado':
+                        tipoDia = 'sabado';
+                        break;
+                    case 'Domingo':
+                        tipoDia = 'domingo';
+                        break;
+                    default:
+                        tipoDia = 'habil';
+                        break;
+                }
+                //
+                $('#my-popper').append('<a href="#" data-tipodia="' + tipoDia + '" data-fecha="' + jsonViajesFechaOrdenados[i].fecha + '" onmouseenter="mouseEnterInFecha($(this))" onmouseleave="mouseLeaveInFecha()" class="btn btn-success btn-sm fechaDiaHtml" >' +
+                                            '<div style="background-color: ' + jsonViajesFechaOrdenados[i].color + '; padding-bottom: 3px;"></div>' +
+                                            fechaFormateada + " " + "<span style='background-color: " + (tipoDia == 'domingo' ? '#dc3545' : '#004e86') + ";padding-left: 7px; padding-right: 7px; border-radius: 7px;' >" + nombreDia.abrevDia + "</span>" +
+                                            '&nbsp;&nbsp;<span data-fecha="' + jsonViajesFechaOrdenados[i].fecha + '" class="fas fa-times-circle fechadata" onclick="borrarLinea($(this))" style="font-size: 12px;" aria-hidden="true"></span>' +
+                                       '</a>');
+            }
+        //
+            $('#my-popper').append('<a href="#" style="padding: 3px;font-size: 12px;" onclick="confirmarFechas($(this).children())" class="btn btn-danger btn-sm" >' +
+                    '<span class="fas fa-chart-area"  style="font-size: 17px;" aria-hidden="true"></span>' +
+                '</a>');
+
+            $('#my-popper').append('<p style="color:black;display: inline-flex;">' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="' + "habil" + '" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasHabiles" value="male"><label style="margin-left: 4px;" for="chckDiasHabiles" >D.Hábiles</label>' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="' + "sabado" + '" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasSabados"  style="margin-left: 21px;" name="gender" value="female"><label style="margin-left: 4px;" for="chckDiasSabados" >Sábados</label>' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="' + "domingo" + '" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasDomingos" style="margin-left: 21px;" name="gender" value="other"><label style="margin-left: 4px;" for="chckDiasDomingos" >Domingos</label>' +
+                                    '</p>');
+            $('#my-popper').append('<div class="popper__arrow" x-arrow="" style="left: 65px;border-width: 5px 5px 0 5px; border-left-color: transparent; border-right-color: transparent; border-bottom-color: transparent; bottom: -5px; left: calc(50% - 5px); margin-top: 0; margin-bottom: 0;"></div>');
+        //
+
+            var paraderoIniSelect = $('#selectParaderoIni').val();
+            var paraderoFinSelect = $('#selectParaderoFin').val();
+            //
+            $.each(jsonViajesAgrupados, function () { //recorriendo los viajes
+                $.each(this.viajes, function () { //recorriendo el grupo de viaje
+
+                    var grupoViajes = this;
+                    var objViajeIniFin = {
+                        ini: null,
+                        fin: null,
+                        diferenciaMinutos: null,
+                        diferenciaMinutos: null,
+                        timestamphsalida: null,
+                        timestamphllegada: null,
+                    }
+                    $.each(grupoViajes, function () {//recorriendo los viajes para calcular el tiempo de viaje
+                        //console.log('<->', this.ID_PARADERO, paraderoIniSelect, paraderoFinSelect, '<->');
+                        //switch (this.ABREV_ESTACION) {
+                        switch (this.ID_PARADERO) {
+                            case paraderoIniSelect:
+                                objViajeIniFin.ini = this;
+                                break;
+                            case paraderoFinSelect:
+                                objViajeIniFin.fin = this;
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    //
+                    var fechaHoraInicioViaje = objViajeIniFin.ini;
+                    var fechaHoraFinViaje = objViajeIniFin.fin;
+                    var tmstampFechaHoraInicioViaje = null;
+                    var tmstampFechaHoraFinViaje = null;
+                    var diferenciaMinutos = 0;
+                    var diferenciaSegundos = 0;
+                    //para los programados
+                    var fechaHoraInicioViajeProg = null;
+                    var fechaHoraFinViajeProg = null;
+                    //
+                    var tmstampFechaHoraInicioViajePROG = null;
+                    var tmstampFechaHoraFinViajePROG = null;
+                    var diferenciaMinutosPROG = 0;
+                    var diferenciaSegundosPROG = 0;
+                    //
+                    var FECHA_HORA_REFERENCIAL = null; //HORA PASO DEL REGISTRO DEL POSTEO REF
+                    
+                    if ((fechaHoraInicioViaje && fechaHoraFinViaje) && (objViajeIniFin.ini.HORA_PASO && objViajeIniFin.fin.HORA_PASO)) {
+                        FECHA_HORA_REFERENCIAL = util.convertDatetoTimeStamp(objViajeIniFin.ini.FECHA + ' ' + '00:00:00'); //HORA PASO DEL REGISTRO DEL POSTEO REF
+                        fechaHoraInicioViaje = objViajeIniFin.ini.FECHA + ' ' + objViajeIniFin.ini.HORA_PASO;
+                        fechaHoraFinViaje = objViajeIniFin.fin.FECHA + ' ' + objViajeIniFin.fin.HORA_PASO;
+                        /********* para lo ejecutado *********/
+                        tmstampFechaHoraInicioViaje = util.convertDatetoTimeStamp(fechaHoraInicioViaje);
+                        tmstampFechaHoraFinViaje = util.convertDatetoTimeStamp(fechaHoraFinViaje);
+                        diferenciaMinutos = ((tmstampFechaHoraFinViaje - tmstampFechaHoraInicioViaje) / 1000 / 60);//diferencia en minutos
+                        diferenciaSegundos = (tmstampFechaHoraFinViaje - tmstampFechaHoraInicioViaje) / 1000; //diferencia en segundos
+                        //console.log(diferenciaMinutosPROG, objViajeIniFin.ini.FEC_HORAPASO_REG + ' ' + objViajeIniFin.ini.HPROGRAMADA, objViajeIniFin.fin.FEC_HORAPASO_REG + ' ' + objViajeIniFin.fin.HPROGRAMADA,
+                        //diferenciaMinutos, objViajeIniFin.ini.FEC_HORAPASO_REG + ' ' + objViajeIniFin.ini.HEJECUTADA, objViajeIniFin.fin.FEC_HORAPASO_REG + ' ' + objViajeIniFin.fin.HEJECUTADA);
+                    }
+                    this.viaje = objViajeIniFin;
+                    this.diferenciaMinutos = diferenciaMinutos;
+                    this.diferenciaSegundos = diferenciaSegundos;
+                    this.timestamphsalida = tmstampFechaHoraInicioViaje;
+                    this.timestamphllegada = tmstampFechaHoraFinViaje;
+                    this.timestamphsalidaprogramada = null;
+                    this.programado = null;
+
+                    objViajeIniFin.diferenciaMinutos = diferenciaMinutos;
+                    objViajeIniFin.diferenciaSegundos = diferenciaSegundos;
+                });
+            });
+            JSON_VIAJES_AGRUPADOS_X_FECHA = jsonViajesAgrupados;
+            if (ObjetosEnGrafico.textoLoading) {
+                ObjetosEnGrafico.textoLoading.remove();
+            }
+            dibujarGrafico(jsonViajesAgrupados);
+        });
+    }
+
+    function getDataModalidades() {
+        //getDataMuestraCORREDOR();
+        switch (codModalidadTransporte) {
+            case '1': //CORREDOR
+                getDataMuestraCORREDOR();
+                break;
+            case '2'://COSAC
+                getDataMuestra();
+                break;
+            default:
+                break;
+        }
+    }
+    //
+    function getDataMuestra() {
+        $('#my-popper').empty();
+        var fechasByData = [];
+        var fechaConsultaInicio = $('#rangoFechaConsulta').val().split('-')[0].trim();
+        var fechaConsultaFin = $('#rangoFechaConsulta').val().split('-')[1].trim();
+        $('#consultar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando');//boton load
+        limpiarGrafico();
+        ObjetosEnGrafico.textoLoading = contexto.text($('#contextoGrafico').width() / 2, $('#contextoGrafico').height() / 2, "Cargando ...").attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+            fill: 'white',
+            "font-size": 18,
+            "font-family": "Arial, Helvetica, sans-serif",
+        });
+        //
+        $.ajax({
+            url: URL_GET_DATA_MUESTRA_COSAC,
+            type: "post",
+            data: { idRutatipoServicio: $('#selectRutaTipoServicio').val(), fechaConsultaIni: fechaConsultaInicio, fechaConsultaFin: fechaConsultaFin },
+            dataType: "json"
+        }).done(function (respuesta) {
+            var jsonViajesFecha = [];
+            $('#consultar').prop('disabled', false).html('Consultar');//boton load
+            if (respuesta.length == 0) {
+                $('#btnVerDias').addClass('disabled').css('cursor', 'not-allowed');
+                $('#btnAgregarFranja').addClass('disabled');//regresa el boton a su normalidad
+                ObjetosEnGrafico.textoLoading.attr({ text: "No hay información para mostrar, consultar otra fecha." });
+                return;
+            }
+
+            $('#txtFranjas').html('Franjas para Ruta ' + $('#selectRuta option:selected').text() + ', sentido ' + $('#selectLado option:selected').text() +
+                ', Desde <strong>' + $('#selectParaderoIni option:selected').text() + '</strong> hasta <strong>' + $('#selectParaderoFin option:selected').text() + '</strong>');
+
+            $('#btnVerDias').removeClass('disabled').css('cursor', 'default');
+            var agrupadoPorFechas = _.groupBy(respuesta, function (d) { return d.FECHA })  //agrupado por fechas la data del comparativo A
+            $.each(agrupadoPorFechas, function (fecha, value) {
+                var item = {
+                    fecha: fecha,
+                    viajes: null
+                }
+                var agrupadoPorIdViaje = _.groupBy(value, function (d) { return d.ID_VIAJE })  //agrupado por fechas la data del comparativo A
+                item.viajes = agrupadoPorIdViaje;
+                jsonViajesFecha.push(item);
+            });
+
+            //filtrando solo los viajes con lo que se realizara el analisis segun la selección
+            //var sentidoSeleccionado = $('#selectLado option:selected').text();
+            var sentidoSeleccionado = $('#selectLado').find(':selected').attr('data-etiquetasentido');
+            var jsonViajesAgrupados = [];
+            var coloresGENERADOS = [];
+            //
+
+            $.each(jsonViajesFecha, function () { //recorriendo por fecha
+                var item = {
+                    fecha   : this.fecha,
+                    color   : getColorParaFecha(coloresGENERADOS),
+                    sentido : sentidoSeleccionado,
+                    viajes  : []
+                };
+                fechasByData.push({ fecha: this.fecha, timestampfecha: util.convertDatetoTimeStamp(this.fecha + ' 00:00:00'), color: item.color });
+
+                $.each(this.viajes, function (idViaje, data) { //recorriendo los bloques de viaje
+                    var sentido = data[0].SENTIDO;
+
+                    if (sentido == sentidoSeleccionado) {
+                        item.viajes.push(data);//solo guarda los viajes del sentido seleccionado
+                    }
+                });
+                jsonViajesAgrupados.push(item);
+            });
+            //agregando las fechas al contendor de fechas HTML
+            var jsonViajesFechaOrdenados = _.orderBy(fechasByData, ['timestampfecha'], ['asc']); //viajes ordenados de menor a mayor
+            //console.log('fechasByData-->', fechasByData);
+            ////
+            for (var i = 0; i < jsonViajesFechaOrdenados.length; i++) {
+                var fechaFormateada = jsonViajesFechaOrdenados[i].fecha.split('/')[0] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[1];
+                var fechaParaJavascript = jsonViajesFechaOrdenados[i].fecha.split('/')[1] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[0] + '/' + jsonViajesFechaOrdenados[i].fecha.split('/')[2];
+                var fechaConsulta = new Date(fechaParaJavascript);
+                //
+                var nroDia = fechaConsulta.getDay();
+                var nombreDia = diasSemana[nroDia];
+                var tipoDia = "";
+
+                switch (nombreDia.dia) {
+                    case 'Sábado':
+                        tipoDia = 'sabado';
+                        break;
+                    case 'Domingo':
+                        tipoDia = 'domingo';
+                        break;
+                    default:
+                        tipoDia = 'habil';
+                        break;
+                }
+                //
+                $('#my-popper').append('<a href="#" data-tipodia="' + tipoDia + '" data-fecha="' + jsonViajesFechaOrdenados[i].fecha + '" onmouseenter="mouseEnterInFecha($(this))" onmouseleave="mouseLeaveInFecha()" class="btn btn-success btn-sm fechaDiaHtml" >' +
+                                            '<div style="background-color: ' + jsonViajesFechaOrdenados[i].color + '; padding-bottom: 3px;"></div>' +
+                                            fechaFormateada + " " + "<span style='background-color: " + (tipoDia == 'domingo' ? '#dc3545' : '#004e86') + ";padding-left: 7px; padding-right: 7px; border-radius: 7px;' >" + nombreDia.abrevDia + "</span>" +
+                                            '&nbsp;&nbsp;<span data-fecha="' + jsonViajesFechaOrdenados[i].fecha + '" class="fas fa-times-circle fechadata" onclick="borrarLinea($(this))" style="font-size: 12px;" aria-hidden="true"></span>' +
+                                       '</a>');
+            }
+            //
+            $('#my-popper').append('<a href="#" style="padding: 3px;font-size: 12px;" onclick="confirmarFechas($(this).children())" class="btn btn-danger btn-sm" >' +
+                    '<span class="fas fa-chart-area"  style="font-size: 17px;" aria-hidden="true"></span>' +
+                '</a>');
+
+            $('#my-popper').append('<p style="color:black;display: inline-flex;">' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="'+ "habil" +'" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasHabiles" value="male"><label style="margin-left: 4px;" for="chckDiasHabiles" >D.Hábiles</label>' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="' + "sabado" + '" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasSabados"  style="margin-left: 21px;" name="gender" value="female"><label style="margin-left: 4px;" for="chckDiasSabados" >Sábados</label>' +
+                                        '<input type="checkbox" class="tipodia"  checked data-tipodia="' + "domingo" + '" onclick="filtrarPorTipoDia($(this));" name="salutation" id="chckDiasDomingos" style="margin-left: 21px;" name="gender" value="other"><label style="margin-left: 4px;" for="chckDiasDomingos" >Domingos</label>' +
+                                    '</p>');
+            $('#my-popper').append('<div class="popper__arrow" x-arrow="" style="left: 65px;border-width: 5px 5px 0 5px; border-left-color: transparent; border-right-color: transparent; border-bottom-color: transparent; bottom: -5px; left: calc(50% - 5px); margin-top: 0; margin-bottom: 0;"></div>');
+            //
+            var paraderoIniSelect = $('#selectParaderoIni').val();
+            var paraderoFinSelect = $('#selectParaderoFin').val();
+            //
+            $.each(jsonViajesAgrupados, function () { //recorriendo los viajes
+                $.each(this.viajes, function () { //recorriendo el grupo de viaje
+
+                    var grupoViajes = this;
+                    var objViajeIniFin = {
+                        ini: null,
+                        fin: null,
+                        diferenciaMinutos: null,
+                        diferenciaMinutos: null,
+                        timestamphsalida: null,
+                        timestamphllegada: null,
+                    }
+                    $.each(grupoViajes, function () {//recorriendo los viajes para calcular el tiempo de viaje
+
+                        switch (this.ABREV_ESTACION) {
+                            case paraderoIniSelect:
+                                objViajeIniFin.ini = this;
+                                break;
+                            case paraderoFinSelect:
+                                objViajeIniFin.fin = this;
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    //
+                    var fechaHoraInicioViaje = objViajeIniFin.ini;
+                    var fechaHoraFinViaje = objViajeIniFin.fin;
+                    var tmstampFechaHoraInicioViaje = null;
+                    var tmstampFechaHoraFinViaje = null;
+                    var diferenciaMinutos = 0;
+                    var diferenciaSegundos = 0;
+                    //para los programados
+                    var fechaHoraInicioViajeProg = null;
+                    var fechaHoraFinViajeProg = null;
+                    //
+                    var tmstampFechaHoraInicioViajePROG = null;
+                    var tmstampFechaHoraFinViajePROG = null;
+                    var diferenciaMinutosPROG = 0;
+                    var diferenciaSegundosPROG = 0;
+                    //
+                    var FECHA_HORA_REFERENCIAL = null; //HORA PASO DEL REGISTRO DEL POSTEO REF
+                    if (fechaHoraInicioViaje && fechaHoraFinViaje) {
+                        FECHA_HORA_REFERENCIAL = util.convertDatetoTimeStamp(objViajeIniFin.ini.FECHA + ' ' + '00:00:00'); //HORA PASO DEL REGISTRO DEL POSTEO REF
+                        fechaHoraInicioViaje = objViajeIniFin.ini.FEC_HORAPASO_REG + ' ' + objViajeIniFin.ini.HEJECUTADA;
+                        fechaHoraFinViaje = objViajeIniFin.fin.FEC_HORAPASO_REG + ' ' + objViajeIniFin.fin.HEJECUTADA;
+
+                        /********* para lo programado **********/
+                        tmstampFechaHoraInicioViajePROG = util.convertDatetoTimeStamp(objViajeIniFin.ini.FECHA + ' ' + objViajeIniFin.ini.HPROGRAMADA);
+                        tmstampFechaHoraFinViajePROG = util.convertDatetoTimeStamp(objViajeIniFin.fin.FECHA + ' ' + objViajeIniFin.fin.HPROGRAMADA);
+
+                        //para saber si la fecha programada pasa del dia siguiente
+                        var diferenciaInicioDiaMin = (((tmstampFechaHoraFinViajePROG - FECHA_HORA_REFERENCIAL) / 1000) / 60);
+                        diferenciaMinutosPROG = ((tmstampFechaHoraFinViajePROG - tmstampFechaHoraInicioViajePROG) / 1000 / 60);
+                        diferenciaSegundosPROG = ((tmstampFechaHoraFinViajePROG - tmstampFechaHoraInicioViajePROG) / 1000);
+
+                        if (diferenciaMinutosPROG < 0) { //si hay una inconsistencia  asume de que hay una data del dia siguiente
+                            tmstampFechaHoraFinViajePROG = tmstampFechaHoraFinViajePROG + 86400000;
+                            diferenciaMinutosPROG = ((tmstampFechaHoraFinViajePROG - tmstampFechaHoraInicioViajePROG) / 1000 / 60); //diferencia en minutos para lo prog
+                            diferenciaSegundosPROG = ((tmstampFechaHoraFinViajePROG - tmstampFechaHoraInicioViajePROG) / 1000); //diferencia en segundos para lo prog
+                        }
+
+                        /********* para lo ejecutado *********/
+                        tmstampFechaHoraInicioViaje = util.convertDatetoTimeStamp(fechaHoraInicioViaje);
+                        tmstampFechaHoraFinViaje = util.convertDatetoTimeStamp(fechaHoraFinViaje);
+                        diferenciaMinutos = ((tmstampFechaHoraFinViaje - tmstampFechaHoraInicioViaje) / 1000 / 60);//diferencia en minutos
+                        diferenciaSegundos = (tmstampFechaHoraFinViaje - tmstampFechaHoraInicioViaje) / 1000; //diferencia en segundos
+                        //diferenciaMinutos, objViajeIniFin.ini.FEC_HORAPASO_REG + ' ' + objViajeIniFin.ini.HEJECUTADA, objViajeIniFin.fin.FEC_HORAPASO_REG + ' ' + objViajeIniFin.fin.HEJECUTADA);
+                    }
+                    this.viaje = objViajeIniFin;
+                    this.diferenciaMinutos = diferenciaMinutos;
+                    this.diferenciaSegundos = diferenciaSegundos;
+                    this.timestamphsalida = tmstampFechaHoraInicioViaje;
+                    this.timestamphllegada = tmstampFechaHoraFinViaje;
+                    this.timestamphsalidaprogramada =
+                    this.programado = null;
+                    //this.programado = { //QUITAR COMENTARIO SI SE DESEA QUE LOS PUNTOS PROGRAMADOS APAREZCAN
+                    //    viaje: this.viaje,
+                    //    fecha: (objViajeIniFin.ini ? objViajeIniFin.ini.FEC_HORAPASO_REG : null),
+                    //    diferenciaMinutos: diferenciaMinutosPROG,
+                    //    diferenciaSegundos: diferenciaSegundosPROG,
+                    //    timestamphsalida: tmstampFechaHoraInicioViajePROG,
+                    //    timestamphllegada: tmstampFechaHoraFinViajePROG
+                    //}
+
+                    objViajeIniFin.diferenciaMinutos = diferenciaMinutos;
+                    objViajeIniFin.diferenciaSegundos = diferenciaSegundos;
+                });
+            });
+            //
+            JSON_VIAJES_AGRUPADOS_X_FECHA = jsonViajesAgrupados;
+            if (ObjetosEnGrafico.textoLoading) {
+                ObjetosEnGrafico.textoLoading.remove();
+            }
+            dibujarGrafico(jsonViajesAgrupados);
+        });
+    }
+
+    function getRecorridosTServByRutaServ(idRutaTipoServicio) {
+        $('#consultar').addClass('disabled');
+        //
+        $.ajax({
+            url: URL_GET_DATA_RECORRIDOTSERV,
+            type: "post",
+            data: { idRutatipoServicio: idRutaTipoServicio },
+            dataType: "json"
+        }).done(function (respuesta) {
+            $('#selectLado').empty();
+            if (respuesta.length == 0) {
+                $('#selectLado').append('<option value="0" >--No hay información--</option>');
+                return false;
+            }
+
+            $.each(respuesta, function () {
+                $('#selectLado').append('<option data-etiquetasentido="'+ this.SENTIDO +'" value="' + this.IDRECORRIDOTIPOSERVICIO + '" >' + this.LADO + '</option>');
+            });
+            getParadServByIdRecorridoServ($('#selectLado').val());
+        });
+    }
+
+    function getParadServByIdRecorridoServ(idRecorridoTipoServicio) {
+        $('#consultar').addClass('disabled');
+        $.ajax({
+            url: URL_GET_DATA_PARADEROTSERV,
+            type: "post",
+            data: { idRecorridoTipoServicio: idRecorridoTipoServicio },
+            dataType: "json"
+        }).done(function (respuesta) {
+            $('#selectParaderoIni').empty();
+            $('#selectParaderoFin').empty();
+            
+            $.each(respuesta, function (i) {
+                $('#selectParaderoIni').append('<option value="' + (codModalidadTransporte == '1' ? this.ID_PARADERO : this.ETIQUETA_NOMBRE) + '">' + (i+1) + '.- ' + this.NOMBRE + '</option>'); //modalidad:  1 CORREDOR | 2 COSAC
+                $('#selectParaderoFin').append('<option value="' + (codModalidadTransporte == '1' ? this.ID_PARADERO : this.ETIQUETA_NOMBRE) + '" ' + (i == respuesta.length - 1 ? ' selected ' : '') + '  >' + (i + 1) + '.- ' + this.NOMBRE + '</option>');//modalidad 1 CORREDOR 2 COSAC
+            });
+            //
+            $('#consultar').removeClass('disabled');
+            //getDataMuestra();
+        });
+    }
+
+    function getColorParaFecha(dataColores) { //obtiene un color irrepetitivo para asignarle a la fecha
+        var colorGenerado = '';
+        do {
+            colorGenerado = util.getRandomColor();
+        } while (dataColores.indexOf(colorGenerado) != -1);//no encuentra el color en el arreglo
+        return colorGenerado;
+    }
+
+    function dibujarGrafico(dataViajesAgrupadosPorFecha) {
+        $('#btnAgregarFranja').addClass('disabled');//regresa el boton a su normalidad
+        var MINUTOS_MAX = (codModalidadTransporte == '1' ? 180 : 50) ;//MINUTOS MAXIMO PARA LA LINEA VERTICAL //1 CORREDORES , 2 COSAC
+        var SEGUNDOS_MAX = 60 * MINUTOS_MAX;
+        dibujarRectaVertical(SEGUNDOS_MAX, dataViajesAgrupadosPorFecha); //dibuja la recta vertical del grafico
+
+        switch (codModalidadTransporte) { //modalidad:  1 CORREDOR | 2 COSAC
+            case '1': //corredor
+                dibujarRectaHorizontal_corredores(dataViajesAgrupadosPorFecha);
+                break;
+            case '2'://cosac
+                dibujarRectaHorizontal(dataViajesAgrupadosPorFecha); // dibuja la recta horizontal
+                break;
+            default:
+                break;
+        }
+    }
+
+    var EQUIV_PX_TO_SEGUNDO_HORIZ = 0;
+    var ARR_VIAJES_INICIALES_X_FECHA = [];
+    var PUNTOS_UNION_VERTICAL_HORIZONTAL = [];
+    //var JSON_VIAJES_AGRUPADOS_FECHA = [];
+    //
+    var DATA_VIAJES_PROGRAMADOS = [];
+    function dibujarRectaHorizontal_corredores(dataViajesPorFecha) {
+
+        //JSON_VIAJES_POR_FECHA = dataViajesPorFecha;
+        var FECHA_REF_PROG = '05/11/2019';
+        var timestampFechaReferencial = util.convertDatetoTimeStamp('05/11/2019 00:00:00');//referecial para el eje X
+        var SALTO_EJE_X_MIN = 60;
+        var SALTO_EJE_X_SEGUNDOS = SALTO_EJE_X_MIN * 60;
+
+        var puntoReferencial = {
+            x: PUNTOS_EN_POSICION_VERTICAL[0].pos_x,
+            y: PUNTOS_EN_POSICION_VERTICAL[0].pos_y,
+        }
+
+        var CANT_MINUTOS_MAX = 1620;//ESTO EQUIVALE A 1 DIA + 2 HORAS EN MINUTOS
+        var CANT_SEGUNDOS_MAX = CANT_MINUTOS_MAX * 60; //ESTO EQUIVALE EN SEGUNDOS
+        var widthContenedor = $('#contextoGrafico').width();
+        var lenRectaHorizontal = widthContenedor - puntoReferencial.x;
+        var equivalencia_px_min_horizontal = (lenRectaHorizontal / CANT_SEGUNDOS_MAX);
+        EQUIV_PX_TO_SEGUNDO_HORIZ = equivalencia_px_min_horizontal;
+        //test width horizontal
+
+        //DIBUJANDO las rectas Horizontales pequeñas
+        var cantidad_px_avance_x = puntoReferencial.x;
+        var dataRectasHorizontales = [];
+        while (cantidad_px_avance_x <= CANT_SEGUNDOS_MAX * equivalencia_px_min_horizontal) {
+            var textoFechaHoraHorizontal =  util.convertTimestampToDate(timestampFechaReferencial);
+            var textoMinutos = textoFechaHoraHorizontal.split(' ')[1].split(':')[0] + ':' +textoFechaHoraHorizontal.split(' ')[1].split(':')[1];
+            var itemRectaVerticalPequenia = contexto.path(["M", cantidad_px_avance_x, puntoReferencial.y, "L", cantidad_px_avance_x, puntoReferencial.y + 15]).attr({ //crea recta horizontal pequeña
+                'stroke-width': 2, // Width in pixels,
+                'stroke': 'white'
+            }).mousemove(function (event) {
+                mostrarLineaVerticalTemp(event);
+            }, function () {
+
+            });
+            //var itemPosicion = {
+            //    pos_x   : cantidad_px_avance_x,
+            //    pos_y   : puntoReferencial.y
+            //}
+            //dataRectasHorizontales.push(itemPosicion);
+
+            var itemTextoHoraSalida = contexto.text(cantidad_px_avance_x, puntoReferencial.y + 37, textoMinutos).attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+                fill: 'white',
+                "font-size": 12,
+                'cursor': 'pointer',
+                "font-family": "Arial, Helvetica, sans-serif",
+                "transform": "r-90"
+            });
+            //
+            cantidad_px_avance_x += equivalencia_px_min_horizontal * SALTO_EJE_X_SEGUNDOS;
+            timestampFechaReferencial += (SALTO_EJE_X_SEGUNDOS * 1000); //* 1000 para convertir a milisegundos
+            //
+            ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia.push(itemRectaVerticalPequenia);
+            ObjetosEnGrafico.rectaHorizontal.textoHoraSalidaPorSaltos.push(itemTextoHoraSalida);
+        }
+        //creando recta horizontal grande
+        var cantidadRectaVerticalPequenia = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia.length;
+        var posicionInicialRectaHorizontal = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[0].attrs.path[1];
+        var posicionFinalRectaHorizontal = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[cantidadRectaVerticalPequenia - 1].attrs.path[1];
+
+        ObjetosEnGrafico.rectaHorizontal.rectaHorizontalGrande = contexto.path(["M", posicionInicialRectaHorizontal[1], posicionInicialRectaHorizontal[2], "L", posicionFinalRectaHorizontal[1], posicionFinalRectaHorizontal[2]]).attr({ //crea recta pequeña
+            'stroke-width': 2, // Width in pixels,
+            'stroke': 'white'
+        });
+        //recorriendo la data de los viajes
+        var fechasConViajes = 0;
+        //
+        $.each(dataViajesPorFecha, function () {
+            var fecha = this.fecha;
+            var coloRecta = this.color;
+            var dataViajes = this.viajes;
+            if (dataViajes.length == 0) {
+                return false;
+            }
+            fechasConViajes++;
+            var viajesOrdenadosbySalida = _.orderBy(dataViajes, ['timestamphsalida'], ['asc']); //viajes ordenados de menor a mayor
+            //
+            var itemViajesIniciales = {
+                timestamphsalida: viajesOrdenadosbySalida[0].timestamphsalida,
+                viajeElemento : null
+            }
+            //
+            var timestampFechaHorainicioDia = util.convertDatetoTimeStamp(fecha + ' ' + '00:00:00');
+            var timeStampFechaHoraSalida = null;
+            var timeStampFechaHoraLlegada = null;
+            var diferenciaIniDiaIniSalidaMinut = null;
+            //
+            var pointTempParaUnion = null;
+            var strPathLineaViaje = '';
+            ////// PROGRAMADO
+            var timeStampFechaHoraSalidaPROG = null;
+            var fechaHoraSalidaPROG = null;
+            var diferenciaIniDiaIniSalidaMinutPROG = null;
+            var strPathLineaViajeProgramado = '';
+            //util.convertDatetoTimeStamp(fecha + ' ' + '00:00:00');
+            //
+            $.each(viajesOrdenadosbySalida, function (i) { //viajes en general
+                //PROGRAMADO
+                var tiempoViajeMinutosPROG = (this.programado ?  this.programado.diferenciaMinutos: null);
+                var tiempoViajeSegundosPROG = (this.programado ?  this.programado.diferenciaSegundos: null );
+                //
+                if (tiempoViajeMinutosPROG) {   //solo si la data de los programados EXISTEN
+                    if (tiempoViajeMinutosPROG > 0) {
+                        timeStampFechaHoraSalidaPROG = this.timestamphsalida;
+                        fechaHoraSalidaPROG = util.convertTimestampToDate(this.timestamphsalida);
+                        diferenciaIniDiaIniSalidaMinutPROG = ((timeStampFechaHoraSalidaPROG - timestampFechaHorainicioDia) / 1000); //segundos
+                        var pos_x_PROG = (puntoReferencial.x + (diferenciaIniDiaIniSalidaMinutPROG * equivalencia_px_min_horizontal)); //posicion x para pintar las salidas en el eje X
+                        var elementoEnEjeY = buscarElementoEnEjeVerticalxMin(tiempoViajeSegundosPROG);
+                        //para saber si es del dia siguiente
+                        var diferenciaIniDiaSalida = ((((timeStampFechaHoraSalidaPROG - util.convertDatetoTimeStamp(this.viaje.ini.FECHA + ' ' + '00:00:00')) / 1000) / 60) / 60);
+                        var isDiaSiguientePROG = (diferenciaIniDiaSalida > 24 ? true : false)
+                        var fechaHoraSalidaREFprog = util.convertDatetoTimeStamp(FECHA_REF_PROG + ' ' + fechaHoraSalidaPROG.split(' ')[1]);
+                        if (isDiaSiguientePROG) {
+                            fechaHoraSalidaREFprog = fechaHoraSalidaREFprog + 86400000;
+                        }
+                        //console.log(util.convertTimestampToDate(timeStampFechaHoraSalidaPROG));
+
+                        var posicionPointTiempoViajePROG = {
+                            timestampIdentificador: timeStampFechaHoraSalidaPROG,
+                            fechaHoraSalidaProgramada: fechaHoraSalidaPROG,
+                            fechaHoraSalidaREFprog: fechaHoraSalidaREFprog,
+                            x: pos_x_PROG,
+                            y: elementoEnEjeY.pos_y,
+                            isDiaSiguiente: isDiaSiguientePROG
+                            //hsalidaReferencialProg :
+                        }
+
+
+                        DATA_VIAJES_PROGRAMADOS.push(posicionPointTiempoViajePROG); //almacenando los tiempos de viajes programados
+                        var puntoProgramado = contexto.circle(posicionPointTiempoViajePROG.x, posicionPointTiempoViajePROG.y, 1).attr({
+                            "fill": "#fbbc05",
+                            "stroke": "#fbbc05"
+                            //"stroke-width": "10"
+                        });
+                        ObjetosEnGrafico.elementosProgramado.puntosProgramados.push(puntoProgramado);
+                    }
+                    /*##################################################################*/
+                }
+                //
+       
+                var tiempoViajeMinutos      = this.viaje.diferenciaMinutos;
+                var tiempoViajeSegundos     = this.viaje.diferenciaSegundos;
+                var fechaHoraSalida         = null;
+                if (tiempoViajeMinutos > 0) { //ARMANDO LA LINEA DE LOS VIAJES EJECUTADOS
+                    timeStampFechaHoraSalida = util.convertDatetoTimeStamp(this.viaje.ini.FECHA + ' ' + this.viaje.ini.HORA_PASO);
+                    timeStampFechaHoraLlegada = this.timestamphllegada;
+                    diferenciaIniDiaIniSalidaMinut = ((timeStampFechaHoraSalida - timestampFechaHorainicioDia) / 1000);//diferencia del inicio del dia con el viaje en SEGUNDOS
+                    fechaHoraSalida = this.viaje.ini.FECHA + ' ' + this.viaje.ini.HORA_PASO;
+                    var pos_x = (puntoReferencial.x + (diferenciaIniDiaIniSalidaMinut * equivalencia_px_min_horizontal)); //posicion x para pintar las salidas en el eje X
+                    var elementoEnEjeY = buscarElementoEnEjeVerticalxMin(tiempoViajeSegundos);
+                    
+                    if (elementoEnEjeY) { //si existe el elemento en la busqueda
+                        var posicionPointTiempoViaje = {
+                            x: pos_x,
+                            y: elementoEnEjeY.pos_y
+                        }
+
+                        var itemTiempoVsHoraData = {
+                            pos_x: posicionPointTiempoViaje.x,
+                            pos_y: posicionPointTiempoViaje.y,
+                            fecha: fecha,
+                            tiempoViajeMinutos: tiempoViajeMinutos,
+                            tiempoViajeSegundos: tiempoViajeSegundos,
+                            fechaHoraSalida: fechaHoraSalida.trim(),
+                            timestampfechaHoraSalida: timeStampFechaHoraSalida,
+                            timestampfechaHoraLlegada: timeStampFechaHoraLlegada
+                        }
+                        PUNTOS_UNION_VERTICAL_HORIZONTAL.push(itemTiempoVsHoraData);
+
+                        if (pointTempParaUnion && itemTiempoVsHoraData) {
+
+                            var pointParaUnion = {
+                                ini: {
+                                    x: pointTempParaUnion.pos_x,
+                                    y: pointTempParaUnion.pos_y
+                                },
+                                fin: {
+                                    x: itemTiempoVsHoraData.pos_x,
+                                    y: itemTiempoVsHoraData.pos_y,
+                                }
+                            }
+
+                            if (i == 1) { //si es el primer registro
+                                strPathLineaViaje += 'M ' + pointParaUnion.ini.x + ',' + pointParaUnion.ini.y + ' '; //desde el punto de la salida
+                            } else {//si son los demas registros
+                                strPathLineaViaje += 'L ' + pointParaUnion.fin.x + ',' + pointParaUnion.fin.y + ' '; //desde el punto de la salida
+                            }
+                        }
+                        pointTempParaUnion = itemTiempoVsHoraData;
+                    }
+                }
+            });
+            //
+            var itemLineaViaje = {
+                elemento: contexto.path(strPathLineaViaje).attr({ // crea la linea de la union de los puntos en una sola linea
+                    'stroke-width': 2, // Width in pixels,
+                    'stroke': coloRecta
+                }).mousemove(function (event) {
+                    //mostrarLineaVerticalTemp(event);
+                }, function () {
+
+                }),
+                fecha: fecha,
+                color: coloRecta
+            }
+
+            itemViajesIniciales.viajeElemento = itemLineaViaje.elemento;
+            ARR_VIAJES_INICIALES_X_FECHA.push(itemViajesIniciales);
+
+            //Agregando la linea Programada
+            //contexto.path(strPathLineaViaje).attr({ // crea la linea de la union de los puntos en una sola linea
+            //    'stroke-width': 2, // Width in pixels,
+            //    'stroke': 'white'
+            //})
+            ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje.push(itemLineaViaje);
+        });
+
+        if (fechasConViajes == 0) {
+            ObjetosEnGrafico.textoLoading = contexto.text($('#contextoGrafico').width() / 2, $('#contextoGrafico').height() / 2, "No hay información para mostrar").attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+                fill: 'white',
+                "font-size": 18,
+                "font-family": "Arial, Helvetica, sans-serif",
+            });
+        }
+        /******** pintando la linea programada*********** PENDIENTE WIll*/
+        //var viajesProgramadosIniOrdenadosTemp = _.orderBy(DATA_VIAJES_PROGRAMADOS, ['fechaHoraSalidaREFprog'], ['asc']); //viajes ordenados de menor a mayor
+        //$.each(viajesProgramadosIniOrdenadosTemp, function () {
+        //    console.log(util.convertTimestampToDate(this.fechaHoraSalidaREFprog));
+        //});
+    }
+    //
+    function dibujarRectaHorizontal(dataViajesPorFecha) {
+
+        //JSON_VIAJES_POR_FECHA = dataViajesPorFecha;
+        var FECHA_REF_PROG = '05/11/2019';
+        var timestampFechaReferencial = util.convertDatetoTimeStamp('05/11/2019 00:00:00');//referecial para el eje X
+        var SALTO_EJE_X_MIN = 60;
+        var SALTO_EJE_X_SEGUNDOS = SALTO_EJE_X_MIN * 60;
+
+        var puntoReferencial = {
+            x: PUNTOS_EN_POSICION_VERTICAL[0].pos_x,
+            y: PUNTOS_EN_POSICION_VERTICAL[0].pos_y,
+        }
+
+        var CANT_MINUTOS_MAX = 1620;//ESTO EQUIVALE A 1 DIA + 2 HORAS EN MINUTOS
+        var CANT_SEGUNDOS_MAX = CANT_MINUTOS_MAX * 60; //ESTO EQUIVALE EN SEGUNDOS
+        var widthContenedor = $('#contextoGrafico').width();
+        var lenRectaHorizontal = widthContenedor - puntoReferencial.x;
+        var equivalencia_px_min_horizontal = (lenRectaHorizontal / CANT_SEGUNDOS_MAX);
+        EQUIV_PX_TO_SEGUNDO_HORIZ = equivalencia_px_min_horizontal;
+        //test width horizontal
+
+        //DIBUJANDO las rectas Horizontales pequeñas
+        var cantidad_px_avance_x = puntoReferencial.x;
+        var dataRectasHorizontales = [];
+        while (cantidad_px_avance_x <= CANT_SEGUNDOS_MAX * equivalencia_px_min_horizontal) {
+            var textoFechaHoraHorizontal = util.convertTimestampToDate(timestampFechaReferencial);
+            var textoMinutos = textoFechaHoraHorizontal.split(' ')[1].split(':')[0] + ':' + textoFechaHoraHorizontal.split(' ')[1].split(':')[1];
+            var itemRectaVerticalPequenia = contexto.path(["M", cantidad_px_avance_x, puntoReferencial.y, "L", cantidad_px_avance_x, puntoReferencial.y + 15]).attr({ //crea recta horizontal pequeña
+                'stroke-width': 2, // Width in pixels,
+                'stroke': 'white'
+            }).mousemove(function (event) {
+                mostrarLineaVerticalTemp(event);
+            }, function () {
+
+            });
+            //var itemPosicion = {
+            //    pos_x   : cantidad_px_avance_x,
+            //    pos_y   : puntoReferencial.y
+            //}
+            //dataRectasHorizontales.push(itemPosicion);
+
+            var itemTextoHoraSalida = contexto.text(cantidad_px_avance_x, puntoReferencial.y + 37, textoMinutos).attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+                fill: 'white',
+                "font-size": 12,
+                'cursor': 'pointer',
+                "font-family": "Arial, Helvetica, sans-serif",
+                "transform": "r-90"
+            });
+            //
+            cantidad_px_avance_x += equivalencia_px_min_horizontal * SALTO_EJE_X_SEGUNDOS;
+            timestampFechaReferencial += (SALTO_EJE_X_SEGUNDOS * 1000); //* 1000 para convertir a milisegundos
+            //
+            ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia.push(itemRectaVerticalPequenia);
+            ObjetosEnGrafico.rectaHorizontal.textoHoraSalidaPorSaltos.push(itemTextoHoraSalida);
+        }
+        //creando recta horizontal grande
+        var cantidadRectaVerticalPequenia = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia.length;
+        var posicionInicialRectaHorizontal = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[0].attrs.path[1];
+        var posicionFinalRectaHorizontal = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[cantidadRectaVerticalPequenia - 1].attrs.path[1];
+        //
+        ObjetosEnGrafico.rectaHorizontal.rectaHorizontalGrande = contexto.path(["M", posicionInicialRectaHorizontal[1], posicionInicialRectaHorizontal[2], "L", posicionFinalRectaHorizontal[1], posicionFinalRectaHorizontal[2]]).attr({ //crea recta pequeña
+            'stroke-width': 2, // Width in pixels,
+            'stroke': 'white'
+        });
+        //recorriendo la data de los viajes
+        var fechasConViajes = 0;
+        $.each(dataViajesPorFecha, function () {
+            var fecha = this.fecha;
+            var coloRecta = this.color;
+            var dataViajes = this.viajes;
+            if (dataViajes.length == 0) {
+                return false;
+            }
+            fechasConViajes++;
+            var viajesOrdenadosbySalida = _.orderBy(dataViajes, ['timestamphsalida'], ['asc']); //viajes ordenados de menor a mayor
+            //
+            var itemViajesIniciales = {
+                timestamphsalida: viajesOrdenadosbySalida[0].timestamphsalida,
+                viajeElemento: null
+            }
+            //
+            var timestampFechaHorainicioDia = util.convertDatetoTimeStamp(fecha + ' ' + '00:00:00');
+            var timeStampFechaHoraSalida = null;
+            var timeStampFechaHoraLlegada = null;
+            var diferenciaIniDiaIniSalidaMinut = null;
+            //
+            var pointTempParaUnion = null;
+            var strPathLineaViaje = '';
+            ////// PROGRAMADO
+            var timeStampFechaHoraSalidaPROG = null;
+            var fechaHoraSalidaPROG = null;
+            var diferenciaIniDiaIniSalidaMinutPROG = null;
+            var strPathLineaViajeProgramado = '';
+            //util.convertDatetoTimeStamp(fecha + ' ' + '00:00:00');
+            //
+            $.each(viajesOrdenadosbySalida, function (i) { //viajes en general
+                //PROGRAMADO
+                var tiempoViajeMinutosPROG = (this.programado ? this.programado.diferenciaMinutos : null);
+                var tiempoViajeSegundosPROG = (this.programado ? this.programado.diferenciaSegundos : null);
+                //
+                if (tiempoViajeMinutosPROG) {   //solo si la data de los programados EXISTEN
+                    if (tiempoViajeMinutosPROG > 0) {
+                        timeStampFechaHoraSalidaPROG = this.timestamphsalida;
+                        fechaHoraSalidaPROG = util.convertTimestampToDate(this.timestamphsalida);
+                        diferenciaIniDiaIniSalidaMinutPROG = ((timeStampFechaHoraSalidaPROG - timestampFechaHorainicioDia) / 1000); //segundos
+                        var pos_x_PROG = (puntoReferencial.x + (diferenciaIniDiaIniSalidaMinutPROG * equivalencia_px_min_horizontal)); //posicion x para pintar las salidas en el eje X
+                        var elementoEnEjeY = buscarElementoEnEjeVerticalxMin(tiempoViajeSegundosPROG);
+
+                        //para saber si es del dia siguiente
+                        var diferenciaIniDiaSalida = ((((timeStampFechaHoraSalidaPROG - util.convertDatetoTimeStamp(this.viaje.ini.FECHA + ' ' + '00:00:00')) / 1000) / 60) / 60);
+                        var isDiaSiguientePROG = (diferenciaIniDiaSalida > 24 ? true : false)
+                        var fechaHoraSalidaREFprog = util.convertDatetoTimeStamp(FECHA_REF_PROG + ' ' + fechaHoraSalidaPROG.split(' ')[1]);
+                        if (isDiaSiguientePROG) {
+                            fechaHoraSalidaREFprog = fechaHoraSalidaREFprog + 86400000;
+                        }
+                        var posicionPointTiempoViajePROG = {
+                            timestampIdentificador: timeStampFechaHoraSalidaPROG,
+                            fechaHoraSalidaProgramada: fechaHoraSalidaPROG,
+                            fechaHoraSalidaREFprog: fechaHoraSalidaREFprog,
+                            x: pos_x_PROG,
+                            y: elementoEnEjeY.pos_y,
+                            isDiaSiguiente: isDiaSiguientePROG
+                            //hsalidaReferencialProg :
+                        }
+
+
+                        DATA_VIAJES_PROGRAMADOS.push(posicionPointTiempoViajePROG); //almacenando los tiempos de viajes programados
+                        var puntoProgramado = contexto.circle(posicionPointTiempoViajePROG.x, posicionPointTiempoViajePROG.y, 1).attr({
+                            "fill": "#fbbc05",
+                            "stroke": "#fbbc05"
+                            //"stroke-width": "10"
+                        });
+                        ObjetosEnGrafico.elementosProgramado.puntosProgramados.push(puntoProgramado);
+                    }
+                    /*##################################################################*/
+                }
+                //
+
+                var tiempoViajeMinutos = this.viaje.diferenciaMinutos;
+                var tiempoViajeSegundos = this.viaje.diferenciaSegundos;
+                var fechaHoraSalida = null;
+                if (tiempoViajeMinutos > 0) { //ARMANDO LA LINEA DE LOS VIAJES EJECUTADOS
+                    timeStampFechaHoraSalida = util.convertDatetoTimeStamp(this.viaje.ini.FEC_HORAPASO_REG + ' ' + this.viaje.ini.HEJECUTADA);
+                    timeStampFechaHoraLlegada = this.timestamphllegada;
+                    diferenciaIniDiaIniSalidaMinut = ((timeStampFechaHoraSalida - timestampFechaHorainicioDia) / 1000);//diferencia del inicio del dia con el viaje en SEGUNDOS
+                    fechaHoraSalida = this.viaje.ini.FEC_HORAPASO_REG + ' ' + this.viaje.ini.HEJECUTADA;
+                    var pos_x = (puntoReferencial.x + (diferenciaIniDiaIniSalidaMinut * equivalencia_px_min_horizontal)); //posicion x para pintar las salidas en el eje X
+                    var elementoEnEjeY = buscarElementoEnEjeVerticalxMin(tiempoViajeSegundos);
+                    if (elementoEnEjeY) { //si existe el elemento en la busqueda
+                        var posicionPointTiempoViaje = {
+                            x: pos_x,
+                            y: elementoEnEjeY.pos_y
+                        }
+
+                        var itemTiempoVsHoraData = {
+                            pos_x: posicionPointTiempoViaje.x,
+                            pos_y: posicionPointTiempoViaje.y,
+                            fecha: fecha,
+                            tiempoViajeMinutos: tiempoViajeMinutos,
+                            tiempoViajeSegundos: tiempoViajeSegundos,
+                            fechaHoraSalida: fechaHoraSalida.trim(),
+                            timestampfechaHoraSalida: timeStampFechaHoraSalida,
+                            timestampfechaHoraLlegada: timeStampFechaHoraLlegada
+                        }
+                        PUNTOS_UNION_VERTICAL_HORIZONTAL.push(itemTiempoVsHoraData);
+
+                        if (pointTempParaUnion && itemTiempoVsHoraData) {
+
+                            var pointParaUnion = {
+                                ini: {
+                                    x: pointTempParaUnion.pos_x,
+                                    y: pointTempParaUnion.pos_y
+                                },
+                                fin: {
+                                    x: itemTiempoVsHoraData.pos_x,
+                                    y: itemTiempoVsHoraData.pos_y,
+                                }
+                            }
+
+                            if (i == 1) { //si es el primer registro
+                                strPathLineaViaje += 'M ' + pointParaUnion.ini.x + ',' + pointParaUnion.ini.y + ' '; //desde el punto de la salida
+                            } else {//si son los demas registros
+                                strPathLineaViaje += 'L ' + pointParaUnion.fin.x + ',' + pointParaUnion.fin.y + ' '; //desde el punto de la salida
+                            }
+                        }
+                        pointTempParaUnion = itemTiempoVsHoraData;
+                    }
+                }
+            });
+            //
+            var itemLineaViaje = {
+                elemento: contexto.path(strPathLineaViaje).attr({ // crea la linea de la union de los puntos en una sola linea
+                    'stroke-width': 2, // Width in pixels,
+                    'stroke': coloRecta
+                }).mousemove(function (event) {
+                    //mostrarLineaVerticalTemp(event);
+                }, function () {
+
+                }),
+                fecha: fecha,
+                color: coloRecta
+            }
+            //
+            itemViajesIniciales.viajeElemento = itemLineaViaje.elemento;
+            ARR_VIAJES_INICIALES_X_FECHA.push(itemViajesIniciales);
+
+            //Agregando la linea Programada
+            //contexto.path(strPathLineaViaje).attr({ // crea la linea de la union de los puntos en una sola linea
+            //    'stroke-width': 2, // Width in pixels,
+            //    'stroke': 'white'
+            //})
+            ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje.push(itemLineaViaje);
+        });
+
+        if (fechasConViajes == 0) {
+            ObjetosEnGrafico.textoLoading = contexto.text($('#contextoGrafico').width() / 2, $('#contextoGrafico').height() / 2, "No hay información para mostrar").attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+                fill: 'white',
+                "font-size": 18,
+                "font-family": "Arial, Helvetica, sans-serif",
+            });
+        }
+        /******** pintando la linea programada*********** PENDIENTE WIll*/
+        //var viajesProgramadosIniOrdenadosTemp = _.orderBy(DATA_VIAJES_PROGRAMADOS, ['fechaHoraSalidaREFprog'], ['asc']); //viajes ordenados de menor a mayor
+        //$.each(viajesProgramadosIniOrdenadosTemp, function () {
+        //    console.log(util.convertTimestampToDate(this.fechaHoraSalidaREFprog));
+        //});
+    }
+    //
+    function buscarElementoEnEjeVerticalxMin(minutoBusqueda) {
+        var rpta = null;
+        $.each(PUNTOS_EN_POSICION_VERTICAL, function () {
+            if (this.minuto == minutoBusqueda) {
+                rpta = this;
+            }
+        });
+        return rpta;
+    }
+
+    Raphael.el.is_visible = function () {
+        return (this.node.style.display !== "none");
+    }
+
+    function confirmarFechas(elemento) {
+        var lineasEnGrafico = ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje;
+        /*************** verificando si hay lineas ocultas ***************/
+        //eliminando elementos
+        $.each($('#my-popper a'), function () {
+            var fechaViaje = $(this).attr('data-fecha');
+            var botonElimina = $(this).find('.fechadata');
+            if(FECHA_ELEMENTOS_OCULTOS.indexOf(fechaViaje) != -1){
+                botonElimina.click();
+            }
+        });
+        //var colorSolido = 'red';
+        $.each(lineasEnGrafico, function () { //eliminando la lineas del grafico para agrupar en uno solo
+            this.elemento.remove();
+            //this.elemento.attr({
+            //    'stroke': colorSolido
+            //});
+        });
+        /***************************************** ordenando la data de las linas en graficos por fechasalida **************************************/
+        var dataPuntosOrdenadoBySalida = _.orderBy(PUNTOS_UNION_VERTICAL_HORIZONTAL, ['timestampfechaHoraSalida'], ['asc']); //viajes ordenados de menor a mayor
+        //EQUIV_PX_TO_SEGUNDO_HORIZ
+        var timeStampFechaHoraSalida = null;
+        var timeStampFechaHoraLlegada = null;
+        var pointTempParaUnion = null;
+        var strPathLineaViaje = '';
+        var FECHA_REFERENCIAL = '05/11/2019';
+        //
+        var ARR_VIAJES_ORDENADOS = [];//almacena los viajes con la fecha referencial para hacer 1 sola linea
+        $.each(dataPuntosOrdenadoBySalida, function (i) {
+            var timestampFechaHorainicioDia = util.convertDatetoTimeStamp(this.fecha + ' ' + '00:00:00');
+            var diferenciaInicioDiaHSalidaSeg = ((this.timestampfechaHoraSalida - timestampFechaHorainicioDia) / 1000); //diferencia en SEGUNDOS para la hora de salida
+            var diferenciaEnHorasHSalida = ((diferenciaInicioDiaHSalidaSeg / 60) / 60);//diferencia en HORAS para la hora de salida
+            //
+            if (this.tiempoViajeMinutos > 0) {
+                var isDiaSiguiente = (diferenciaEnHorasHSalida > 24 ? true : false);//VERIFICA SI ES DIA SIGUIENTE--- AQUI ES DONDE ESTA PENDIENTE
+                var item = {
+                    fecha: this.fecha,
+                    tiempoViajeMinutos: this.tiempoViajeMinutos,
+                    tiempoViajeSegundos: this.tiempoViajeSegundos,
+                    fechaHoraSalida: this.fechaHoraSalida.trim(),
+                    timestampfechaHoraSalida: this.timestampfechaHoraSalida,
+                    timestampfechaHoraLlegada: timeStampFechaHoraLlegada,
+                    isDiaSiguiente: isDiaSiguiente,//si pasa las 24 horas es el dia diguiente = true
+                    timestampFechaHoraSalidaTEMP: util.convertDatetoTimeStamp(FECHA_REFERENCIAL + ' ' + this.fechaHoraSalida.split(' ')[1])
+                }
+
+                if (item.isDiaSiguiente) {
+                    item.timestampFechaHoraSalidaTEMP = item.timestampFechaHoraSalidaTEMP + 86400000; // LE AGREGA UN DÍA A LA FECHA TEMPORAL SI DETECTA QUE LA SALIDA EL DEL DIA SIGUIENTE
+                }
+                ARR_VIAJES_ORDENADOS.push(item);
+            }
+        });
+        /*#############################################   ordenando por fechahorasalida temp   #############################################*/
+        var puntoReferencial = { //en inicio de horizontal
+            x: PUNTOS_EN_POSICION_VERTICAL[0].pos_x,
+            y: PUNTOS_EN_POSICION_VERTICAL[0].pos_y,
+        }
+        var fechaHoraReferencialIniDiaTEMP = util.convertDatetoTimeStamp(FECHA_REFERENCIAL + ' 00:00:00');
+        var viajesOrdenadosReferencial = _.orderBy(ARR_VIAJES_ORDENADOS, ['timestampFechaHoraSalidaTEMP'], ['asc']); //viajes ordenados de menor a mayor
+        var timeStampFechaHoraSalida = null;
+        var timeStampFechaHoraLlegada = null;
+        var diferenciaIniDiaIniSalidaMinut = null;
+        var pointTempParaUnion = null;
+        var strPathLineaViaje = '';
+        //
+        var viajeInicial = null;
+
+        $.each(viajesOrdenadosReferencial, function (i) {
+
+            var tiempoViajeMinutos = this.tiempoViajeMinutos;
+            var tiempoViajeSegundos = this.tiempoViajeSegundos;
+            //
+            var diferenciaInicioDiaHSalidaSeg = ((this.timestampFechaHoraSalidaTEMP - fechaHoraReferencialIniDiaTEMP) / 1000); //diferencia en SEGUNDOS para la hora de salida
+            var diferenciaEnHorasHSalida = ((diferenciaInicioDiaHSalidaSeg / 60) / 60);//diferencia en HORAS para la hora de salida
+            if (tiempoViajeMinutos > 0) {
+                diferenciaIniDiaIniSalidaMinut = ((this.timestampFechaHoraSalidaTEMP - fechaHoraReferencialIniDiaTEMP) / 1000);//diferencia del inicio del dia con el viaje en SEGUNDOS
+                var posicion_x = (puntoReferencial.x + (diferenciaIniDiaIniSalidaMinut * EQUIV_PX_TO_SEGUNDO_HORIZ)); //posicion x para pintar las salidas en el eje X
+                var elementoEnEjeY = buscarElementoEnEjeVerticalxMin(tiempoViajeSegundos);
+
+                var itemTiempoVsHoraData = {
+                    pos_x: posicion_x,
+                    pos_y: elementoEnEjeY.pos_y,
+                    //fecha: this.fecha,
+                    //tiempoViajeMinutos: tiempoViajeMinutos,
+                    //tiempoViajeSegundos: tiempoViajeSegundos,
+                    //fechaHoraSalida: this.fechaHoraSalida.trim(),
+                    //timestampfechaHoraSalida: timeStampFechaHoraSalida,
+                    //timestampfechaHoraLlegada: timeStampFechaHoraLlegada,
+                    //isDiaSiguiente: isDiaSiguiente,//si pasa las 24 horas es el dia diguiente = true
+                    //timestampFechaHoraSalidaTEMP: util.convertDatetoTimeStamp(FECHA_REFERENCIAL + ' ' + this.fechaHoraSalida.split(' ')[1])
+                }
+
+                if (i == 0) {//primer recorrido
+                    strPathLineaViaje += 'M ' + itemTiempoVsHoraData.pos_x + ',' + itemTiempoVsHoraData.pos_y + ' '; //se captura el primer punto de la salida
+                    viajeInicial = this;
+                }
+
+                if (pointTempParaUnion && itemTiempoVsHoraData) {
+                    var pointParaUnion = {
+                        ini: {
+                            x: pointTempParaUnion.pos_x,
+                            y: pointTempParaUnion.pos_y
+                        },
+                        fin: {
+                            x: itemTiempoVsHoraData.pos_x,
+                            y: itemTiempoVsHoraData.pos_y,
+                        }
+                    }
+                    strPathLineaViaje += 'L ' + pointParaUnion.fin.x + ',' + pointParaUnion.fin.y + ' '; //concatena los siguientes puntos
+                }
+                pointTempParaUnion = itemTiempoVsHoraData;
+            }
+        });
+
+        /*creando el unico path*/
+        var COLOR_LINEA_UNICA = 'red';
+        var lineaUnica = contexto.path(strPathLineaViaje).attr({ // crea la linea de la union de los puntos en una sola linea
+            'stroke-width': 1, // Width in pixels,
+            'stroke': COLOR_LINEA_UNICA
+        });
+        lineaUnica.timestamphsalida = viajeInicial.timestampfechaHoraSalida;
+        ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaUnificada = lineaUnica;
+        /********************************************************************************/
+        elemento.parent().addClass('disabled');
+        $.each($('.fechaDiaHtml'), function () {
+            if ($(this).hasClass('disabled')) {
+                $(this).css({
+                    'background-color': 'red',
+                    'color': 'white',
+                    'border': '1px solid gray'
+                })
+            } else {
+                $(this).addClass('disabled');
+            }
+        });
+        $('#btnAgregarFranja').removeClass('disabled');
+    }
+
+    var PUNTOS_EN_POSICION_VERTICAL = [];
+    function dibujarRectaVertical(cantidadSegundosMAX) {
+        var lenVertical = $('#contextoGrafico').height();
+        var nroSaltoSeleccionado = Number($('#selectHoraSalto').val()) * 60; //EN SEGUNDOS
+        var padding = {
+            TOP_PERCENT: 5,
+            BOTTOM_PERCENT: 12,
+            LEFT_PX: 40
+        };
+        //
+        var tamanioRectaVertical = lenVertical - (lenVertical * (padding.BOTTOM_PERCENT / 100)) - lenVertical * (padding.TOP_PERCENT / 100);
+        var posicionRectaVertical = {
+            puntoinicio: {
+                x: padding.LEFT_PX,
+                y: lenVertical * (padding.TOP_PERCENT / 100)
+            },
+            puntofin: {
+                x: padding.LEFT_PX,
+                y: (lenVertical - (lenVertical * (padding.BOTTOM_PERCENT / 100)))
+            }
+        };
+
+        var equivalenciaMinEnPX = (tamanioRectaVertical / cantidadSegundosMAX);
+        var cantidadPuntosEnGrafico = (tamanioRectaVertical / equivalenciaMinEnPX);
+        var posicionXpuntoTemporal = posicionRectaVertical.puntofin.y;
+        var cantidadPuntosCreados = 0;
+        //RECTA HORIZONTAL TEMP
+        var rectaTemporal = null;
+
+        for (var i = 0; i <= cantidadPuntosEnGrafico; i++) { //dibujando los elementos de la linea vertical
+            var numberRandom = 1 + Math.floor(Math.random() * 10);
+            var itemPuntoData = {
+                minuto  : i,
+                pos_x   : posicionRectaVertical.puntofin.x,
+                pos_y   : posicionXpuntoTemporal
+            }
+            PUNTOS_EN_POSICION_VERTICAL.push(itemPuntoData);
+            if (i % nroSaltoSeleccionado == 0) {
+                var itemRectaPequenia = null;
+                itemRectaPequenia = contexto.path(["M", posicionRectaVertical.puntofin.x, posicionXpuntoTemporal, "L", posicionRectaVertical.puntofin.x - 10, posicionXpuntoTemporal]).attr({ //crea recta pequeña
+                    'stroke-width': 2, // Width in pixels,
+                    'stroke': 'white'
+                });
+                //
+                var itemTextoMinutos =  contexto.text(posicionRectaVertical.puntofin.x - 20, posicionXpuntoTemporal, (i/60) ).attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+                    fill: 'white',
+                    "font-size": 13,
+                    'cursor': 'pointer',
+                    "font-family": "Arial, Helvetica, sans-serif",
+                    //"transform": "r-90"
+                });
+                //
+                ObjetosEnGrafico.rectaVertical.rectaPequenia.push(itemRectaPequenia);
+                ObjetosEnGrafico.rectaVertical.textoMinutos.push(itemTextoMinutos);
+                //cantidadPuntosCreados = 0;
+            }
+            //
+            //dibujando recta vertical grande
+            posicionXpuntoTemporal -= equivalenciaMinEnPX;//aumenta la cantidad de px que equivale a un minuto
+        }
+        var posicionInicialRecta = PUNTOS_EN_POSICION_VERTICAL[0];
+        var posicionFinalRecta = PUNTOS_EN_POSICION_VERTICAL[PUNTOS_EN_POSICION_VERTICAL.length - 1];
+        //
+        ObjetosEnGrafico.rectaVertical.rectaGrande = contexto.path(["M", posicionInicialRecta.pos_x, posicionInicialRecta.pos_y, "L", posicionFinalRecta.pos_x , posicionFinalRecta.pos_y]).attr({ //crea recta pequeña
+            'stroke-width': 2, // Width in pixels,
+            'stroke': 'white'
+        });
+    }
+
+    function limpiarGrafico() {
+
+        if (ObjetosEnGrafico.textoLoading) { //eliminando el elemento del texto loading
+            ObjetosEnGrafico.textoLoading.remove();
+        }
+        if (ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaUnificada) { //eliminando el elemento del texto loading
+            ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaUnificada.remove();
+        }
+
+        ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaUnificada = null;
+        ObjetosEnGrafico.textoLoading = null; //seteando null
+
+        $.each(ObjetosEnGrafico.rectaVertical.rectaPequenia, function () { //eliminando las rectas pequenias en la recta vertical central
+            this.remove();
+        });
+
+        $.each(ObjetosEnGrafico.rectaVertical.textoMinutos, function () { //eliminando el texto de la recta vertical
+            this.remove();
+        });
+
+
+        if (ObjetosEnGrafico.rectaVertical.rectaGrande) {// recta vertical grande
+            ObjetosEnGrafico.rectaVertical.rectaGrande.remove();
+        }
+
+        if (ObjetosEnGrafico.rectaHorizontal.rectaHorizontalGrande) {// recta horizontal grande
+            ObjetosEnGrafico.rectaHorizontal.rectaHorizontalGrande.remove();
+        }
+
+
+
+        ObjetosEnGrafico.rectaVertical =
+            {
+                puntosMinutosVertical: [],
+                textoMinutos : [],
+                rectaPequenia: [],
+                rectaGrande : null
+            }
+        //limpiando recta horizontal
+        if (ObjetosEnGrafico.rectaHorizontal.lineaRectaGrande) {
+            ObjetosEnGrafico.rectaHorizontal.lineaRectaGrande.remove();
+        }
+
+        //
+        $.each(ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia, function () { //eliminando el texto de la recta vertical
+            this.remove();
+        });
+        $.each(ObjetosEnGrafico.rectaHorizontal.textoHoraSalidaPorSaltos, function () { //eliminando el texto de la recta vertical
+            this.remove();
+        });
+
+        $.each(ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje, function () { //eliminando el texto de la recta vertical
+            this.elemento.remove();
+        });
+
+        $.each(ObjetosEnGrafico.elementosProgramado.puntosProgramados, function () {
+            this.remove();
+        });
+
+
+        ObjetosEnGrafico.rectaHorizontal =
+        {
+            lineaRectaGrande: null,
+            rectaVerticalPequenia: [],
+            textoHoraSalidaPorSaltos: []
+        }
+
+        ObjetosEnGrafico.elementosUnionHoraVsTiempo =
+        {
+            lineaViaje: []
+        };
+
+        ObjetosEnGrafico.elementosProgramado =
+        {
+            puntosProgramados: []
+        }
+
+
+        ARR_VIAJES_INICIALES_X_FECHA = []; //limpia los viajes iniciales en data
+        JSON_VIAJES_AGRUPADOS_X_FECHA = []
+
+        OPCIONES_ACTIVAS = {
+            AGREGAR_FRANJA: false//seteando a false la opcion para agregar franjas
+        }
+
+        $.each(ARR_FRANJAS_SELECCIONADAS, function () {//borrando las franjas creadas en el contexto
+            this.elementos.linea.remove();
+            this.elementos.texto.remove();
+        });
+        ARR_FRANJAS_SELECCIONADAS = []; //limpiando la variable
+        EQUIV_PX_TO_SEGUNDO_HORIZ = 0;
+        ARR_VIAJES_INICIALES_X_FECHA = [];
+        PUNTOS_UNION_VERTICAL_HORIZONTAL = [];
+        PUNTOS_EN_POSICION_VERTICAL = [];
+        ELEMENTO_SELECCIONADO = null;
+        OPCIONES_ACTIVAS = {
+            AGREGAR_FRANJA: false
+        }
+        RECTA_TEMP_VERTICAL = null;
+        TEXTO_TEMP_VERTICAL = null;
+        ARR_FRANJAS_SELECCIONADAS = [];
+        heightContexto = null;
+        widthContexto = null;
+    }
+
+    var ELEMENTO_SELECCIONADO = null;
+    function mouseEnterInFecha(elemento) {
+        var fecha = elemento.attr('data-fecha');
+        var lineasEnGrafico = ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje;
+        //
+        $.each(lineasEnGrafico,function(){
+            if (this.fecha == fecha) {
+                ELEMENTO_SELECCIONADO = this;
+            }
+        });
+        ELEMENTO_SELECCIONADO.elemento.toFront();//anviar adelante
+
+        if (ELEMENTO_SELECCIONADO.elemento) {
+            ELEMENTO_SELECCIONADO.elemento.attr({ //crea recta horizontal grande
+                //'fill' : 'red',
+                'stroke-dasharray': '-',
+                'stroke-width': 5, // Width in pixels,
+                'stroke': 'white'
+            });
+        }
+    }
+
+    function mouseLeaveInFecha() {
+        if (ELEMENTO_SELECCIONADO.elemento) {
+            //ObjetosEnGrafico.contenedor.parentNode.appendChild(ELEMENTO_SELECCIONADO.elemento); // move to top
+            //ELEMENTO_SELECCIONADO.elemento.toBack(); //enviar atras
+
+            ELEMENTO_SELECCIONADO.elemento.attr({ //crea recta horizontal grande
+                'stroke-dasharray': '',
+                'stroke-width': 2, // Width in pixels,
+                'stroke': ELEMENTO_SELECCIONADO.color
+            });
+        }
+    }
+
+    function borrarLinea(elemento) { //aqui se va ha sombrear la recta que selecciono con el hover
+        var fecha = elemento.attr('data-fecha');
+        var lineasEnGrafico = ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaViaje;
+
+        $.each(PUNTOS_UNION_VERTICAL_HORIZONTAL, function (posicion) { //puntos de las rectas en data
+            if (fecha == this.fecha) {
+                //PUNTOS_UNION_VERTICAL_HORIZONTAL.splice(posicion, 1);
+                PUNTOS_UNION_VERTICAL_HORIZONTAL[posicion] = null;
+            }
+        });
+        //
+        $.each(ARR_VIAJES_INICIALES_X_FECHA, function (posicion) { //recorriendo los viajes iniciales guardados
+            var elementoLineaFecha = null;
+            if (this.viajeElemento) {
+                elementoLineaFecha = this.viajeElemento[0];
+                if (!elementoLineaFecha) { //si no existe la linea en el gráfico
+                    ARR_VIAJES_INICIALES_X_FECHA[posicion] = null;
+                }
+            }
+        });
+        //
+        elemento.parent().css({ 'cursor': 'not-allowed' }).addClass('disabled');
+        elemento.remove();
+        $.each(lineasEnGrafico, function () { //eliminando el path de la fecha indicada
+            if (this.fecha == fecha) {
+                this.elemento.remove();
+            }
+        });
+    }
+
+    var OPCIONES_ACTIVAS = {
+        AGREGAR_FRANJA : false
+    }
+    function agregarFranjaEnGrafico(elemento) { //muestra la franja en el mouse y agrega la primera franja en caso no haya ninguna franja
+        /***************** activa la franja en el mouse para que pueda agregar cuando quiera *****************/
+        OPCIONES_ACTIVAS.AGREGAR_FRANJA = true;
+        elemento.addClass('disabled');
+        //
+
+        if (ARR_FRANJAS_SELECCIONADAS.length > 0) {
+            return;
+        }
+        //
+        //##################################### PINTANDO LA PRIMERA FRANJA EN BASE AL MENOR #######################################################################################
+        var viajesInicialesOrdenadosTemp = _.orderBy(ARR_VIAJES_INICIALES_X_FECHA, ['timestamphsalida'], ['asc']); //viajes ordenados de menor a mayor
+        var viajesInicialesOrdenados = [];
+        //
+        $.each(viajesInicialesOrdenadosTemp, function () {
+            var elementoIncontext = null;
+            if (this.viajeElemento) {
+                elementoIncontext = this.viajeElemento[0];
+                if (elementoIncontext != null) {
+                    viajesInicialesOrdenados.push(this);
+                }
+            }
+        });
+        //
+        var cantidadRectaPequenias_vertical = ObjetosEnGrafico.rectaVertical.rectaPequenia.length;
+        var pos_y_referencial = {
+            inicial: ObjetosEnGrafico.rectaVertical.rectaPequenia[0].attrs.path[0][2],
+            final: ObjetosEnGrafico.rectaVertical.rectaPequenia[cantidadRectaPequenias_vertical - 1].attrs.path[0][2],
+        }; //obtiene el Y de la primera linea de la recta vertical
+        //
+        var viajeInicialDeLineaUnica = ObjetosEnGrafico.elementosUnionHoraVsTiempo.lineaUnificada;
+        var pos_x_referencial_viaje = viajeInicialDeLineaUnica.attrs.path[0][1];
+        var fechaREFERENCIAL = '05/11/2019';
+        var fechaFormatoFranjaInicial = util.convertTimestampToDate(viajeInicialDeLineaUnica.timestamphsalida);
+        fechaFormatoFranjaInicial = fechaREFERENCIAL + ' ' + fechaFormatoFranjaInicial.split(' ')[1];
+        var tiemStampFranjaInicial = util.convertDatetoTimeStamp(fechaFormatoFranjaInicial);
+        var nuevaFranja = crearFranjaEnGrafico({ ini_x: pos_x_referencial_viaje, ini_y: pos_y_referencial.final, fin_x: pos_x_referencial_viaje, fin_y: pos_y_referencial.inicial },
+            { pos_x: pos_x_referencial_viaje + 10, pos_y: pos_y_referencial.final + 30 }, fechaFormatoFranjaInicial.split(' ')[1], tiemStampFranjaInicial); //aqui agrega la primera franja
+
+        var itemFranjaElement = {
+            identificadorTimeStamp: tiemStampFranjaInicial,
+            elementos: {
+                linea: nuevaFranja.linea,
+                texto: nuevaFranja.texto,
+            }
+        }
+        ARR_FRANJAS_SELECCIONADAS.push(itemFranjaElement); //aqui almacena las franjas que se van creando
+    }
+
+    var RECTA_TEMP_VERTICAL = null;
+    var TEXTO_TEMP_VERTICAL = null;
+    //var temp_rect = null;
+    var ARR_FRANJAS_SELECCIONADAS = [];
+    function mostrarLineaVerticalTemp(eventoCursor) {
+        if (RECTA_TEMP_VERTICAL) {
+            RECTA_TEMP_VERTICAL.remove();
+            RECTA_TEMP_VERTICAL = null;
+        }
+
+        if (TEXTO_TEMP_VERTICAL) {
+            TEXTO_TEMP_VERTICAL.remove();
+            TEXTO_TEMP_VERTICAL = null;
+        }
+
+        if (!OPCIONES_ACTIVAS.AGREGAR_FRANJA) {
+            return;
+        }
+
+        /*#### PARA CALCULAR los segundos donde me estoy moviendo para el texto */
+        var cantidadRectaPequenias_vertical = ObjetosEnGrafico.rectaVertical.rectaPequenia.length;
+        var pos_y_referencial = {
+            inicial: ObjetosEnGrafico.rectaVertical.rectaPequenia[0].attrs.path[0][2],
+            final: ObjetosEnGrafico.rectaVertical.rectaPequenia[cantidadRectaPequenias_vertical - 1].attrs.path[0][2],
+        }; //obtiene el Y de la primera linea de la recta vertical
+
+        var timestampFechaReferencial = util.convertDatetoTimeStamp('05/11/2019 00:00:00');//referecial para el eje X
+        var punto_x_referencial_ini = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[0].attrs.path[0][1];
+        var distanciaEnPx = eventoCursor.layerX - punto_x_referencial_ini;
+        var cantidadEnSegundos = distanciaEnPx / EQUIV_PX_TO_SEGUNDO_HORIZ;
+        var cantidadEnMinutos = (cantidadEnSegundos / 60).toFixed(0);
+
+        timestampFechaReferencial += (Number(cantidadEnMinutos) * 60000); //agregando la cantidad en milisegundos
+
+        var textoFechaHoraHorizontal = util.convertTimestampToDate(timestampFechaReferencial); //texto en formato dd/mm/yyy hh:mm:ii
+        textoFechaHoraHorizontal = textoFechaHoraHorizontal.split(' ')[1];
+        RECTA_TEMP_VERTICAL = contexto.path(["M", eventoCursor.layerX, pos_y_referencial.final, "L", eventoCursor.layerX, pos_y_referencial.inicial]).attr({ //crea recta horizontal grande
+            //'stroke-dasharray': '-',
+            'stroke-width': 5, // Width in pixels,
+            'stroke': '#fbbc05'
+        }).click(function (event) { //aqui agrega una nueva franja
+            var newFranja = crearFranjaEnGrafico({ ini_x: eventoCursor.layerX, ini_y: pos_y_referencial.final, fin_x: eventoCursor.layerX, fin_y: pos_y_referencial.inicial },
+            { pos_x: eventoCursor.layerX + 10, pos_y: eventoCursor.layerY }, textoFechaHoraHorizontal, timestampFechaReferencial);
+
+            var itemFranjaElemento = {
+                identificadorTimeStamp: timestampFechaReferencial,
+                elementos: {
+                    linea: newFranja.linea,
+                    texto: newFranja.texto,
+                }
+            }
+            ARR_FRANJAS_SELECCIONADAS.push(itemFranjaElemento); //aqui almacena las franjas que se van creando
+        });
+
+        TEXTO_TEMP_VERTICAL = contexto.text(eventoCursor.layerX + 20, eventoCursor.layerY + 37, textoFechaHoraHorizontal).attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+            fill: 'white',
+            "font-size": 15,
+            'cursor': 'pointer',
+            "font-family": "Arial, Helvetica, sans-serif",
+            "transform": "r-90"
+        });
+    }
+
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) { //esc
+            if (OPCIONES_ACTIVAS.AGREGAR_FRANJA) {
+
+                if (RECTA_TEMP_VERTICAL) {
+                    RECTA_TEMP_VERTICAL.remove();
+                    TEXTO_TEMP_VERTICAL.remove();
+                    RECTA_TEMP_VERTICAL = null;
+                    TEXTO_TEMP_VERTICAL = null;
+                }
+                $('#btnAgregarFranja').removeClass('disabled');//regresa el boton a su normalidad
+                ObjetosEnGrafico.contenedor.attr({ "cursor": "default" });
+                OPCIONES_ACTIVAS.AGREGAR_FRANJA = false;
+            }
+        }
+    });
+
+    var CLICK_FUNCION = {
+        DELAY : 500,
+        CLICKS: 0,
+        TIMER : null
+    }
+
+    function crearFranjaEnGrafico(posRecta, posTexto, texto, timestampIdentificador) {
+        var rptaElemento = {
+            linea: null,
+            texto :null
+        };
+        rptaElemento.texto = contexto.text(posTexto.pos_x, posTexto.pos_y, texto).attr({ //crea el texto el texto dividido / 60 para obtener el valor del texto
+            fill: 'white',
+            "font-size": 13,
+            'cursor': 'pointer',
+            "font-family": "Arial, Helvetica, sans-serif",
+            "transform": "r-90"
+        });
+        rptaElemento.linea = contexto.path(["M", posRecta.ini_x, posRecta.ini_y, "L", posRecta.fin_x, posRecta.fin_y]).attr({ //crea recta horizontal grande
+            //'stroke-dasharray': '-',
+            'stroke-width': 3, // Width in pixels,
+            'stroke': '#fbbc05'// el default amarillo
+        })
+        .hover(function () {
+            rptaElemento.texto.attr({//texto del hover de la recta de franja
+                //fill: 'red'
+                fill: 'white'
+            })
+            this.attr({
+                //'stroke-dasharray': '-',
+                'stroke-width': 5, // Width in pixels,
+                cursor: 'pointer',
+                //'stroke': 'red' //rojo para elinar
+                'stroke': '#fbbc05' //rojo para elinar
+            });
+        }, function () {
+            this.attr({
+                //'stroke-dasharray': '',
+                'stroke-width': 3, // Width in pixels,
+                cursor: 'default', // el default amarillo
+                'stroke': '#fbbc05'// el default amarillo
+            });
+            rptaElemento.texto.attr({
+                fill: 'white'
+            })
+        }).click(function () {
+            CLICK_FUNCION.CLICKS++;
+            if (CLICK_FUNCION.CLICKS === 1) {
+                CLICK_FUNCION.TIMER = setTimeout(function () { //1 CLICK FUNCTION
+                    CLICK_FUNCION.CLICKS = 0;             //after action performed, reset counter
+                }, CLICK_FUNCION.DELAY);
+
+            } else { //DOUBLE CLICK FUNCTION
+                clearTimeout(CLICK_FUNCION.TIMER);    //prevent single-click action
+                CLICK_FUNCION.CLICKS = 0;
+                eliminarFranja(this.identificadorTimestampTemp);
+            }
+        });
+
+        //rptaElemento.linea.timestampFranjaFinal
+        rptaElemento.linea.elementoTexto = rptaElemento.texto;
+        rptaElemento.linea.identificadorTimestampTemp = timestampIdentificador;
+        rptaElemento.linea.drag(onDragMoveLineaTemporal, onDragStartLineaTemporal, onDragCompleteLineaTemporal);//evento dragg
+        return rptaElemento;
+    }
+
+    /*funciones drag para la linea temporal*/
+    function onDragStartLineaTemporal() {
+        this.ox = this.getBBox().x;
+        this.oy = this.getBBox().y;
+    }
+
+    var nowX;
+    var nowY;
+    var heightContexto = null;
+    var widthContexto = null;
+
+    function onDragMoveLineaTemporal(dx, dy) {
+        heightContexto = $('#contextoGrafico').find('svg')[0].clientHeight;
+        widthContexto = $('#contextoGrafico').find('svg')[0].clientWidth;
+        var posicionInicialEnX = this.attrs.path[0][1];
+        //
+        nowX = Math.min((widthContexto - this.getBBox().width), this.ox + dx);
+        nowY = Math.min((heightContexto - this.getBBox().height), this.oy + dy);
+        //
+        nowX = Math.max(0, nowX);
+        nowY = Math.max(0, nowY);
+        //
+        var diferenciaMovimiento = nowX - posicionInicialEnX;
+
+        this.transform("T" + diferenciaMovimiento + "," + 0); //mover path con la animacion transform
+        this.elementoTexto.transform("T" + diferenciaMovimiento + "," + 0 + "r-90"); //mover el texto que acompaña a la franja con la animacion transform
+
+        /*obteniendo el texto para mostrar el tiempo en el texto en movimiento*/
+        var timestampFechaReferencial = util.convertDatetoTimeStamp('05/11/2019 00:00:00');//referecial para el eje X
+        var punto_x_referencial_ini = ObjetosEnGrafico.rectaHorizontal.rectaVerticalPequenia[0].attrs.path[0][1];
+
+        var distanciaEnPx = event.layerX - punto_x_referencial_ini;
+        var cantidadEnSegundos = distanciaEnPx / EQUIV_PX_TO_SEGUNDO_HORIZ;
+        var cantidadEnMinutos = (cantidadEnSegundos / 60).toFixed(0);
+        timestampFechaReferencial += (Number(cantidadEnMinutos) * 60000); //agregando la cantidad en milisegundos
+        var textoFechaHoraHorizontal = util.convertTimestampToDate(timestampFechaReferencial); //texto en formato dd/mm/yyy hh:mm:ii
+        this.identificadorTimestampTemp = timestampFechaReferencial;
+        this.elementoTexto.attr({ text: textoFechaHoraHorizontal.split(' ')[1] }); //seteando el texto en el formato hora:minuto
+    }
+
+    function onDragCompleteLineaTemporal() {
+        //console.log("DragComplete--")
+    }
+    /**************************************/
+    function getRangosDeTiempoPorFranja() {
+        var rpta = null;
+    }
+
+    function eliminarFranja(timeStampIdentificador) {
+        var posicionElimina = 0;
+        //ARMANDO LA DATA
+        $.each(ARR_FRANJAS_SELECCIONADAS, function (positionObjec) {
+            var identificadorTemporal = this.elementos.linea.identificadorTimestampTemp;
+            if (identificadorTemporal == timeStampIdentificador) {
+                this.elementos.linea.remove();
+                this.elementos.texto.remove();
+                posicionElimina = positionObjec;
+            }
+        });
+        //
+        ARR_FRANJAS_SELECCIONADAS.splice(posicionElimina, 1);
+    }
+
+    function crearFranjasHorariasEnTabla() {
+        /*trabajando la data*/
+        $.each(ARR_FRANJAS_SELECCIONADAS, function () {
+            var timestampReferencial = this.elementos.linea.identificadorTimestampTemp;
+            this.identificadorTimeStamp = timestampReferencial;
+        });
+
+        var ordenarFranjasMenorMayor = _.orderBy(ARR_FRANJAS_SELECCIONADAS, ['identificadorTimeStamp'], ['asc']); //viajes ordenados de menor a mayor
+        var franjasHorariasOrdenadas = [];
+        //
+        $.each(ordenarFranjasMenorMayor, function (i) {
+            var timeStampIdentificadorIni = (ordenarFranjasMenorMayor[i] ? ordenarFranjasMenorMayor[i].identificadorTimeStamp : null);
+            var timeStampIdentificadorFin = (ordenarFranjasMenorMayor[i + 1] ? ordenarFranjasMenorMayor[i + 1].identificadorTimeStamp : null);
+            //
+            if (i > 0) {
+                timeStampIdentificadorIni = (timeStampIdentificadorIni + 1000);
+            }
+            //
+            if (timeStampIdentificadorIni && timeStampIdentificadorFin) {
+                var item = {
+                    franja : (i + 1),
+                    ini: {
+                        timestamp: timeStampIdentificadorIni,
+                        formatoHora: util.convertTimestampToDate(timeStampIdentificadorIni)
+                    },
+                    fin: {
+                        timestamp: timeStampIdentificadorFin,
+                        formatoHora: util.convertTimestampToDate(timeStampIdentificadorFin)
+                    },
+                    timestampSalidaParaComparacion : null,
+                    viajes : []
+                }
+                franjasHorariasOrdenadas.push(item);
+            }
+        });
+
+        getDataPorFranjaHoraria(franjasHorariasOrdenadas);
+
+        //*armando el html de franjas para el segundo tab*/
+        $('#tbFranjaGenerada tbody').empty();
+        var strHTMLtabla = '';
+        $.each(franjasHorariasOrdenadas, function () {
+            var iniFormatoHora = this.ini.formatoHora.split(' ')[1];
+            var finFormatoHora = this.fin.formatoHora.split(' ')[1];
+            strHTMLtabla += '<tr onclick="ubicarFranjaHoraria('+ this.franja +', $(this))" class="franja_row" id="franja_' + this.franja + '" >' +
+                                '<td>' + this.franja + '</td>' +
+                                '<td>' + iniFormatoHora + '</td>' +
+                                '<td>' + finFormatoHora + '</td>' +
+                                '<td>' + '-' + '</td>' +
+                            '</tr>';
+        });
+
+        $('#tbFranjaGenerada tbody').append(strHTMLtabla);
+    }
+
+    function getDataPorFranjaHoraria(jsonFranjas) {
+        var jsonViajesGeneral = [];
+        var puntos_union_vertHorizon_filtrado = PUNTOS_UNION_VERTICAL_HORIZONTAL.filter(function (el) {
+            return el != null && el != "";
+        });
+
+        $.each(puntos_union_vertHorizon_filtrado, function () {
+            //$.each(ObjetosEnGrafico.elementosUnionHoraVsTiempo.puntos, function () {
+            var elemento = this;
+            if (elemento != null) {
+                var fechaViaje = this.fecha;
+                var timestampInicioDia = util.convertDatetoTimeStamp(this.fecha + ' ' + '00:00:00');
+                var diferenciaInicioDiaHSalidaSeg = ((this.timestampfechaHoraSalida - timestampInicioDia) / 1000); //diferencia en SEGUNDOS para la hora de salida
+                var diferenciaEnHorasHSalida = ((diferenciaInicioDiaHSalidaSeg / 60) / 60);//diferencia en HORAS para la hora de salida
+                //
+                var diferenciaInicioDiaHLlegadaSeg = ((this.timestampfechaHoraLlegada - timestampInicioDia) / 1000); //diferencia en SEGUNDOS para la hora de salida
+                var diferenciaEnHorasHLlegada = ((diferenciaInicioDiaHLlegadaSeg / 60) / 60);//diferencia en HORAS para la hora de salida
+                //
+                var itemViaje = {
+                    fechaHoraSalida: this.fechaHoraSalida.trim(),
+                    tiempoViajeMinutos: this.tiempoViajeMinutos,
+                    tiempoViajeMinutosRound: Number(this.tiempoViajeMinutos.toFixed(0)),
+                    tiempoViajeSegundos: this.tiempoViajeSegundos,
+                    timestampFechaHoraSalida: util.convertDatetoTimeStamp(this.fechaHoraSalida),
+                    isDiaSiguiente: (diferenciaEnHorasHSalida > 24 ? true : false)//si pasa las 24 horas es el dia diguiente = true
+                };
+                jsonViajesGeneral.push(itemViaje);
+            }
+        });
+        /************ recorriendo los viajes generales para setearlos en las franjas horarias ************/
+
+        $.each(jsonViajesGeneral, function () {
+            ubicarViajeEnFranja(this, jsonFranjas);
+        });
+        var equivalenciaEnPx = ($('#tabContenido').height() / 100); //aquivalencia del 100 %
+        var lenDeLasTablas = (equivalenciaEnPx * 70); //el 70 %
+
+        //############################## ARMANDO EL HTML DE LAS TABLAS DE FRANJAS
+        $('#contenidoFranjasTablas').empty();
+        var strHTMLFranjas = '';
+
+        $.each(jsonFranjas, function () {
+            var nroFranja = this.franja;
+            var tiemposDeViajeRoundOrdenados = _.orderBy(this.viajes, ['tiempoViajeMinutosRound'], ['asc']); //tiempos de viajes redondeados ordenados.
+            var agrupadoPorTiempoViaje = _.groupBy(tiemposDeViajeRoundOrdenados, function (d) { return d.tiempoViajeMinutosRound })  //agrupado por fechas la data del comparativo A
+            var totalViajesEnFranja = tiemposDeViajeRoundOrdenados.length;
+
+            strHTMLFranjas += '<table id="tablaDetalle_'+ this.franja +'" class="table tablaFixed tabladetallefranja" style="width:200px;margin-right: 8px;border: 1px solid rgb(87, 194, 190);">';
+            strHTMLFranjas += '<thead>';
+            strHTMLFranjas += '<tr >';
+            strHTMLFranjas += '<th colspan="3" style="width: 100%; padding: 1px; text-align: center; background-color: #00a39ca8; color: white;font-size: 13px;">FRANJA ' + (this.franja < 10 ? '0' + this.franja : this.franja) + '<br><span style="color: white;" >' + totalViajesEnFranja + ' VIAJES</span></th>';
+            strHTMLFranjas += '</tr>';
+            strHTMLFranjas += '<tr style="background-color: #e9ecef" >';
+            strHTMLFranjas += '<th style="padding-top: 4px; padding-bottom: 3px; height: auto !important;font-size:12px;padding-right: 0;text-align:left;background-color: #e9ecef;">MIN</th>';
+            strHTMLFranjas += '<th style="padding-top: 4px; padding-bottom: 3px; height: auto !important;font-size:12px;padding-right: 0;text-align:center;background-color: #e9ecef;"><span class="fas fa-bus" aria-hidden="true"></span></th>';
+            strHTMLFranjas += '<th style="padding-top: 4px; padding-bottom: 3px; height: auto !important;font-size:12px;padding-right: 0;text-align:right;background-color: #e9ecef;">%</th>';
+            strHTMLFranjas += '<tr>';
+            strHTMLFranjas += '<thead>';
+
+            strHTMLFranjas += '<tbody style="height:' + (lenDeLasTablas ) + 'px;overflow-y: auto" >';
+            var avancePorcentaje = 0;
+            $.each(agrupadoPorTiempoViaje, function (numero, arrData) { //aqui recorre los tiempos agrupados por minutos
+                var cantidadViajes = arrData.length;
+                var porcentajeDelTotal = (100 * cantidadViajes / totalViajesEnFranja);
+                var fullColor = 1;
+                var porcentajeDegraded = ((avancePorcentaje * fullColor) / 100);
+                porcentajeDegraded = porcentajeDegraded.toFixed(3);
+                var colorBackground = 'rgb(255, 174, 97,' + porcentajeDegraded + ' )';
+                strHTMLFranjas += '<tr onmouseover="hoverTablaFranja($(this))" onmouseout="unHoverTablaFranja($(this))" data-minuto="' + numero + '" data-idfranja="' + nroFranja + '" onclick="agregarTiempoAProgramar($(this));" style="background-color:' + colorBackground + ';cursor:pointer;" >';
+                strHTMLFranjas += '<td>' + numero + '</td>';
+                strHTMLFranjas += '<td style="text-align: right;padding-right: 15%;" >' + cantidadViajes + '</td>';
+                strHTMLFranjas += '<td style="text-align: right;padding-right: 3%;">' + (Number(avancePorcentaje.toFixed(0)) < 10 ? '0' + avancePorcentaje.toFixed(0) : avancePorcentaje.toFixed(0)) + ' %' + '</td>';
+                strHTMLFranjas += '</tr>';
+                avancePorcentaje += porcentajeDelTotal;
+            });
+            strHTMLFranjas += '</tbody>';
+            strHTMLFranjas += '</table>';
+        });
+        $('#contenidoFranjasTablas').append(strHTMLFranjas);
+    }
+
+    function hoverTablaFranja(elemento) {
+        var nroFranja = elemento.attr('data-idfranja');
+        var tablaFranja = elemento.parent().parent();
+        var cabeceraTabla = tablaFranja.find('thead').find('tr').eq(0).find('th');
+
+        $.each($('.tabladetallefranja thead'), function (i) {
+            $(this).find('tr').find('th').eq(0).css({
+                'background-color': '#00a39ca8'
+            });
+        });
+
+        cabeceraTabla.css({
+            'background-color': '#49505787',
+        });
+
+        tablaFranja.css({
+            'border': '1px solid rgb(195, 186, 186)'
+        });
+
+        $('.franja_row').css({
+            'background-color': 'white',
+            'color': 'black',
+        });
+
+        $('#franja_' + nroFranja).css({
+            'background-color': '#49505787',
+            'color': 'white',
+        });
+    }
+
+    function unHoverTablaFranja(elemento) {
+        var tablaFranja = elemento.parent().parent();
+        var cabeceraTabla = tablaFranja.find('thead').find('tr').eq(0).find('th');
+        cabeceraTabla.css({
+            'background-color': '#00a39ca8'
+        });
+
+        tablaFranja.css({ //regresa a la normlaidad el color del thead de la tabla
+            'border': '1px solid rgb(87, 194, 190)'
+        });
+        $('.franja_row').css({ //limpia el background de las franjas principal
+            'background-color': 'white',
+            'color': 'black',
+        });
+    }
+
+    function ubicarFranjaHoraria(nroFranja, elementoTR) {//cuando da click en un row de las franjas te lleve a su tabla
+        var tablaFranja = $('#tablaDetalle_' + nroFranja);
+        var cabeceraTabla = tablaFranja.find('thead').find('tr').eq(0).find('th');
+
+        $.each($('.tabladetallefranja thead'), function (i) {
+            $(this).find('tr').find('th').eq(0).css({
+                'background-color': '#00a39ca8'
+            });
+        });
+
+        $('.tabladetallefranja').css({ //regresa a la normlaidad el color del thead de la tabla
+            'border': '1px solid rgb(87, 194, 190)'
+        });
+
+        $('.franja_row').css({ //limpia el background de las franjas principal
+            'background-color': 'white',
+            'color': 'black',
+        });
+        /****************************/
+        /*agregando estilo de sombreado*/
+        cabeceraTabla.css({
+            'background-color': '#49505787'
+        });
+
+        tablaFranja.css({ //regresa a la normlaidad el color del thead de la tabla
+            'border': '2px solid rgb(195, 186, 186)'
+        });
+
+        var widthTabla = $("#tablaDetalle_" + nroFranja).width();
+        var scrollLeftMove = (widthTabla * (nroFranja - 1));
+        elementoTR.css({
+            'background-color': '#49505787',
+            'color': 'white',
+        });
+
+
+        $('#contenidoFranjasTablas').animate({
+            //scrollTop: $("#" + id).offset().top
+            scrollLeft: scrollLeftMove
+        },
+        'slow');
+    }
+
+    function focusTablaDetallePorFranja(nroFranja) {
+
+    }
+
+    function removerSeleccionado(elemento, nroOrden) {
+        elemento.parent().parent().parent().html('-');
+        var idTabla = '#tablaDetalle_' + nroOrden + ' tbody > tr';
+        $.each($(idTabla), function () {
+            $(this).removeClass('sombreaRow');
+        });
+    }
+
+    function agregarTiempoAProgramar(elemento) {
+        var idFranjaSeleccionada = elemento.attr('data-idfranja');
+        var minutoSeleccionado = elemento.attr('data-minuto');
+        var tablaTbodyBaseHTML = elemento.parent();
+        $('#franja_' + idFranjaSeleccionada).find('td').eq(3).html('<h6><span class="badge badge-primary">' + minutoSeleccionado + ' <span class="fa fa-times-circle iconocerrar" onclick="removerSeleccionado($(this),' + idFranjaSeleccionada + ');" style="opacity: 0.6;" ></span> </span></h6>');
+
+        $.each(tablaTbodyBaseHTML.find('tr'), function () { //removiendo clase de seleccionada
+            $(this).removeClass('sombreaRow');
+        });
+        elemento.addClass('sombreaRow');
+    }
+
+    function ubicarViajeEnFranja(viaje, dataFranja) {
+        var FECHA_REFERENCIAL = '05/11/2019';
+        var fechaTempParaComparacion = FECHA_REFERENCIAL + ' ' + viaje.fechaHoraSalida.split(' ')[1];
+        var timestampTempParaComparacion = util.convertDatetoTimeStamp(fechaTempParaComparacion);
+        //console.log("#######################");
+        $.each(dataFranja, function () {
+            if (viaje.isDiaSiguiente) {
+                timestampTempParaComparacion = timestampTempParaComparacion + 86400000; // LE AGREGA UN DÍA A LA FECHA TEMPORAL SI DETECTA QUE LA SALIDA EL DEL DIA SIGUIENTE
+            }
+
+            if (timestampTempParaComparacion >= this.ini.timestamp && timestampTempParaComparacion <= this.fin.timestamp) {
+                viaje.timestampTempParaComparacion = timestampTempParaComparacion;
+                this.viajes.push(viaje);
+            }
+            timestampTempParaComparacion = util.convertDatetoTimeStamp(fechaTempParaComparacion);
+        });
+    }
+
+</script>

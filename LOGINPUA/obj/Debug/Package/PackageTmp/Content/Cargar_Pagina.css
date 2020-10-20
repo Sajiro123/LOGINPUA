@@ -1,0 +1,32 @@
+﻿#loading {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/Util/giphy.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+  .imagen_ {
+        width:30%
+    }
+     
+
+    .imagen_logo {
+        width:25%
+    }
+
+@media (max-width: 575px) {
+  .imagen_ {
+        width:100%
+    }
+     
+}
+
+@media (max-width: 575px) {
+  .imagen_logo {
+        width:100%
+    }
+     
+}

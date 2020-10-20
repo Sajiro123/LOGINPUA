@@ -1,0 +1,79 @@
+﻿<div class="modal fade" id="modalRegistroRutaTipoServ">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registro Tipo de servicio</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="width:310px;font-weight:100;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><strong>Tipo de Servicio</strong></label>
+                        <select class="form-control" id="selectTipoServicio">
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label><strong>Tipo de Servicio Operacional</strong></label>
+                        <select class="form-control" id="selectTipoServicioOperacional">
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label><strong>Nombre</strong></label>
+                        <input id="txtNombreRutaTipoServicio" style="width:100% !important" type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label><strong>Color</strong></label>
+                        <input id="txtcolor" data-jscolor="" style="width:100% !important" type="text" class="form-control" />
+                    </div> 
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="btnGuardaRutaTipoServicio" onclick="registrarRutaTipoServicio()" class="btn btn-info" type="button">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function registrarRutaTipoServicio() {
+        $.ajax({
+            url: URL_REGISTRA_RUTA_TSERVICIO,
+            dataType: 'json',
+            data: {
+                idRuta: $('#selectRuta').val(),
+                idTipoServicio: $('#selectTipoServicio').val(),
+                idTipoServicioOper: $('#selectTipoServicioOperacional').val(),
+                nombre: $('#txtNombreRutaTipoServicio').val(),
+                color:$('#txtcolor').val()
+            },
+            success: function (result) {
+                Swal.fire({
+                    type: result.COD_ESTADO == 1 ? 'success' : 'error',
+                    title: result.DES_ESTADO,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                
+                if (result.COD_ESTADO == 1) {
+                    $('#modalRegistroRutaTipoServ').modal('hide');
+                    getTipoServicioByRuta();
+                }
+            }
+        }, JSON);
+    }
+
+</script>

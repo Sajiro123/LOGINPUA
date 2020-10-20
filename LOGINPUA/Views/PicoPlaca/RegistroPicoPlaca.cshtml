@@ -1,0 +1,186 @@
+﻿@model IEnumerable<ENTIDADES.CC_CORREDOR>
+@{
+    ViewBag.Title = "RegistroPicoPlaca";
+    //Layout = "~/Views/Shared/_Layout_corredores_Supervisor.cshtml";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+
+@*<link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
+<link href="~/Content/plugins/sweetAlert/sweetalert2.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />*@ 
+
+<script src="~/Content/js/js_registro_pico_placa/js_registroPicoPlaca.js"></script>
+@*<script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>
+<script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.4/xlsx.core.min.js"></script>
+<script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+<script src="~/Scripts/exportar_excel/jhxlsx.js"></script>
+<script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/plugins/moment/moment.js"></script>
+<script src="~/Scripts/Utilidades/Util.js"></script>*@
+
+@{
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+}
+<br />
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>Registro Pico Placa&nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalRegistroPicoPlaca();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor">
+                @foreach (var item in listRutas)
+                {
+                <option value="@item.ID_RUTA">@item.ABREV_CORREDOR   @item.NRO_RUTA</option>
+                }
+            </select>
+
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="txtFechaConsultaIni" value="01/08/2019" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+        <select class="form-control form-control-sm" id="selectCorredores" hidden>
+            @foreach (var item in Model)
+            {
+                <option value="@item.ID_CORREDOR">@item.ABREVIATURA</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="txtFechaConsultaFin" value="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+    </div>
+    <div class="col-md-1" style="display: contents;" >
+        <a href="#" id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</a>
+    </div>
+    <div class="col-md-4 text-right">
+        <a href="" id="exportar" class="btn btn-success btn-sm" data-toggle="modal" onclick="exportarTabla();">Exportar</a>
+    </div>
+    @*<div class="col-md-2">
+        <a href="" id="btnRegistrarPicoPlaca" class="btn btn-info btn-sm" data-toggle="modal" onclick="AbrirModalRegistroPicoPlaca();" >Registrar</a>
+    </div>
+    <div class="col-md-4">
+
+    </div>*@
+</div>
+<hr />
+<div class="row">
+    <div class="table-responsive">
+        <table class="responsive-table" id="tbReportePicoPlaca" style="width:100%">
+            <thead >
+                <tr>
+                    <th rowspan="2" style="vertical-align:middle;">FECHA</th>
+                    <th rowspan="2" style="vertical-align:middle;">CORREDOR</th>
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">RUTA</th>
+                    <th colspan="2" class="text-center">HORA</th>
+                    <th colspan="2" class="text-center">DISTANCIA</th>
+                    <th colspan="2" class="text-center">VELOCIDAD PROM</th>
+                    <th colspan="2" class="text-center">TIEMPO PROM</th>
+                    <th rowspan="2" style="vertical-align:middle;" class="text-right">USUARIO REG</th>
+                    <th rowspan="2" style="vertical-align:middle;" class="text-right">FECHA REG</th>
+                </tr>
+
+                <tr>
+                    <th class="text-center">INI</th>
+                    <th class="text-center">FIN</th>
+                    <th class="text-center">AB</th>
+                    <th class="text-center">BA</th>
+                    <th class="text-center">AB</th>
+                    <th class="text-center">BA</th>
+                    <th class="text-center">AB</th>
+                    <th class="text-center">BA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@Html.Partial("_RegistroPicoPlaca")
+
+<script>
+    var Utilidades = new Util();
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_IMPORTAR_DATA_DESPACHO = "@Url.Action("importarExcelDespachos", "PicoPlaca")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("subir_archivo", "PicoPlaca")"
+    var URL_GET_REPORTE_BY_FECHAS = "@Url.Action("getReportePicoPlacaByFechas", "PicoPlaca")";
+    var URL_ACTION_UPLOAD_FILE_TEST = "@Url.Action("importarExcelDespachosDepura", "PicoPlaca")";
+    
+</script>
+

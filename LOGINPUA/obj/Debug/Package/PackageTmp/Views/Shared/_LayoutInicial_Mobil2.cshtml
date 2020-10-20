@@ -1,0 +1,215 @@
+﻿@{
+    string ruta = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
+    if (ruta.Substring(ruta.Length - 1).Equals("/"))
+    {
+        ruta = ruta.Substring(0, ruta.Length - 1);
+    }
+
+
+    string action = ViewBag.currentAction as string;
+    string controlador = ViewBag.currentRoute as string;
+    string menu = "";
+
+    int i = 0;
+    var dicMenu_Modulo = (Dictionary<int, LOGINPUA.Models.MenuModels>)Session["modulo_session"];
+    List<ENTIDADES.CC_ACCESO_CORREDORES> List_Acceso = (List<ENTIDADES.CC_ACCESO_CORREDORES>)Session["acceso_corredor"];
+    ViewBag.Lista_Accesos = List_Acceso;
+    var modalidad = 0;
+    string menu_modalidad = "";
+    int idmodulo = 0;
+    string nombmodulo = "";
+
+    Dictionary<string, List<LOGINPUA.Models.MenuModels>> dicMenuP_hijo = new Dictionary<string, List<LOGINPUA.Models.MenuModels>>();
+
+    List<LOGINPUA.Models.MenuModels> listPadres = new List<LOGINPUA.Models.MenuModels>();
+    List<LOGINPUA.Models.MenuModels> ListHijos = new List<LOGINPUA.Models.MenuModels>();
+
+    if (dicMenu_Modulo == null)
+    {
+        Response.Redirect("~/Home/Sistemas_");
+    }
+    else
+    {
+        foreach (var item in dicMenu_Modulo)
+        {
+            if (item.Value.is_padre == 1)
+            {
+                listPadres.Add(item.Value);
+            }
+        }
+
+        foreach (var item_padre in listPadres)
+        {
+            List<LOGINPUA.Models.MenuModels> menu_hijos = new List<LOGINPUA.Models.MenuModels>();
+
+            var nombre_padre = item_padre.nombmenu;
+            foreach (var item_hijo in dicMenu_Modulo)
+            {
+                var menu_hijo = new LOGINPUA.Models.MenuModels();
+
+                if (item_hijo.Value.is_padre == 0 && item_padre.idmenu == item_hijo.Value.id_menu_padre)
+                {
+                    menu_hijo.idmenu = item_hijo.Value.idmenu;
+                    menu_hijo.nombmenu = item_hijo.Value.nombmenu;
+                    nombmodulo = item_hijo.Value.nomModulo;
+                    menu_hijo.url_menu = item_hijo.Value.url_menu;
+                    menu_hijo.is_padre = item_hijo.Value.is_padre;
+                    menu_hijo.id_menu_padre = item_hijo.Value.id_menu_padre;
+                    menu_hijo.idmodulo = item_hijo.Value.idmodulo;
+                    menu_hijo.nomModulo = item_hijo.Value.nomModulo;
+                    menu_hijo.urlmodulo = item_hijo.Value.urlmodulo;
+                    menu_hijo.imgmodulo = item_hijo.Value.imgmodulo;
+                    menu_hijo.id_modalidad = item_hijo.Value.id_modalidad;
+                    idmodulo = item_hijo.Value.idmodulo;
+
+                    if (action != null)
+                    {
+                        string menufinal = controlador + '/' + action;
+                        if (menufinal == item_hijo.Value.url_menu)
+                        {
+                            menu = item_hijo.Value.nombmenu;
+                        }
+                    }
+
+                    menu_hijos.Add(menu_hijo);
+                }
+            }
+            dicMenuP_hijo.Add(nombre_padre, menu_hijos);
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>.::PROTRANSPORTE::.</title>
+ 
+    <link href="~/Content/scss/tableformt.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.multiselect.css" />
+    <link href="~/Content/css/simple-sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css">
+    <link href="~/Content/plugins/tooltipster/tooltipster.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.0.js" ></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/tooltipster/jquery.tooltipster.min.js"></script>
+    <script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>
+
+    <link rel="stylesheet" href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/sweetAlert/sweetalert2.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/css/css_conductores/bootstrap-select.min.css" />
+
+
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/exportar_excel/xlsx.core.min.js"></script>
+    <script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+    <script src="~/Scripts/exportar_excel/jhxlsx.js"></script>
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/plugins/moment/moment.js"></script>
+    <script src="~/Scripts/Utilidades/Util.js"></script>
+    <script src="~/Content/plugins/numberValidador/numberValidador.js"></script>
+    <script src="~/Content/js/all.min.js"></script>
+    <script src="~/Content/js/bootstrap-select.js"></script>
+    <script src="~/Content/plugins/lodash/lodash.min.js"></script>  
+    <script>eval(mod_pagespeed_2HaUiZdTC$);</script>
+    <link rel="stylesheet" hrui-icon-loadingef="~/Content/css/css_programacion/alertify.css" />
+    <script src="~/Content/js/js_programacion/alertify.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.js"></script>
+    <script src="~/Content/plugins/uitablefilter/jquery.uitablefilter.js"></script>
+    <script src="~/Content/plugins/fancytable/fancyTable.js"></script>
+
+    <!--MOBILE-->
+ 
+
+    <link href="~/Content/mobiscroll.jquery.min.css" rel="stylesheet" />
+    <script src="~/Content/js/mobiscroll.jquery.min.js"></script>
+
+    
+
+
+
+</head>
+
+
+<body class="conta row" style="overflow: auto">
+
+    <div class="d-flex" id="wrapper" style="display:none">
+        <div class="list-group list-group-flush">
+            <div id="accordion">
+                <input type="hidden" id="mod" />
+                @foreach (var itempadre_hijo in dicMenuP_hijo)
+                {
+                    if (itempadre_hijo.Value.Count >= 1)
+                    {
+                        var nombre = itempadre_hijo.Key;
+                        int tam_var = nombre.Length;
+                        string nombre_final = nombre.Substring((tam_var - 2), 2)+"-";
+
+                        <div class="card">
+
+                            @*<div class="card-header">
+                                    <a name="@itempadre_hijo.Key" class="card-link" data-toggle="collapse" href='#collapseOne_@nombre_final'>
+                                        @itempadre_hijo.Key
+                                    </a>
+                                </div>*@
+
+
+                            <div name="@itempadre_hijo.Key" id='collapseOne_@nombre_final' class="collapse" data-parent="#accordion">
+                                @foreach (var itemhijo in itempadre_hijo.Value)
+                                {
+                                    <script>$('#mod').val(@itemhijo.id_modalidad);</script>
+                                    modalidad = itemhijo.id_modalidad;
+                                    int indexOf = itemhijo.url_menu.IndexOf('/');
+                                    var actionUrl = "";
+                                    var controllerUrl = "";
+                                    string[] urlMenu = new string[10];
+                                    //
+                                    if (indexOf != -1)
+                                    {
+                                        urlMenu = itemhijo.url_menu.Split('/');
+                                        controllerUrl = urlMenu[0];
+                                        actionUrl = urlMenu[1];
+                                        <div class="card-body">
+                                            <a data-action="@actionUrl" data-controller="@controllerUrl" data-idmodalidad="@itemhijo.id_modalidad" href="@Url.Action(actionUrl, controllerUrl)" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-body">
+                                            <a href="#" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+
+
+
+
+
+        <div id="page-content-wrapper">
+            <div data-role="header" data-theme="b" style="background-color:#00a69f">
+                <a href="#">
+                <svg class="svg-inline--fa fa-home fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path></svg></a>
+                <h1 style="color: white;font-weight: bold;width: 205px;text-align: left;">@ViewBag.name_title</h1>
+                @*<a href="#" data-icon="check">PT</a>*@
+            </div>
+            @RenderBody()
+        </div>
+                    </div>
+
+ 
+
+
+</body>
+</html>

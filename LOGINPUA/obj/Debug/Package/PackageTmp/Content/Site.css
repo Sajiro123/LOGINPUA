@@ -1,0 +1,162 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+
+
+@media screen and (max-width: 700px) {
+    .capa_a_ocultar {
+        display: none;
+    }
+
+    .thead-azul-claro {
+        width: 100%;
+    }
+
+    .centrado {
+        margin: 0 5 0px;
+    }
+
+    .tablas {
+        font-size: 13px;
+    }
+    .table_responsive {
+        margin:0px;
+         border: 2px;
+        width: 100%; 
+    }
+	
+ 
+}
+
+/*EXXEL*/
+.contiene_slider {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+#item_slider h3 {
+    color: #004e86;
+}
+
+#item_slider p {
+    color: #004e86;
+}
+
+#txtUsuario, #txtContrasena {
+    margin-bottom: 15px;
+    float: left;
+    width: 49%;
+}
+
+#txtUsuario {
+    margin-right: 2%;
+}
+
+#btnIngresar {
+    padding: 5px 16px;
+    background-color: #19459c;
+}
+
+    #btnIngresar:hover,
+    #btnIngresar:active,
+    #   :focus {
+        background-color: #02908a !important;
+    }
+
+.form_initial {
+    margin-top: 30px !important;
+}
+
+.cada_input {
+    margin-bottom: 15px !important;
+}
+
+.boton_inicial {
+    margin-left: 15px;
+    margin-top: 25px !important;
+    width: 47.4%;
+    background-color: #00a39c;
+}
+
+    .boton_inicial:hover,
+    .boton_inicial:active,
+    .boton_inicial:focus {
+        background-color: #02908a !important;
+    }
+
+@media only screen and (max-width: 768px) {
+    .boton_inicial {
+        width: calc(100% - 30px);
+        margin-left: 15px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .collapse {
+        float: right;
+    }
+}
+
+
+@media only screen and (max-width: 414px) {
+    .imagen_logo {
+        max-width: 80%;
+    }
+}
+
+.navbar-inverse {
+    background-color: #ffffff;
+    border-color: #00a39c;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/*.body-content {
+    margin-top: 40px;
+}*/
+
+.cada_cuadrado {
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: baseline;
+    padding-top: 30px;
+}
+
+.contiene_todos_cuadros {
+    width: 100%;
+    float: left;
+    margin-bottom: 30px;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #014f87;
+}
+
+.navbar-toggle {
+    background-color: #004e86;
+}
+ 

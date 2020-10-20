@@ -1,0 +1,326 @@
+﻿<div class="modal fade" id="modal_editar_inciden">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 150%;margin-left: -138px;">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Infracción</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+
+
+            <form id="sectionParametrosEditarIncidencia" autocomplete="off">
+                <input type="text" class="form-control" name="ID_RUTA" value="" id="txtSelectdiv" style="display:none">
+                <input type="text" class="form-control" name="ID_INCIDENCIA" value="" id="txt_incidencia" style="display:none">
+
+                <div class="form-group container">
+
+                    <fieldset class="border p-1">
+                        <legend class="scheduler-border" style="font-size:18px">PERSONAL</legend>
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Tipo Personal</h3>
+                                <div class="col-sm-3">
+                                    <select id="selectEditarTipoPersonaIncidencia" class="form-control" data-live-search="true" style="cursor: not-allowed;" disabled></select>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Persona</h3>
+                                <div class="col-sm-3">
+                                    <select style="width:137%;" id="selectEditarPersonaIncidencia" name="NUM_DOCUMENTO" class="selectpicker" data-live-search="true" disabled></select>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Supervisor</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txt_edit_supervisor" name="SUPERVISOR" disabled />
+                                </div><div class="col-sm-1"></div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <br />
+                    <fieldset class="border p-1">
+                        <legend class="scheduler-border" style="font-size:18px">INFRACCION</legend>
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Consorcio</h3>
+                                <div class="col-sm-3">
+                                    <select class="selectpicker" id="selectEditarConcesionario" name="EMPRESA" data-live-search="true" disabled ></select>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Descripcion</h3>
+                                <div class="col-sm-3">
+                                    <select id="selectEditarInfraccion" name="ID_INFRACCION" class="selectpicker" data-live-search="true" disabled></select>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Placa/Padron</h3>
+                                <div class="col-sm-3">
+                                    <select id="selectEditarPlacaPadron" name="PLACA_PADRON" class="selectpicker" data-live-search="true" disabled></select>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Tipo de Infracción</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txt_editar_tipo_infraccion" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Paquete</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" name="PAQUETE_CONCESION" class="form-control" id="txt_editar_paquete" disabled />
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Contrato</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" name="CONTRATO" class="form-control" id="txt_editar_contrato" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Fecha Incidencia</h3>
+                                <div class="col-sm-3">
+                                    <input size="16" type="datetime-local" id="txt_editar_fecha_incidencia" name="FECHA_INCIDENCIA" class="form-control">
+
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Fin Incidencia</h3>
+                                <div class="col-sm-3">
+                                    <input size="16" type="datetime-local" id="txt_editar_hora_fin" name="HORA_FIN" class="form-control">
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Sentido</h3>
+                                <div class="col-sm-3">
+                                    <select class="form-control" id="select_editar_lado" name="LADO" data-live-search="true">
+                                        <option value="N-S">N-S</option>
+                                        <option value="S-N">S-N</option>
+                                        <option value="E-O">E-O</option>
+                                        <option value="O-E">O-E</option>
+                                    </select>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Tiempo de Solucion</h3>
+                                <div class="col-sm-1">
+                                    <input type="text" style="width: 93px;text-align: center;" class="form-control" id="txt_editar_tiempo_solucion" readonly="readonly" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <h3 class="col-sm-2 col-form-label">Min.</h3>
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input type="text" style="width: 93px;text-align: center; margin-left: -29px;" class="form-control" id="txt_editar_tiempo_minutos" readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+
+                                 
+ 
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Descripción</h3>
+                                <div class="col-sm-3">
+                                    <textarea onkeyup="textAreaAdjust(this)" class="form-control" id="txta_editar_desc_incid" name="DESCRIPCION_INCIDENCIA" data-live-search="true"></textarea>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Numero de Servicio</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txt_editar_num_servicio" name="NUM_SERVICIO" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </fieldset>
+
+                    <br />
+
+                    <fieldset class="border p-1">
+                        <legend class="scheduler-border" style="font-size:18px">MODALIDAD SANCION</legend>
+                        <br />
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Tipo de Sancion</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txt_editar_tipo_sancion" name="SANCION" disabled />
+                                </div><div class="col-sm-1"></div>
+                                <h3 class="col-sm-2 col-form-label" style="display:none" id="txt_editar_tipo_date">Numero de Dias</h3>
+                                <div class="col-sm-2">
+                                    <input type="number" min="0" class="form-control" id="txt_editar_num_dias" style="display:none" name="" value="" disabled/>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="control-group">
+                                <div class="form-group row">
+
+
+
+                                </div>
+
+                            </div>*@
+
+                    </fieldset>
+
+                    <br />
+
+                    <fieldset class="border p-1">
+                        <legend class="scheduler-border" style="font-size:18px">ADICIONALES</legend>
+                        <br />
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Lugar Hecho</h3>
+                                <div class="col-sm-3">
+                                    <select id="selectEditarlugarhecho" class="form-control" name="LUGAR_HECHO" data-live-search="true" style="cursor: not-allowed;" disabled>
+                                        <option value="PATIO">PATIO</option>
+                                        <option value="SERVICIO">SERVICIO</option>
+                                    </select>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Intervencion Policial</h3>
+                                <div class="col-sm-3" style="margin-top: 6px;">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="custom-control custom-radio col-md-4">
+                                            <input disabled type="radio" id="editar_customRadio1" name="INTERVENCION_POLICIAL" class="custom-control-input" value="SI" >
+                                            <label class="custom-control-label" for="customRadio1">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio col-md-4">
+                                            <input disabled type="radio" id="editar_customRadio2" name="INTERVENCION_POLICIAL" class="custom-control-input" value="NO">
+                                            <label class="custom-control-label" for="customRadio2">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Informante</h3>
+                                <div class="col-sm-3">
+                                    <input disabled type="text" class="form-control" id="txt_editar_informante" name="INFORMANTE" value="" />
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label">Paradero/Lugar</h3>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="txt_editar_paradero" name="PARADERO" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Informe</h3>
+                                <div class="col-sm-3" style="margin-top: 6px;">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editar_customRadio5" name="INFORME" class="custom-control-input" value="SI" >
+                                            <label class="custom-control-label" for="customRadio5">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editar_customRadio6" name="INFORME" class="custom-control-input" value="NO">
+                                            <label class="custom-control-label" for="customRadio6">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label" id="editar_dis_proy_lbl">Proyecto Carta</h3>
+                                <div class="col-sm-3" id="editar_dis_proy_checked" style="margin-top: 6px;">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editar_customRadio3" name="PROYECTO_CARTA" class="custom-control-input" value="SI" >
+                                            <label class="custom-control-label" for="customRadio3">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editar_customRadio4" name="PROYECTO_CARTA" class="custom-control-input" value="NO">
+                                            <label class="custom-control-label" for="customRadio4">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Cumplimiento Plazo</h3>
+                                <div class="col-sm-3" style="margin-top: 6px;">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editarradioPlazoSi" name="CUMPLIMIENTO_PLAZO" class="custom-control-input" value="SI" checked>
+                                            <label class="custom-control-label" for="radioPlazoSi">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio col-md-3">
+                                            <input disabled type="radio" id="editarradioPlazoNo" name="CUMPLIMIENTO_PLAZO" class="custom-control-input" value="NO">
+                                            <label class="custom-control-label" for="radioPlazoNo">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div><div class="col-sm-1"></div>
+
+                                <h3 class="col-sm-2 col-form-label" id="dis_edit_num_inf_lbl">N° Informe</h3>
+                                <div class="col-sm-3" id="dis_edit_num_inf_txt">
+                                    <input disabled type="text" class="form-control" id="txt_editar_num_informe" name="NUM_INFORME" value="" />
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            <div class="form-group row">
+                                <h3 class="col-sm-2 col-form-label">Observacion Cumplimiento</h3>
+                                <div class="col-sm-3">
+                                    <textarea disabled class="form-control" id="txta_edit_Obser_Cumpl" name="OBSERVACION_CUMPLIMIENTO" data-live-search="true"></textarea>
+                                </div><div class="col-sm-1"></div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+                    <div class="modal-footer">
+                        <button id="editar_incid_btn" class="btn btn-info" type="submit">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

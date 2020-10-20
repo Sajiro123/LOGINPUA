@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Subir_Rutas";
+    Layout = "~/Views/Shared/_Layout_corredores_admin.cshtml";
+}
+
+<h2>Subir_Rutas</h2>
+
+@using (@Html.BeginForm("Subir_Rutas", "Programacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Raw(ViewBag.Error)
+
+    <span>excel</span>
+
+    <div class="md-form">
+        <div class="custom-file">
+            <i class="fas fa-images prefix"></i>
+            <input type="file" class="custom-file-input vacios" name="excel_cargar" lang="es">
+            <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+        </div>  
+
+    </div>    <input type="submit" name="name" value="guardar" />
+
+}
+
+
+
+
+@using (@Html.BeginForm("Subir_Placas_Conductores", "Programacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Raw(ViewBag.Error)
+
+    <span>PLACAS CONDUCTORES</span>
+
+    <div class="md-form">
+        <div class="custom-file">
+            <i class="fas fa-images prefix"></i>
+            <input type="file" class="custom-file-input vacios" name="excel_placas_conductores" lang="es">
+            <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+        </div>
+
+    </div>    <input type="submit" name="name" value="guardar" />
+
+}

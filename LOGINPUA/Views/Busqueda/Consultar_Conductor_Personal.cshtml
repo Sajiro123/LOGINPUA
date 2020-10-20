@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Consultar_Conductor";
+    Layout = "~/Views/Shared/_LayoutInicial_Mobil.cshtml";
+}
+
+
+<script src="~/Content/js/js_buses/js_Consultar_Placa.js"></script>
+<style>
+    span {
+        font-size: 14px;
+    }
+</style>
+
+
+<br />
+
+
+<div id="sectionBusqueda" style="padding: 40px;margin-top: -31px;">
+    <div class="row" style="background-color:#0bbeb6">
+        <div class="col-md-12 text-center" style="padding-top: 12px;">
+            <span style="color:white;font-size: 17px;">¡Bienvenidos al Sistema de Consulta de Conductores y Personal </span>
+            <br />
+            <span style="color:white;font-size: 17px;">del Sistema Integrado de Transporte de Lima!</span>
+            <br /><br />
+        </div>
+
+        <div class="col-md-12 text-center" style="padding-top: 21px;">
+            <div class="inner-addon left-addon" style="position: relative;">
+                <input type="text" value="" placeholder="Ingresar Número De Documento" id="txtConductor" maxlength="12" class="form-control" style="display:initial !important;width: 257px;text-align:center">
+            </div>
+        </div>
+
+
+        <div class="col-md-12 text-center" style="padding-top: 13px;padding-bottom: 24px;">
+            <br />
+
+
+            <button id="btnConsultar" onclick="Buscar_Conductor();" style="width: 200px;border-radius: 50px;font-weight: bold;color: white;background-color: #154390;border: 1px solid #154390;" class="btn btn-info">BUSCAR</button>
+        </div>
+    </div>
+</div>
+
+
+<table class="table" id="table_resultado"></table>
+
+
+
+
+
+<script>
+    var URL_LIST_BUSCAR_CONDUCTOR = "@Url.Action("Busqueda_Conductores_Personal", "Busqueda")";
+</script>

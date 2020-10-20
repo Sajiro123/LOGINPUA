@@ -1,0 +1,61 @@
+﻿
+<div class="modal fade" id="editar_model">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Imagen</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+
+                <div class="form-group row" id="icono_txt">
+                    <div class="col-sm-12" style="text-align:center">
+                        <br />
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview img-thumbnail" id="id_img" data-trigger="fileinput" style="width: 300px; height: 200px;"></div>
+                            <div>
+                                <span class="btn btn-outline-secondary btn-file">
+                                    <span class="fileinput-new">Seleccionar Imagen</span>
+                                    <span class="fileinput-exists">Cambiar</span>
+                                    <input type="file" src="~/Util/Image/amarillo.png" id="imageUploadForm_EDIT" accept=".jpg,.gif,.png" name="imgPerfil">
+
+                                </span>
+                                <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Eliminar</a>
+                            </div>
+                        </div>
+                    </div><div class="col-sm-1"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnGuardarParadero" onclick="UpdateModulo_img($(this))" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#nombre').keyup(function () {
+            $(this).val($(this).val().toUpperCase());
+        });
+    });
+
+
+    
+
+
+  
+
+
+
+
+
+</script>

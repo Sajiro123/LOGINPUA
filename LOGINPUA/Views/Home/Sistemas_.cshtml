@@ -1,0 +1,104 @@
+﻿
+@{
+    int idmodalidad_ = 0;
+    if (ViewBag.modalidad != null)
+    {
+        idmodalidad_ = (int)ViewBag.modalidad;
+
+    }
+
+    ViewBag.Title = "Sistemas_";
+    var listaMatrix= ViewBag.CuentasMatrix;
+
+
+    Layout = "~/Views/Shared/_LayoutPrincipal.cshtml";
+}
+<style>
+    body {
+        background: #eee;
+    }
+    a:hover{
+        color:white
+    }
+</style>
+<div class="container">
+    <div class="row" id="regresar">
+        <div class="col-sm-1">
+            <i class="fas fa-arrow-circle-left" onclick="Modulo_usuario()" style="font-size:50px;cursor:pointer;"></i>
+        </div>
+    </div>
+    <br />
+    <div class="row " id="idpadre">
+    </div>
+</div>
+@Html.Partial("_ModalCuentas_usuario")
+
+<script>
+    var URL_GET_MODALIDAD = "@Url.Action("TipoModalidad", "Home")";
+
+    $(document).ready(function () {
+        //$('#modalcuentas').modal('show');
+
+
+        Modulo_usuario();
+
+        if (@idmodalidad_ !=0) {
+            Escoger_Modalidad(1)
+        }
+    });
+
+    function Modulo_usuario() {
+        var arraymodalidad = @(new HtmlString(ViewBag.modalidadUsuario));
+        $('#idpadre').empty();
+        $.each(arraymodalidad,function(key, value){
+            var idModalidad = key;
+            var nomModalidad= value ;
+
+            $('#regresar').css('display','none');
+            $('#idpadre').append('<div class="col-sm-6"><div class="card" style="text-align:center;margin:220px 0px"><div class="card-body" stlye="margin:20px">'+
+                '<i class="fas fa-bus" style="font-size: 60px;"></i>'+
+          '<h2 style="margin:40px 0;cursor:pointer;" onclick="Escoger_Modalidad('+idModalidad+')" >'+nomModalidad+'</h2>'+
+       ' </div></div></div>');
+
+        });
+    }
+
+
+
+    function Escoger_Modalidad(id) {
+        $.ajax({
+            url: URL_GET_MODALIDAD,
+            data: {
+                id_modalidad: id
+            },
+            dataType: 'json',
+            success: function   (result) {
+                var agrupadoPorModulo = _.groupBy(result, function (d) { return d.nomModulo+"_"+d.imgmodulo})  //agrupado por fechas la data del comparativo A
+                $('#idpadre').empty();
+                $.each(agrupadoPorModulo, function (key, values) {
+                    var models= key.split("_");
+                    var nombremod= models[0];
+                    var url_img=models[1];
+
+                    $('#regresar').css('display','block ');
+
+                    $('#idpadre').append('<div class="col-md-3">'+
+           '<div class="card mb-4">'+
+             ' <img style="display:block;margin-left:auto;margin-right:auto;width:70%;" src="@Url.Content("~/Util/Modulo/")'+url_img+'">' +
+             ' <div class="card-body">'+
+              '<a style="text-decoration:none;"  href="@Url.Action("Inicio","Home")/?&id='+values[0].idmodulo+'">'+
+              '<h5 class="card-title" style="text-align:center">'+nombremod+'</h5></a>'+
+                  ' </div>'+
+                  ' </div>');
+                });
+            }
+        }, JSON);
+    }
+
+
+
+    $(document).ready(function () {
+        $(".list-group").remove();
+        $("#menu-toggle").remove();
+    });
+</script>

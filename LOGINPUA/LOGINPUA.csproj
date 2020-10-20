@@ -1,0 +1,950 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{719533B9-D021-493C-A229-6D90FA2226EE}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LOGINPUA</RootNamespace>
+    <AssemblyName>LOGINPUA</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\CommonServiceLocator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.Data.AdoDotNetInterop, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Prompting, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.VSDesigner, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.9.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Librerias\Excel\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spire.Common, Version=10.9.0.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.10.9.0\lib\net40\Spire.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.8.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.10.9.0\lib\net40\Spire.License.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=6.8.10.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.10.9.0\lib\net40\Spire.Pdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spire.XLS, Version=10.9.0.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.10.9.0\lib\net40\Spire.XLS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SpreadsheetLight">
+      <HintPath>..\..\..\Librerias\Excel\SpreadsheetLight.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.0.3.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.2.0.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Container.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Interception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Interception.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Mvc5, Version=1.3.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc5.1.3.0\lib\net45\Unity.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.ServiceLocation, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AnalisisTiempoViajeController.cs" />
+    <Compile Include="Controllers\BusesConductoresController.cs" />
+    <Compile Include="Controllers\BusquedaController.cs" />
+    <Compile Include="Controllers\ConcesionarioController.cs" />
+    <Compile Include="Controllers\ConsultarPlacaController.cs" />
+    <Compile Include="Controllers\EstudioPasajerosController.cs" />
+    <Compile Include="Controllers\CorrelativoController.cs" />
+    <Compile Include="Controllers\Generar_POGController.cs" />
+    <Compile Include="Controllers\IncidenciasController.cs" />
+    <Compile Include="Controllers\BusesController.cs" />
+    <Compile Include="Controllers\ConductoresController.cs" />
+    <Compile Include="Controllers\ControlController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\Menu_PerfilController.cs" />
+    <Compile Include="Controllers\Menu_UsuarioController.cs" />
+    <Compile Include="Controllers\ModuloController.cs" />
+    <Compile Include="Controllers\ParaderoController.cs" />
+    <Compile Include="Controllers\Pasajero_ValidacionDetController.cs" />
+    <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="Controllers\PersonaController.cs" />
+    <Compile Include="Controllers\PicoPlacaController.cs" />
+    <Compile Include="Controllers\PlacasConadisController.cs" />
+    <Compile Include="Controllers\Produccion_DemandaController.cs" />
+    <Compile Include="Controllers\ProgramacionController.cs" />
+    <Compile Include="Controllers\Proveedor_ServicioController.cs" />
+    <Compile Include="Controllers\RecorridosController.cs" />
+    <Compile Include="Controllers\RutaController.cs" />
+    <Compile Include="Controllers\RutaTipoServicioController.cs" />
+    <Compile Include="Controllers\SalidaController.cs" />
+    <Compile Include="Controllers\SupervisorController.cs" />
+    <Compile Include="Controllers\RolPersonaController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Controllers\Usuario_PersonasController.cs" />
+    <Compile Include="Controllers\ValidacionePasajeroController.cs" />
+    <Compile Include="Enumerados\Acciones.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccesoModel.cs" />
+    <Compile Include="Models\AdministradorModel.cs" />
+    <Compile Include="Models\AsignarModel.cs" />
+    <Compile Include="Models\BusesModel.cs" />
+    <Compile Include="Models\ConductoresModel.cs" />
+    <Compile Include="Models\ExportData.cs" />
+    <Compile Include="Models\DespachoModel.cs" />
+    <Compile Include="Models\EmpresaModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\MensajeModel.cs" />
+    <Compile Include="Models\MenuModels.cs" />
+    <Compile Include="Models\ProgramacionModel.cs" />
+    <Compile Include="Models\Reportes_Despacho.cs" />
+    <Compile Include="Models\Reportes_Comparativo.cs" />
+    <Compile Include="Models\ReportesBuses.cs" />
+    <Compile Include="Models\ReadExcel.cs" />
+    <Compile Include="Models\UsuarioModel.cs" />
+    <Compile Include="Models\ViajeProgramadoModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Archivo.cs" />
+    <Compile Include="Util\Knockout\Binding\KnockoutBinding.cs" />
+    <Compile Include="Util\Knockout\Binding\KnockoutBindingEnums.cs" />
+    <Compile Include="Util\Knockout\Binding\KnockoutBindingItem.cs" />
+    <Compile Include="Util\Knockout\Binding\KnockoutBindingStringItem.cs" />
+    <Compile Include="Util\Knockout\Binding\KnockoutBingindComplexItem.cs" />
+    <Compile Include="Util\Knockout\Html\KnockoutFormContext.cs" />
+    <Compile Include="Util\Knockout\Html\KnockoutHtml.cs" />
+    <Compile Include="Util\Knockout\Html\KnockoutTagBuilder.cs" />
+    <Compile Include="Util\Knockout\IKnockoutContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutCommonRegionContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutForeachContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutIfContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutRegionContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutSubContext.cs" />
+    <Compile Include="Util\Knockout\SubContexts\KnockoutWithContext.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutController.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutExpressionConverter.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutExpressionData.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutExtensions.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutJsModelBuilder.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutModelBinder.cs" />
+    <Compile Include="Util\Knockout\Utilities\KnockoutUtilities.cs" />
+    <Compile Include="Util\Seguridad\Crypto.cs" />
+    <Compile Include="Util\Seguridad\Encriptador.cs" />
+    <Compile Include="Util\Seguridad\EncriptadorHacom.cs" />
+    <Compile Include="Util\Util.cs" />
+    <Compile Include="Util\VerificarAcceso.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Adjuntos\BusesConductores\verExcel.html" />
+    <Content Include="bin\Adjuntos\Files_Despacho\w.txt" />
+    <Content Include="bin\Adjuntos\Programacion\w.txt" />
+    <Content Include="bin\AD.dll" />
+    <Content Include="bin\AD.pdb" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\AutoMapper.dll" />
+    <Content Include="bin\CommonServiceLocator.dll" />
+    <Content Include="bin\Dapper.Contrib.dll" />
+    <Content Include="bin\Dapper.dll" />
+    <Content Include="bin\Dapper.xml" />
+    <Content Include="bin\DocumentFormat.OpenXml.dll" />
+    <Content Include="bin\ENTIDADES.dll" />
+    <Content Include="bin\ENTIDADES.pdb" />
+    <Content Include="bin\LN.dll" />
+    <Content Include="bin\LN.pdb" />
+    <Content Include="bin\LOGINPUA.dll" />
+    <Content Include="bin\LOGINPUA.pdb" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Oracle.DataAccess.dll" />
+    <Content Include="bin\REPOSITORIO.dll" />
+    <Content Include="bin\REPOSITORIO.pdb" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\SpreadsheetLight.dll" />
+    <Content Include="bin\stdole.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\Unity.Abstractions.dll" />
+    <Content Include="bin\Unity.Configuration.dll" />
+    <Content Include="bin\Unity.Container.dll" />
+    <Content Include="bin\Unity.Interception.Configuration.dll" />
+    <Content Include="bin\Unity.Interception.dll" />
+    <Content Include="bin\Unity.Mvc5.dll" />
+    <Content Include="bin\Unity.RegistrationByConvention.dll" />
+    <Content Include="bin\Unity.ServiceLocation.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap4.min.css" />
+    <Content Include="Content\Cargar_Pagina.css" />
+    <Content Include="Content\css\css_bitacora\bitacora.css" />
+    <Content Include="Content\css\css_buses\accordion.css" />
+    <Content Include="Content\css\css_buses\bootstrap-datepicker.min.css" />
+    <Content Include="Content\css\css_buses\bostrap-combined.min.css" />
+    <Content Include="Content\css\css_buses\Buses.scss" />
+    <Content Include="Content\css\css_buses\jquery.dm-uploader.min.css" />
+    <Content Include="Content\css\css_buses\placas.css" />
+    <Content Include="Content\css\css_conductores\bootstrap-select.min.css" />
+    <Content Include="Content\css\css_conductores\Formulario.css" />
+    <Content Include="Content\css\css_distancia\dataTables.css" />
+    <Content Include="Content\css\css_programacion\alertify.css" />
+    <Content Include="Content\css\css_programacion\full_screem.css" />
+    <Content Include="Content\css\css_programacion\LoadingMobil.css" />
+    <Content Include="Content\css\css_programacion\main.css" />
+    <Content Include="Content\css\css_tablehovertd\td_hover.css" />
+    <Content Include="Content\css\datepicker\bootstrap-datepicker.css" />
+    <Content Include="Content\css\simple-sidebar.css" />
+    <Content Include="Content\css_Admin\bootstrap-4.2.1.min.css" />
+    <Content Include="Content\css_Admin\fontawesome-5.7.2.css" />
+    <Content Include="Content\css_Admin\menu.css" />
+    <Content Include="Content\dataPruebas\viajesCorredores.js" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\jquery.multiselect.css" />
+    <Content Include="Content\js\all.min.js" />
+    <Content Include="Content\js\bootstrap-datepicker.min.js" />
+    <Content Include="Content\js\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\js\bootstrap-datetimepicker.pt-BR.js" />
+    <Content Include="Content\js\bootstrap-select.js" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\bostrap.bundle.min.js" />
+    <Content Include="Content\js\Cargar_Pagina.js" />
+    <Content Include="Content\js\jquery.easing.min.js" />
+    <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\js_analisis_tiempo_viaje\js_reporteViaje.js" />
+    <Content Include="bin\Adjuntos\js_buses\js_Consultar_Placa.js" />
+    <Content Include="Content\js\js_buses\accordion.js" />
+    <Content Include="Content\js\js_buses\js_Consultar_Placa.js" />
+    <Content Include="Content\js\js_buses\js_registro_buses.js" />
+    <Content Include="Content\js\js_conductor\formulario.js" />
+    <Content Include="Content\js\js_conductor\js_conductor.js" />
+    <Content Include="Content\js\js_estudio_pasajeros\js_ReportePasajerosDetalle.js" />
+    <Content Include="Content\js\js_estudio_pasajeros\js_ReportePasajeros.js" />
+    <Content Include="Content\js\js_estudio_pasajeros\js_PasajerosCampo.js" />
+    <Content Include="Content\js\js_correlativo\js_registro_inf_corr.js" />
+    <Content Include="Content\js\js_generarPOG\js_Generar_POG.js" />
+    <Content Include="Content\js\js_incidencias\accordion.js" />
+    <Content Include="Content\js\js_incidencias\js_registro_incidencias.js" />
+    <Content Include="Content\js\js_incidencias\js_registro_infracciones.js" />
+    <Content Include="bin\Adjuntos\js_buses\accordion.js" />
+    <Content Include="bin\Adjuntos\js_buses\js_registro_buses.js" />
+    <Content Include="Content\js\js_Calendario\bootstrap-datepicker.min.js" />
+    <Content Include="Content\js\js_distancia\dataTables.js" />
+    <Content Include="Content\js\js_mantenimiento_menu\registro_menus.js" />
+    <Content Include="Content\js\js_mantenimiento_menu_perfil\registro_menu_perfil.js" />
+    <Content Include="Content\js\js_mantenimiento_perfil\registro_perfil.js" />
+    <Content Include="Content\js\js_mantenimiento_persona\registro_persona.js" />
+    <Content Include="Content\js\js_mantenimiento_Proveedor_Serv\registro_Proveedor_Serv.js" />
+    <Content Include="Content\js\js_mantenimiento_usuario\registro_usuario.js" />
+    <Content Include="Content\js\js_paraderos_validacionesdet\Calcular_Intervalos.js" />
+    <Content Include="Content\js\js_paraderos_validacionesdet\ReporteValidaiciones.js" />
+    <Content Include="Content\js\js_paraderos_validacionesdet\CargarArchivo.js" />
+    <Content Include="Content\js\js_paraderos_validacionesdet\SubirArchivo_det.js" />
+    <Content Include="Content\js\js_pico_placa\pico_placa.js" />
+    <Content Include="Content\js\js_produccion_demanda\produccion_demanda.js" />
+    <Content Include="Content\js\js_programacion\alertify.min.js" />
+    <Content Include="Content\js\js_programacion\full_screem.js" />
+    <Content Include="Content\js\js_programacion\jquery-3.3.1.min.js" />
+    <Content Include="Content\js\js_programacion\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Content\js\js_generarPOG\js_Reporte_POG.js" />
+    <Content Include="Content\js\js_programacion\Modulo_admin.js" />
+    <Content Include="Content\js\js_programacion\ProgDetPod.js" />
+    <Content Include="Content\js\js_programacion\programacion.js" />
+    <Content Include="Content\js\js_programacion_bus\js_conductor\formulario.js" />
+    <Content Include="Content\js\js_programacion_bus\js_reporteCaracterizacion.js" />
+    <Content Include="Content\js\js_programacion_bus\js_PrgDetall.js" />
+    <Content Include="Content\js\js_programacion_bus\js_importarProgramacion.js" />
+    <Content Include="Content\js\js_programacion_bus\ReporteVersus.js" />
+    <Content Include="Content\js\js_recorrido\js_recorridos.js" />
+    <Content Include="Content\js\js_registro_despacho\js_registroDespacho.js" />
+    <Content Include="Content\js\js_registro_pico_placa\js_registroPicoPlaca.js" />
+    <Content Include="Content\js\js_registro_pico_placa\js_rerporte_comparativo.js" />
+    <Content Include="Content\js\js_rol_persona\accordion.js" />
+    <Content Include="Content\js\js_rol_persona\js_registro_rol_persona.js" />
+    <Content Include="Content\js\js_supervisor\js_supervisor.js" />
+    <Content Include="Content\js\mobiscroll.jquery.min.js" />
+    <Content Include="Content\js\MonthPiker.js" />
+    <Content Include="Content\js\validaciones.js" />
+    <Content Include="Content\layout.css" />
+    <Content Include="Content\mobiscroll.jquery.min.css" />
+    <Content Include="Content\modalbostrap.css" />
+    <Content Include="Content\plugins\datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="Content\plugins\datepicker\bootstrap-datepicker3.min.css" />
+    <Content Include="Content\plugins\daterangepicker\daterangepicker.css" />
+    <Content Include="Content\plugins\daterangepicker\daterangepicker.min.js" />
+    <Content Include="Content\plugins\fancytable\fancyTable.js" />
+    <Content Include="Content\plugins\lodash\lodash.min.js" />
+    <Content Include="Content\plugins\moment\moment.js" />
+    <Content Include="Content\plugins\numberValidador\numberValidador.js" />
+    <Content Include="Content\plugins\raphael\raphael.js" />
+    <Content Include="Content\plugins\sweetAlert\sweetalert2.css" />
+    <Content Include="Content\plugins\sweetAlert\sweetalert2.js" />
+    <Content Include="Content\plugins\tooltipster\jquery.tooltipster.min.js" />
+    <Content Include="Content\plugins\tooltipster\tooltipster.css" />
+    <Content Include="Content\plugins\treeview\bootstrap-treeview.js" />
+    <Content Include="Content\plugins\uitablefilter\jquery.uitablefilter.js" />
+    <Content Include="Content\scss\tableformt.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\SweetAlert\promise-polyfill.js" />
+    <Content Include="Content\SweetAlert\sweetalert2%408.js" />
+    <Content Include="Content\LayoutInicial.css" />
+    <Content Include="Content\tableexport.css" />
+    <Content Include="Download\excel\prueba.txt" />
+    <Content Include="Download\prueba.txt" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\Blob.min.js" />
+    <Content Include="Scripts\bootstrap-clockpicker.min.css" />
+    <Content Include="Scripts\bootstrap-clockpicker.min.js" />
+    <Content Include="Scripts\bootstrap-slider.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\exportar_excel\tableexport.js" />
+    <Content Include="Scripts\exportar_excel\xlsx.core.min.js" />
+    <Content Include="Scripts\github.min.css" />
+    <Content Include="Scripts\highlight.min.js" />
+    <Content Include="Scripts\jquery-2.2.0.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.multiselect.js" />
+    <Content Include="Scripts\jscolor.js" />
+    <Content Include="Scripts\tableexport.js" />
+    <Content Include="Util\consulta_placas.png" />
+    <Content Include="Util\CuerpoCorreo.txt" />
+    <Content Include="Util\Imagenes_incidencias\1040643372_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\1168241492_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\1254631639_1_FlujoIscha8.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1425926072_1_BizagiCierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\1448157713_1_FlujoRecaudación.PNG" />
+    <Content Include="Util\Imagenes_incidencias\155320977_1_FlujoRecaudación.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1556821408_1_FlujoRecaudación.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1629547082_1_Captura.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1739776367_1_BizagiCierredeKmv2.png" />
+    <Content Include="Util\Imagenes_incidencias\1752416059_1_FlujoIscha9.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1779028668_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\187658851_1_FlujoRecaudación.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1886695680_1_FlujoIscha7.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1904545232_1_FlujoRecaudación.PNG" />
+    <Content Include="Util\Imagenes_incidencias\1918072378_1_BizagiPresentacióndequeja.png" />
+    <Content Include="Util\Imagenes_incidencias\1960644602_1_PHOTO-2020-06-01-13-10-06.jpg" />
+    <Content Include="Util\Imagenes_incidencias\2039444796_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\2053794775_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\2055501773_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\2135760787_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\271054762_1_FlujoIscha8.PNG" />
+    <Content Include="Util\Imagenes_incidencias\271149936_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\300574276_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\516200329_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\614688681_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\707101606_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\728550810_1_BizagiInspecciónycontrolprevios.png" />
+    <Content Include="Util\Imagenes_incidencias\746353907_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\810508530_1_3dce4333-aa88-444f-8424-0876ffbb09c5.jpg" />
+    <Content Include="Util\Imagenes_incidencias\829035886_1_FlujoIscha9.PNG" />
+    <Content Include="Util\Imagenes_incidencias\860481287_1_BizagicierredelaOperación.png" />
+    <Content Include="Util\Imagenes_incidencias\91684064_1_FlujoIscha7.PNG" />
+    <Content Include="Util\Logotipo_ATU-01.jpg" />
+    <Content Include="Util\Logotipo_ATU.png" />
+    <Content Include="Util\mensaje\alerta.gif" />
+    <Content Include="Util\mensaje\bien.jpg" />
+    <Content Include="Util\mensaje\error.png" />
+    <Content Include="Util\mensaje\loading.gif" />
+    <Content Include="Util\mensaje\loading3.gif" />
+    <Content Include="Util\mensaje\Mensaje.js" />
+    <Content Include="Util\Modulo\101-MOVIL.png" />
+    <Content Include="Util\Modulo\301-MANTENIMIENTO.png" />
+    <Content Include="Util\Modulo\361-MOBIL.png" />
+    <Content Include="Util\Scripts\Blob.min.js" />
+    <Content Include="Util\Scripts\bootstrap-clockpicker.min.css" />
+    <Content Include="Util\Scripts\bootstrap-clockpicker.min.js" />
+    <Content Include="Util\Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Util\Scripts\bootstrap.min.js" />
+    <Content Include="Util\Scripts\exportar_excel\Blob.js" />
+    <Content Include="Util\Scripts\exportar_excel\FileSaver.js" />
+    <Content Include="Util\Scripts\exportar_excel\tableexport.js" />
+    <Content Include="Util\Scripts\exportar_excel\xls.core.min.js" />
+    <Content Include="Util\Scripts\exportar_excel\xlsx.core.min.js" />
+    <Content Include="Util\Scripts\github.min.css" />
+    <Content Include="Util\Scripts\googleMapsUtil\richmarker.js" />
+    <Content Include="Util\Scripts\googleMapsUtil\utilGoogleMap.js" />
+    <Content Include="Util\Scripts\highlight.min.js" />
+    <Content Include="Adjuntos\ProgramacionDetPod\jquery-mobile-theme-070849-0.zip" />
+    <None Include="Util\Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Util\Scripts\jquery-1.10.2.js" />
+    <Content Include="Util\Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Util\Scripts\jquery.blockUI.js" />
+    <Content Include="Util\Scripts\jquery.infinitecarousel3.min.js" />
+    <Content Include="Util\Scripts\jquery.multiselect.js" />
+    <Content Include="Util\Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Util\Scripts\jquery.validate.js" />
+    <Content Include="Util\Scripts\jquery.validate.min.js" />
+    <Content Include="Util\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Util\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Util\Scripts\modernizr-2.6.2.js" />
+    <Content Include="Util\Scripts\respond.js" />
+    <Content Include="Util\Scripts\respond.min.js" />
+    <Content Include="Util\Scripts\scripts_Admin\jquery-3.3.1.min.js" />
+    <Content Include="Util\Scripts\scripts_Admin\jquery.dataTables.min.js" />
+    <Content Include="Util\Scripts\scripts_Admin\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Util\Scripts\tableexport.js" />
+    <Content Include="Util\Scripts\Utilidades\Util.js" />
+    <None Include="Util\Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\EstudioPasajeros\Pasajeros_Campo.cshtml" />
+    <Content Include="Views\Usuarios\Login.cshtml" />
+    <Content Include="Views\EstudioPasajeros\Pasajeros_Origen_Destino.cshtml" />
+    <Content Include="Views\EstudioPasajeros\Pasajeros_Colectivo.cshtml" />
+    <Content Include="Views\Programacion\_ModalPOD\_ModalPOG.cshtml" />
+    <Content Include="Views\Incidencias\_EditarIncidencia.cshtml" />
+    <Content Include="Views\Correlativo\Informe_Correlativo.cshtml" />
+    <Content Include="Views\Correlativo\_AgregarInfCorr.cshtml" />
+    <Content Include="Views\Correlativo\_EditarInfCorr.cshtml" />
+    <Content Include="Views\Programacion\_ModalPOD\_ModalPOGRegistro.cshtml" />
+    <Content Include="Views\ConsultarPlaca\Consultar_Placa.cshtml" />
+    <Content Include="Views\Busqueda\Consultar_Conductor_Personal.cshtml" />
+    <Content Include="Views\Home\_ModalCuentas_usuario.cshtml" />
+    <Content Include="Views\Pasajero_ValidacionDet\SubirValidacionDetallado.cshtml" />
+    <Content Include="Views\Pasajero_ValidacionDet\_RegistroParaderoDet.cshtml" />
+    <Content Include="Views\Shared\_LayoutInicial_Mobil2.cshtml" />
+    <Content Include="Views\Pasajero_ValidacionDet\ReporteValidacionPasajeros.cshtml" />
+    <Content Include="Views\Programacion\Reporte_Caracterizacion.cshtml" />
+    <Content Include="Scripts\exportar_excel\xls.core.min.js" />
+    <Content Include="Views\EstudioPasajeros\ReportePasajeros.cshtml" />
+    <Content Include="Views\AnalisisTiempoViaje\ReporteViajes.cshtml" />
+    <Content Include="Views\Pasajero_ValidacionDet\Calcular_Intervalos.cshtml" />
+    <Content Include="Views\Generar_POG\Generar_Pog.cshtml" />
+    <Content Include="bin\LOGINPUA.dll.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="Views\Generar_POG\Reporte_Pog.cshtml" />
+    <Content Include="Views\Recorridos\Mantenimiento.cshtml" />
+    <Content Include="Views\Programacion\Reporte_Versus.cshtml" />
+    <Content Include="Views\EstudioPasajeros\ReportePasajerosDetallado.cshtml" />
+    <Content Include="Util\FormatoExcel.Pod.xlsx" />
+    <Content Include="Util\ManualProgramacion.pdf" />
+    <Content Include="Views\ValidacionePasajero\SubirValidacionPasaj.cshtml" />
+    <Content Include="Views\ValidacionePasajero\_RegistroParaderoDet.cshtml" />
+    <Content Include="Views\Produccion_Demanda\Listar.cshtml" />
+    <Content Include="Adjuntos\Produccion\010820_DEMANDA Y PRODUCCION.xlsx" />
+    <Content Include="Views\BusesConductores\Inicio.cshtml" />
+    <Content Include="Adjuntos\BusesConductores\BUSES Y CONDUCTORES PROGRAMADOS - CORREDORES COMPLEMENTARIOS ATU 17.xlsx" />
+    <Content Include="Adjuntos\BusesConductores\240920_BUSES Y CONDUC_PROG_CC.xlsx" />
+    <Content Include="Views\Concesionario\Buses_Conductores_Programados.cshtml" />
+    <Content Include="Util\Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Programacion\_ModalDespacho\_ActualizarIncidencias.cshtml" />
+    <Content Include="Views\Programacion\ProgrDetPod.cshtml" />
+    <Content Include="Views\Programacion\_ModalDespacho\_AgregarSalidaNueva.cshtml" />
+    <Content Include="Views\Programacion\_ModalProgPod\_RegistrarArchivoProgPod.cshtml" />
+    <Content Include="Views\Programacion\_ModalProgPod\_EnviarCorreoProgPod.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Properties\PublishProfiles\LOGINPUA.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\exportar_excel\Blob.js" />
+    <Content Include="Scripts\exportar_excel\FileSaver.js" />
+    <Content Include="Scripts\exportar_excel\jhxlsx.js" />
+    <Content Include="Scripts\googleMapsUtil\richmarker.js" />
+    <Content Include="Scripts\googleMapsUtil\utilGoogleMap.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.infinitecarousel3.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\scripts_Admin\bootstrap-4.2.1.min.js" />
+    <Content Include="Scripts\scripts_Admin\jquery.dataTables.min.js" />
+    <Content Include="Scripts\scripts_Admin\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\scripts_Admin\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\Utilidades\Util.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Util\36_blanco.png" />
+    <Content Include="Util\encriptador.jar" />
+    <Content Include="Util\icon_estadistica.png" />
+    <Content Include="Util\Image2\AMARILLO2.jpg" />
+    <Content Include="Util\Image2\camera-png-icon-10.png" />
+    <Content Include="Util\Image2\imagen1.jpg" />
+    <Content Include="Util\Image2\imagen2.jpg" />
+    <Content Include="Util\Image2\imagen3.jpg" />
+    <Content Include="Util\Image2\imagen4.jpg" />
+    <Content Include="Util\Image2\imagen5.jpg" />
+    <Content Include="Util\Image2\img1.jpg" />
+    <Content Include="Util\Image2\img2.jpg" />
+    <Content Include="Util\Image2\verde2.jpg" />
+    <Content Include="Util\Image\amarillo.png" />
+    <Content Include="Util\Image\archivo.png" />
+    <Content Include="Util\Image\azul.png" />
+    <Content Include="Util\Image\BI.jpg" />
+    <Content Include="Util\Image\bitacora.png" />
+    <Content Include="Util\Image\CC.png" />
+    <Content Include="Util\Image\circuito.png" />
+    <Content Include="Util\Image\descarga.jpg" />
+    <Content Include="Util\Image\excel-icon.png" />
+    <Content Include="Util\Image\ico.png" />
+    <Content Include="Util\Image\icon_estadistica.png" />
+    <Content Include="Util\Image\JP.png" />
+    <Content Include="Util\Image\loading.gif" />
+    <Content Include="Util\Image\map-icon-new-1.png" />
+    <Content Include="Util\Image\map.jpg" />
+    <Content Include="Util\Image\marcador_mapa.png" />
+    <Content Include="Util\Image\morado.png" />
+    <Content Include="Util\Image\ms-excel-icon.png" />
+    <Content Include="Util\Image\partes_bus.png" />
+    <Content Include="Util\Image\pdf-icon.jpg" />
+    <Content Include="Util\Image\PN.png" />
+    <Content Include="Util\Image\programando.jfif" />
+    <Content Include="Util\Image\PT.png" />
+    <Content Include="Util\Image\pT_lima.jpg" />
+    <Content Include="Util\Image\reportes.png" />
+    <Content Include="Util\Image\rojo.png" />
+    <Content Include="Util\Image\SJL.png" />
+    <Content Include="Util\Image\slide1.jpg" />
+    <Content Include="Util\Image\slide2.jpg" />
+    <Content Include="Util\Image\supervision.png" />
+    <Content Include="Util\Image\TGA.png" />
+    <Content Include="Util\Image\Users_icon.jpg" />
+    <Content Include="Util\Image\verde.png" />
+    <Content Include="Util\img_despacho\prueba.txt" />
+    <Content Include="Util\loader.gif" />
+    <Content Include="Util\mensajes-error\trabajando.png" />
+    <Content Include="Util\Modulo\1-ADMINISTRADOR CC.png" />
+    <Content Include="Util\Modulo\201-VELOCIDAD.jpg" />
+    <Content Include="Util\Modulo\21-ADMINISTRADOR CC.png" />
+    <Content Include="Util\Modulo\221-PROGRAMACION.jpg" />
+    <Content Include="Util\Modulo\241-GESTION DE USUARIO.png" />
+    <Content Include="Util\Modulo\242-REPORTES.png" />
+    <Content Include="Util\Modulo\261-OPERACIONES.png" />
+    <Content Include="Util\Modulo\281-PROGRAMACION.png" />
+    <Content Include="Util\Modulo\41-OPERACIONES.png" />
+    <Content Include="Util\Modulo\61-PROGRAMACIÓN.png" />
+    <Content Include="Util\Modulo\81-PROGRAMACION.png" />
+    <Content Include="Util\Programacion_img\Corredor-Amarrilo\20-05-8.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Amarrilo\20-05.png" />
+    <Content Include="Util\Programacion_img\Corredor-Amarrilo\21-05-1.png" />
+    <Content Include="Util\Programacion_img\Corredor-Amarrilo\21-05.png" />
+    <Content Include="Util\Programacion_img\Corredor-Amarrilo\22-05-6.png" />
+    <Content Include="Util\Programacion_img\Corredor-Azul\20-05-9.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Azul\20-05.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Azul\20-05.vnd.openxmlformats-officedocument.presentationml.presentation" />
+    <Content Include="Util\Programacion_img\Corredor-Azul\21-05-4.png" />
+    <Content Include="Util\Programacion_img\Corredor-Azul\22-05-4.png" />
+    <Content Include="Util\Programacion_img\Corredor-Morado\20-05.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Morado\22-05-2.png" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\20-05.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\21-05-0.png" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\21-05.png" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\22-05-2.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\22-05-4.png" />
+    <Content Include="Util\Programacion_img\Corredor-Rojo\22-05.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Verde\20-05.jpeg" />
+    <Content Include="Util\Programacion_img\Corredor-Verde\20-05.png" />
+    <Content Include="Util\Programacion_img\Corredor-Verde\22-05-1.png" />
+    <Content Include="Util\Programacion_img\Estadisticas\20-05.png" />
+    <Content Include="Util\Programacion_img\Estadisticas\21-05.png" />
+    <Content Include="Util\Programacion_img\Estadisticas\22-05.png" />
+    <Content Include="Util\Programacion_img\ico.png" />
+    <Content Include="Util\Programacion_img\icon_estadistica.png" />
+    <Content Include="Util\PT_logon2.png" />
+    <Content Include="Views\PicoPlaca\Reporte.cshtml" />
+    <Content Include="Views\PicoPlaca\RegistroPicoPlaca.cshtml" />
+    <Content Include="Views\PicoPlaca\_RegistroPicoPlaca.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin_v2.cshtml" />
+    <Content Include="Views\Shared\_LayoutPrincipal.cshtml" />
+    <Content Include="Views\PicoPlaca\_ValidacionPdf.cshtml" />
+    <Content Include="Views\Salida\ReporteComparativo.cshtml" />
+    <Content Include="Views\Buses\_AgregarBuses.cshtml" />
+    <Content Include="Views\Salida\ImportarRegistros.cshtml" />
+    <Content Include="Views\Salida\_RegistroDespacho.cshtml" />
+    <Content Include="Views\Paradero\Inicio.cshtml" />
+    <Content Include="Views\Paradero\_MapaParaderos.cshtml" />
+    <Content Include="Views\Paradero\_RegistroParadero.cshtml" />
+    <Content Include="Views\Paradero\_ImportarParaderos.cshtml" />
+    <Content Include="Views\RutaTipoServicio\Inicio.cshtml" />
+    <Content Include="Views\RutaTipoServicio\_RegistroRutaTipoServ.cshtml" />
+    <Content Include="Views\RutaTipoServicio\_RegistroParaderos.cshtml" />
+    <Content Include="Views\Persona\MantenimientoPerson.cshtml" />
+    <Content Include="Views\Persona\_RegistroPersona.cshtml" />
+    <Content Include="Views\Menu_Usuario\Menu_usuario.cshtml" />
+    <Content Include="Views\Menu_Usuario\_RegistroMenu.cshtml" />
+    <Content Include="Views\Perfil\Perfil_Inicio.cshtml" />
+    <Content Include="Views\Perfil\_RegistroPerfil.cshtml" />
+    <Content Include="Views\Menu_Perfil\Asignar_MenuPerfi.cshtml" />
+    <Content Include="Views\Home\Sistemas_.cshtml" />
+    <Content Include="Views\Modulo\Mantenimiento_Modulo.cshtml" />
+    <Content Include="Views\Modulo\_RegistroModulo.cshtml" />
+    <Content Include="Views\Home\Inicio.cshtml" />
+    <Content Include="Views\Shared\_LayoutInicial.cshtml" />
+    <Content Include="Views\Modulo\_EditarModulo.cshtml" />
+    <Content Include="Views\Proveedor_Servicio\Inicio.cshtml" />
+    <Content Include="Views\Proveedor_Servicio\_RegistroProv_Serv.cshtml" />
+    <Content Include="Views\Proveedor_Servicio\_EditarProv_Serv.cshtml" />
+    <Content Include="Views\Ruta\Inicio.cshtml" />
+    <Content Include="Views\Ruta\_RegistroRuta.cshtml" />
+    <Content Include="Views\Salida\ViajesPromediados.cshtml" />
+    <Content Include="Views\AnalisisTiempoViaje\Inicio.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Home\mensaje_error.cshtml" />
+    <Content Include="Views\Administracion\Index.cshtml" />
+    <Content Include="Views\Empresa\Crear.cshtml" />
+    <Content Include="Views\Empresa\Index.cshtml" />
+    <Content Include="Views\Empresa\Modificar.cshtml" />
+    <Content Include="Views\Empresa\Empresa.cshtml" />
+    <Content Include="Views\Accesos\Crear.cshtml" />
+    <Content Include="Views\Accesos\Accesos.cshtml" />
+    <Content Include="Views\Accesos\Index.cshtml" />
+    <Content Include="Views\Accesos\Modificar.cshtml" />
+    <Content Include="Views\Empresa\Control\Control_Buses.cshtml" />
+    <Content Include="Views\Programacion\Subir_Rutas.cshtml" />
+    <Content Include="Views\Supervisor\Fuera_Campo.cshtml" />
+    <Content Include="Views\Supervisor\Estado_Bus.cshtml" />
+    <Content Include="Views\Administracion\Listar_Usuarios_CC.cshtml" />
+    <Content Include="Views\Supervisor\Index.cshtml" />
+    <Content Include="Views\Supervisor\Reportes_Despacho.cshtml" />
+    <Content Include="Views\Supervisor\Ubicacion_Despachador.cshtml" />
+    <Content Include="Views\Programacion\SubirProgramacion.cshtml" />
+    <Content Include="Views\Programacion\_ImportarExcelProgramacion.cshtml" />
+    <Content Include="Views\Usuario_Personas\MantenimientoUsuario.cshtml" />
+    <Content Include="Views\Usuario_Personas\_RegistroUsuario.cshtml" />
+    <Content Include="Views\Usuario_Personas\_EditarUsuario.cshtml" />
+    <Content Include="Views\Persona\Actualizar_Datos.cshtml" />
+    <Content Include="Views\Buses\Buses.cshtml" />
+    <Content Include="Views\Buses\Buses_Desafectados.cshtml" />
+    <Content Include="Views\Buses\_AfectarBuses.cshtml" />
+    <Content Include="Views\Buses\_EditarBuses.cshtml" />
+    <Content Include="Views\Supervisor\_RegistroImagenes.cshtml" />
+    <Content Include="Views\Menu_Perfil\_AgregarAccion.cshtml" />
+    <Content Include="Views\RolPersona\RolPersona.cshtml" />
+    <Content Include="Views\RolPersona\_EditarRoles.cshtml" />
+    <Content Include="Views\RolPersona\_RegistroRolPersona.cshtml" />
+    <Content Include="Views\Ruta\_EditarRuta.cshtml" />
+    <Content Include="Views\RutaTipoServicio\_EditarRutaTipoServ.cshtml" />
+    <Content Include="Views\Incidencias\Incidencias.cshtml" />
+    <Content Include="Views\Incidencias\Infracciones.cshtml" />
+    <Content Include="Views\Incidencias\_AgregarInfraccion.cshtml" />
+    <Content Include="Views\Incidencias\_EditarInfraccion.cshtml" />
+    <Content Include="Views\Incidencias\_AgregarIncidencia.cshtml" />
+    <Content Include="Views\Correlativo\_ActualizarInfCorr.cshtml" />
+    <Content Include="Views\Conductores\Conductores.cshtml" />
+    <Content Include="Views\Programacion\ProgracionDetallado.cshtml" />
+    <Content Include="Views\Programacion\_ModalDespacho\_RegistroDetallSalida.cshtml" />
+    <Content Include="Views\Programacion\_ModalDespacho\_RegistroProgDetall.cshtml" />
+    <Content Include="Views\Shared\_LayoutInicial_Mobil.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Adjuntos\Files_Despacho\" />
+    <Folder Include="Adjuntos\Programacion\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="bin\Adjuntos\Paradero_Validacion\" />
+    <Folder Include="Content\bin\" />
+    <Folder Include="Upload\" />
+    <Folder Include="Views\Bitacora\" />
+    <Folder Include="Views\Control\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AD\AD.csproj">
+      <Project>{44d23c0c-163a-471d-b4a6-03cc862d2f3a}</Project>
+      <Name>AD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ENTIDADES\Entidades.csproj">
+      <Project>{ebd3d24a-f878-4b89-8d43-31f161b2f200}</Project>
+      <Name>Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LN\LN.csproj">
+      <Project>{e4ad381c-1854-486e-bbd9-b01d88b2191a}</Project>
+      <Name>LN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LOGINPUA.Util\LOGINPUA.Util.csproj">
+      <Project>{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}</Project>
+      <Name>LOGINPUA.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REPOSITORIO\Repositorio.csproj">
+      <Project>{c5047a51-92f9-406e-b979-ff0e8bbf8c3a}</Project>
+      <Name>Repositorio</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>53179</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:53183/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

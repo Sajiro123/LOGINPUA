@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "ReportePasajeros";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    var fecha_actual = DateTime.Now.ToString("dd/MM/yyyy");
+}
+
+<script src="~/Content/js/js_estudio_pasajeros/js_ReportePasajeros.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+
+
+
+<script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+<script src="~/Scripts/exportar_excel/Blob.js"></script>
+<script src="~/Scripts/exportar_excel/xls.core.min.js"></script>
+<script src="~/Scripts/exportar_excel/tableexport.js"></script>
+
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Reporte de Estudio de Pasajeros&nbsp;&nbsp;&nbsp;
+
+
+            @*@foreach (var item in Lista_acciones)
+                {
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                    {
+                        <button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    }
+
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                    {
+                        idmodificar = 1;
+                        <input type="text" id="permisoActualiza" value="1" hidden />
+                    }
+                    if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                    {
+                        ideliminar = 1;
+                        <input type="text" id="permisoEliminar" value="1" hidden />
+                    }
+                }*@
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+        </h4>
+    </div>
+</div>
+<br />
+
+<div class="row" id="row_filtros">
+
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="idfiltro">
+                <option value="oferta_demanda" selected>Oferta-Demanda</option>
+                <option value="origen_destino">Origen-Destino</option>
+                <option value="colectivo">Colectivo</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select name="id_corredor" class="form-control form-control-sm" id="selectRutaConsulta"></select>
+        </div>
+    </div>
+
+    @*<div class="col-md-1">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="idlado">
+                <option value="A">A</option>
+                <option value="B">B</option>
+
+            </select>
+        </div>
+    </div>*@
+
+    <div class="col-md-2">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input class="form-control form-control-sm" id="rangoFechaConsulta">
+        </div>
+    </div>
+
+
+    <div class="col-md-1">
+        <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" onclick="Listar_pasajeros_filtro();">Consultar</button>
+    </div>
+    @*<p><a href="#">Do it.</a></p>*@
+</div>
+
+<hr />
+
+<div class="table-responsive">
+    <table class="text-center responsive-table" style="width:100%" id="tablaGeneral">
+        <thead class="thead-azul-claro">
+            @*<tr></tr>*@
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+  
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_LISTAR_OFERTA_DEMANDA = "@Url.Action("Listar_Oferta_Demada", "EstudioPasajeros")";
+    var URL_GET_LISTAR_ORIGEN_DESTINO = "@Url.Action("Listar_Origen_Destino", "EstudioPasajeros")";
+    var URL_GET_LISTAR_COLECTIVO = "@Url.Action("Listar_Colectivo", "EstudioPasajeros")";
+
+    $('#rangoFechaConsulta').daterangepicker({
+        //startDate: FECHA_HOY,
+
+        //maxDate: FECHA_HOY,
+        //startDate: '14/02/2020',
+        //endDate: '08/05/2020',
+        timePicker: false,
+        //startDate: moment().startOf('hour'),
+        //endDate: moment().startOf('hour').add(7, 'days'),
+        //"disabledDays": new Array('02/11/2019', '03/11/2019'),
+        "opens": "center",
+        locale: { format: 'DD/MM/YYYY', "daysOfWeek": ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"], "monthNames": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"] }
+    });
+</script>
+

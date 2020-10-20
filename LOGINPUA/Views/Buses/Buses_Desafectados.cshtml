@@ -1,0 +1,275 @@
+﻿
+@{
+    ViewBag.Title = "Lista_Buses_Desafectados";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>Buses Desafectados&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+    <span class="fa fa-search"></span>
+</button></h4>
+
+    </div>
+</div>
+<br />
+
+<hr />
+
+         <div class="row">
+            <div class="col-sm-12">
+                <table id="TbbusesDesafec" class="responsive-table" style="width:100%">
+                  
+                      <thead>
+                        <tr role="row">
+                            <th>N°</th>
+                            <th>PLACA REEMPLAZADA</th>
+                            <th>CORREDOR</th>
+                            <th>PLACA</th>
+                            <th>AÑO DE FABRICACION</th>
+                            <th>COMBUSTIBLE</th>
+                            <th>FECHA DE INCIO A PT</th>
+                            <th style="width:500px;">NOMBRE DE LA EMPRESA</th>
+                            <th>PROPIETARIO</th>
+                            <th>PAQUETE CONCESIÓN</th>
+                            <th>PAQUETE DONDE BRINDA SERVICIO</th>
+                            <th>TIPO SERVICIO</th>
+                            <th>ESTADO</th>
+                            <th>MARCA</th>
+                            <th>MODELO</th>
+                            <th>TECNOLOGIA EURO</th>
+                            <th>POTENCIA MOTOR</th>
+                            <th>SERIE DE MOTOR</th>
+                            <th>SERIE CHASIS</th>
+                            <th>COLOR VEHICULO</th>
+                            <th>LONGITUD</th>
+                            <th>ASIENTOS</th>
+                            <th>ÁREA LIBRE DE PASILLO (m2)</th>
+                            <th>PESO NETO (KG)</th>
+                            <th>PESO BRUTO (KG)</th>
+                            <th>ALTURA</th>
+                            <th>ANCHO</th>
+                            <th>CARGA UTIL</th>
+                            <th>PUERTA A LA IZQUIERDA</th>
+                            <th>PARTIDA REGISTRAL</th>
+                            <th>CODIGO CVS</th>
+                            <th>CVS INICIO</th>
+                            <th>CVS VIGENCIA</th>
+                            <th>SOAT INICIO</th>
+                            <th>SOAT VIGENCIA</th>
+                            <th>N° PÓLIZA VEHÍCULOS</th>
+                            <th>VEHICULOS INICIO</th>
+                            <th>VEHICULOS VIGENCIA</th>
+                            <th>N° POLIZA RESPONSABILIDAD CIVIL</th>
+                            <th>RC INICIO</th>
+                            <th>RC VIGENCIA</th>
+                            <th>N° POLIZA ACCIDENTES PERSONALES COLECTIVOS PARTICULARES</th>
+                            <th>APCP INICIO</th>
+                            <th>APCP VIGENCIA</th>
+                            <th>N° POLIZA MULTIRIESGOS</th>
+                            <th>MULTIRESGOS INICIO</th>
+                            <th>MULTIRIESGOS VIGENCIA</th>
+                            <th>RTV INICIO</th>
+                            <th>RTV VIGENCIA</th>
+                            <th>INICIO REVISION ANUAL GNV</th>
+                            <th>VIGENCIA REVISION ANUAL GNV</th>
+                            <th>INICIO REVISION CILINDROS GNV</th>
+                            <th>VIGENCIA REVISION CILINDROS GNV</th>
+                        </tr>
+                    </thead>
+                    <tbody class="display nowrap" id="listar_buses_desafectados"></tbody>
+                </table>
+            </div>
+        </div>
+  
+
+
+@Html.Partial("_AfectarBuses")
+
+<script>
+
+    var URL_LIST_BUSES_DESAFECTADOS = "@Url.Action("ListarBusesDesafectados", "Buses")";
+    var URL_REGISTRAR_BUS_AFECTADO = "@Url.Action("Registro_Bus_Afectado", "Buses")";
+    var URL_LIST_CORREDORES = "@Url.Action("getRutaCorredor", "Buses")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")'; 
+
+
+    $(document).ready(function () {
+        getRutaCorredor();
+        getListBusesDesafectados();
+
+      
+        var placa_id = $('#idplaca').val();
+        if (placa_id > 0) {
+            $('#ModalDesafectarBus').modal({ backdrop: 'static', keyboard: false });
+        }
+
+        //INSERTAR BUS AFECTADO
+        $("#sectionBusesDesafectados").on("submit", function (e) {
+
+            e.preventDefault();
+            if ($('#BS_PLACA').val().length == 0) {
+                Swal.fire({
+                    type: 'info',
+                    title: "Debe llenar los campos obligatorios para realizar el registro.",
+                    showConfirmButton: false,
+                });
+                return false;
+            }
+
+            var ModelBus = $('#sectionBusesDesafectados').serializeObject();
+            $('#registrar_afectado_btn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Guardando...');
+
+            $.ajax({
+                url: URL_REGISTRAR_BUS_AFECTADO,
+                data: ModelBus,
+                dataType: 'json',
+                success: function (result) {
+                    Swal.fire({
+                        type: result.COD_ESTADO == 0 ? 'error' : 'success',
+                        title: result.DES_ESTADO,
+                        showConfirmButton: false,
+                        //timer: 2000
+                    })
+                    $('#registrar_afectado_btn').prop('disabled', false).html('Guardar');
+                    $('#ModalDesafectarBus').modal('hide');
+                    getListBusesDesafectados();
+                }, error: function (xhr, status, error) {
+                },
+
+            }, JSON);
+
+        })
+
+
+
+
+    });
+
+    function getRutaCorredor() {
+
+        $.ajax({
+            url: URL_LIST_CORREDORES,
+            dataType: 'json',
+            success: function (result) {
+                $.each(result, function () {
+                    $('#selectAbrevCorredorAfectar').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+
+                })
+
+            }
+        }, JSON);
+    }
+    
+    function getListBusesDesafectados() {
+
+        $('#TbbusesDesafec tbody').empty();
+        DATA_LISTA_BUSES = "";
+        var strHTML = '';
+
+        $.ajax({
+            url: URL_LIST_BUSES_DESAFECTADOS,
+            dataType: 'json',
+            success: function (result) {
+                DATA_LISTA_BUSES = result
+                $('#listar_buses').empty();
+                if (result.length <= 0) {
+                    strHTML += '<tr><td colspan="100" class="text-left" style="padding-left: 15%">No hay información para mostrar</td></tr>';
+                } else {
+                    $.each(result, function (i) {
+
+                        strHTML += '<tr  onclick="seleccionaFila($(this))" ' + '>' +
+                                    '<td>' + (i + 1) + '</td>' +
+                                    '<td class="text-center" >' + '<span class="badge badge-primary" style="font-size: 1em" >' + (this.PLACA_REEMPLAZADA == null ? "" : this.PLACA_REEMPLAZADA) + '</span>' + '</td>' +
+                                    '<td class="text-center" >' + (this.ABREVIATURA == null ? "" : this.ABREVIATURA) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PLACA == null ? "" : this.BS_PLACA) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_AÑO_FABRICACION == null ? "" : this.BS_AÑO_FABRICACION) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_COMBUSTIBLE == null ? "" : this.BS_COMBUSTIBLE) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_FECINI_PT == null ? "" : this.BS_FECINI_PT) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_NOM_EMPRE == null ? "" : this.BS_NOM_EMPRE) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PROPIETARIO == null ? "" : this.BS_PROPIETARIO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PAQUETE_CONCESION == null ? "" : this.BS_PAQUETE_CONCESION) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PAQUETE_SERVICIO == null ? "" : this.BS_PAQUETE_SERVICIO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_TIPO_SERVICIO == null ? "" : this.BS_TIPO_SERVICIO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_ESTADO == null ? "" : this.BS_ESTADO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_MARCA == null ? "" : this.BS_MARCA) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_MODELO == null ? "" : this.BS_MODELO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_TECNOLOGIA_EURO == null ? "" : this.BS_TECNOLOGIA_EURO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_POTENCIA_MOTOR == null ? "" : this.BS_POTENCIA_MOTOR) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_SERIE_MOTOR == null ? "" : this.BS_SERIE_MOTOR) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_SERIE_CHASIS == null ? "" : this.BS_SERIE_CHASIS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_COLOR_VEHICULO == null ? "" : this.BS_COLOR_VEHICULO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_LONGITUD == null ? "" : this.BS_LONGITUD) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_ASIENTOS == null ? "" : this.BS_ASIENTOS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_AREA_PASILLO == null ? "" : this.BS_AREA_PASILLO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PESO_NETO == null ? "" : this.BS_PESO_NETO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PESO_BRUTO == null ? "" : this.BS_PESO_BRUTO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_ALTURA == null ? "" : this.BS_ALTURA) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_ANCHO == null ? "" : this.BS_ANCHO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_CARGA_UTIL == null ? "" : this.BS_CARGA_UTIL) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PUERTA_IZQUIERDA == null ? "" : this.BS_PUERTA_IZQUIERDA) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_PARTIDA_REGISTRAL == null ? "" : this.BS_PARTIDA_REGISTRAL) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_CODIGO_CVS == null ? "" : this.BS_CODIGO_CVS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_CVS_FEC_INIC == null ? "" : this.BS_CVS_FEC_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_CVS_FEC_FIN == null ? "" : this.BS_CVS_FEC_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_SOAT_FEC_INIC == null ? "" : this.BS_SOAT_FEC_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_SOAT_FEC_FIN == null ? "" : this.BS_SOAT_FEC_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_POLIZA_VEHICULOS == null ? "" : this.BS_POLIZA_VEHICULOS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_VEHICULOS_INIC == null ? "" : this.BS_VEHICULOS_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_VEHICULOS_FIN == null ? "" : this.BS_VEHICULOS_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_POLIZA_CIVIL == null ? "" : this.BS_POLIZA_CIVIL) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_RC_INICIO == null ? "" : this.BS_RC_INICIO) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_RC_FIN == null ? "" : this.BS_RC_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_POLIZA_ACCI_COLECTIVOS == null ? "" : this.BS_POLIZA_ACCI_COLECTIVOS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_APCP_INIC == null ? "" : this.BS_APCP_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_APCP_FIN == null ? "" : this.BS_APCP_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_POLIZA_MULTIRIESGOS == null ? "" : this.BS_POLIZA_MULTIRIESGOS) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_MULTIRESGOS_INIC == null ? "" : this.BS_MULTIRESGOS_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_MULTIRESGOS_FIN == null ? "" : this.BS_MULTIRESGOS_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_RTV_INIC == null ? "" : this.BS_RTV_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_RTV_FIN == null ? "" : this.BS_RTV_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_REVI_ANUAL_GNV_INIC == null ? "" : this.BS_REVI_ANUAL_GNV_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_REVI_ANUAL_GNV_FIN == null ? "" : this.BS_REVI_ANUAL_GNV_FIN) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_REVISION_CILINDROS_GNV_INIC == null ? "" : this.BS_REVISION_CILINDROS_GNV_INIC) + '</td>' +
+                                    '<td class="text-center" >' + (this.BS_REVISION_CILINDROS_GNV_FIN == null ? "" : this.BS_REVISION_CILINDROS_GNV_FIN) + '</td>' +
+                                   '</tr>';
+                    });
+                }
+                $('#listar_buses_desafectados').append(strHTML);
+                util.activarEnumeradoTabla('#TbbusesDesafec', $('#btnBusquedaEnTabla'));
+
+            },
+        }, JSON);
+      }
+
+    function seleccionaFila(elementFila) {
+        $.each($('#TbbusesDesafec tbody > tr'), function () {
+            $(this).css('background-color', '');
+        });
+        elementFila.css('background-color', '#17a2b838');
+    }
+
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+</script>
+
+

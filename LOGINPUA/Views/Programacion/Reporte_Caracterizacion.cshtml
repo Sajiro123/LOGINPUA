@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "Reporte_Caracterizacion";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+}
+
+
+<script src="~/Content/js/js_programacion_bus/js_reporteCaracterizacion.js"></script>
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment.min.js"></script>
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Caracterizacion Semanal&nbsp;&nbsp;&nbsp;
+
+            @*@foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {*@
+                    @*<button type="button" id="btnRegistrarPicoPlaca" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModalImportar();">
+                        <span class="fa fa-plus"></span>
+                    </button>*@
+                @*}
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }*@
+
+        </h4>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredor();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectRutaConsulta" ></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Seleccionar rango de fechas"><span class="fa fa-calendar" aria-hidden="true"></span></span>
+            </div>
+            <input class="form-control form-control-sm" id="rangoFechaConsulta" />
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+
+            <button id="consultar" class="btn btn-info btn-sm"  onclick="reporte_x_fechas();" style="text-transform: capitalize;">Consultar</button>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="table-responsive">
+
+    <table id="tbReporteCaracterizacion" class="text-center responsive-table" style="width:100%">
+        <thead>
+            <tr>
+                <th width="30" class="text-center">N°</th>
+                <th width="46" class="text-center" scope="col">RUTA</th>
+                <th width="100" class="text-center" scope="col">N° BUSES</th>
+                <th width="100" class="text-center" scope="col">N° KM</th>
+                <th width="100" class="text-center" scope="col">USUARIO</th>
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+    @*@Html.Partial("")
+    @Html.Partial("")
+    @Html.Partial("")*@
+
+</div>
+<script>
+
+
+    var URL_GET_AGREGAR_CAMPOS_POG = "@Url.Action("AgregarCamposPOG", "Programacion")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("cargarArchivo", "Programacion")";
+     var URL_GET_TIPO_DIAS = "@Url.Action("getTipoDias", "Programacion")";
+    var URL_GET_RESUMEN_PROGRAMACION = "@Url.Action("getResumenProgramado", "Programacion")";
+    var URL_GET_TIPO_SERVICIO_BY_CORREDOR = "@Url.Action("getTipoServicioByCorredor", "Programacion")";
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_IDMAESTRO_X_FECHA = "@Url.Action("getIdMaestro_x_fecha", "Programacion")";
+    var URL_GET_DATA_VIAJES = "@Url.Action("getDataViajesProgramacion", "Programacion")";
+
+    var URL_GET_DATA_VIAJES = "@Url.Action("getDataViajesProgramacion", "Programacion")";
+    var URL_GET_TIPOOPER_X_RUTA = "@Url.Action("getTiposServicioByIdRuta", "RutaTipoServicio")";
+    $('#rangoFechaConsulta').daterangepicker({
+        //"maxSpan": {
+        //    "days": 6
+        //},
+        "autoApply": true,
+        
+        startDate: '06/04/2020',
+        endDate: '08/04/2020',
+        timePicker: false,
+        //startDate: moment().startOf('hour'),
+        //endDate: moment().startOf('hour').add(7, 'days'),
+        //"disabledDays": new Array('02/11/2019', '03/11/2019'),
+        "opens": "center",
+        locale: { format: 'DD/MM/YYYY', "daysOfWeek": ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"], "monthNames": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"] }
+
+    });
+
+    var util = new Util();
+
+</script>
+

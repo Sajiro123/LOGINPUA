@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Conductores";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+    List<ENTIDADES.CC_RUTA_CORREDOR> listRutas = new List<ENTIDADES.CC_RUTA_CORREDOR>();
+    listRutas = ViewBag.rutas;
+}
+
+
+<style>
+    body {
+        overflow-x: scroll;
+    }
+
+    .textoAchicado {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 163px;
+    }
+</style>
+
+<script src="~/Content/js/js_incidencias/js_registro_incidencias.js"></script>
+<script src="~/Scripts/highlight.min.js"></script>
+<script src="~/Scripts/bootstrap-clockpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/bootstrap-clockpicker.min.css">
+
+<link href="https://www.malot.fr/bootstrap-datetimepicker/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<script src="https://www.malot.fr/bootstrap-datetimepicker/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?t=20130302"></script>
+
+@*<script src="~/Content/js/js_incidencias/js_registro_incidencias.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>*@
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <br />
+        <h4>
+
+            Infracciones&nbsp;&nbsp;&nbsp;
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <a href="" id="btnRegistrarIncidencia" onclick="$('#sectionParametrosAgregarIncidencia')[0].reset();" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_agregar_inciden">
+                        <span class="fa fa-plus"></span>
+                    </a>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+        </h4>
+    </div>
+</div>
+
+
+<br />
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+            </div>
+            <select class="form-control form-control-sm" id="selectCorredores" onchange="getRutaPorCorredores_inicial();"></select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+            </div>
+
+            <select class="form-control form-control-sm" id="selectRutaCorredor">
+
+                @*@foreach (var item in listRutas)
+                    {
+                        <option value="@item.ID_RUTA">@item.ABREV_CORREDOR   @item.NRO_RUTA</option>
+
+                    }*@
+            </select>
+
+        </div>
+    </div>
+
+    <div class="col-md-7 text-right">
+        <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+    </div>
+
+
+
+    @*<div class="col-md-2">
+            <div class="col-xs-6">
+                <button class="btn btn-info btn-sm" id="mostrartodo_btn" onclick="getListBuses();"><i class="fas fa-bus-alt"></i>&nbsp; Mostrar Todo</button>
+            </div>
+        </div>*@
+
+    @*<div class="col-md-1" style="display: none">
+            <button id="consultar" class="btn btn-info btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="getListConductores();">Consultar</button>
+
+        </div>
+
+        <div class="col-md-2" style="display: none">
+            <div class="col-xs-6">
+
+            </div>
+        </div>
+        <div class="col-md-8 text-right">
+            <button id="exportar" class="btn btn-success btn-sm" data-toggle="modal" style="text-transform: capitalize;" onclick="exportarTabla();">Exportar</button>
+        </div>*@
+
+
+
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12">
+        <div>
+
+            <table class="responsive-table" id="Tbincidencias" style="width:100%">
+                <thead class="thead-azul-claro">
+                    <tr>
+                        <th>N°</th>
+                        <th>FECHA</th>
+                        <th>HORA</th>
+                        <th>PLACA</th>
+                        <th>OPERADOR</th>
+                        <th>INFRACCION</th>
+                        <th>SANCION</th>
+                        <th>DESCRIPCION</th>
+                        <th>ESTADO</th>
+                        <th>USU REG</th>
+                        <th>FECHA REG</th>
+                        <th></th>
+                        @*@if (idmodificar == 1)
+                            {
+                                <th style="width: 100px;color:#1d96b2">aS</th>
+                                <th style="width: 100px;color:#1d96b2">aS</th>
+                            }*@
+                        @if (ideliminar == 1)
+                        {
+                            <th style="color:#1d96b2"></th>
+                        }
+                        <th></th>
+
+
+                    </tr>
+                </thead>
+                <tbody class="display nowrap" id="listar_incidencias">
+                    @*<tr>
+                            <td colspan="13">Cargando informacion de las Incidencias correspondientes</td>
+                        </tr>*@
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@Html.Partial("_AgregarIncidencia")
+@*@Html.Partial("_ActualizarIncidencia")*@
+@Html.Partial("_EditarIncidencia")
+
+@if (ViewBag.resultado != null)
+{
+    <script>
+        $(document).ready(function () {
+        Swal.fire({
+          type: 'success',
+          title: 'Se registró correctamente',
+          showConfirmButton: false,
+          //timer: 2000
+        })
+        });
+    </script>
+}
+
+<script>
+    $('#txt_fecha_incidencia').datepicker({
+        format: "dd/mm/yyyy",
+        orientation: "bottom",
+        autoclose: true
+    });
+    $('#txt_fecha_fin').datepicker({
+        format: "dd/mm/yyyy",
+        orientation: "bottom",
+        autoclose: true
+    });
+
+    var Utilidades = new Util();
+
+    var URL_LIST_CONDUCTORES = "@Url.Action("ListarConductores", "Conductores")";
+    var URL_LIST_PERSONA_INCIDENCIA = "@Url.Action("Listar_Persona_Incidencia", "Incidencias")";
+    var URL_LIST_INCIDENCIAS = "@Url.Action("Listar_Incidencias", "Incidencias")";
+    var URL_LIST_INFRACCIONES = "@Url.Action("Listar_Infracciones", "Incidencias")";
+    var URL_REGISTRAR_INCIDENCIA = "@Url.Action("Registrar_Incidencia", "Incidencias")";
+    var URL_ANULA_INCIDENCIA = "@Url.Action("AnularIncidencia", "Incidencias")";
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_LIST_BUSES_BY_ID = "@Url.Action("ListarBusesbyId", "Buses")";
+    var URL_LIST_CONCESIONARIOS = "@Url.Action("ListarConcesionarios", "Incidencias")";
+    var URL_ACTUALIZAR_INCIDENCIA = "@Url.Action("Actualizar_Incidencia", "Incidencias")";
+    var URL_EDITAR_INCIDENCIA = "@Url.Action("Editar_Incidencia", "Incidencias")";
+    var URL_ESTADO_INCIDENCIA = "@Url.Action("Estado_Incidencia", "Incidencias")";
+    var URL_SUBIR_ARCHIVO_INCIDENCIA = "@Url.Action("Agregar_Archivo", "Incidencias")";
+    var URL_ELIMINAR_ARCHIVO_INCIDENCIA = "@Url.Action("Eliminar_Archivo", "Incidencias")";
+
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+    //$('.clockpicker').clockpicker().find('input').change(function () {
+    //});
+
+</script>

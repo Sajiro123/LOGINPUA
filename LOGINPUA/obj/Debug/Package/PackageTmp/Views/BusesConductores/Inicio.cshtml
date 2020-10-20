@@ -1,0 +1,448 @@
+﻿@{
+    ViewBag.Title = "Listar";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+    var List = Session["user_datos"] as List<ENTIDADES.CC_PERSONA>;
+    var parametro_saludo = "";
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    DateTime fecha = DateTime.Now;
+    string fecha_actual = fecha.ToString("MM/yyyy");
+    string fecha_busqueda = fecha.ToString("dd/MM/yyyy");
+    string fecha_dia_siguiente = fecha.AddDays(1).ToString("dd/MM/yyyy");
+
+    if (fecha.Hour >= 5 && fecha.Hour < 12)
+    {
+        parametro_saludo="Buenos días";
+    }
+    else if (fecha.Hour >= 12 && fecha.Hour < 18)
+    {
+        parametro_saludo = "Buenas tardes";
+    }
+    else
+    {
+        parametro_saludo = "Buenas noches";
+    }
+
+    string ruta = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
+    if (ruta.Substring(ruta.Length - 1).Equals("/"))
+    {
+        ruta = ruta.Substring(0, ruta.Length - 1);
+    }
+
+    var nombre = "";
+    var correo = "";
+}
+
+<input type="text" name="name" value="@ViewBag.id_perfilcc" id="id_perfil" hidden />
+
+<script src="~/Content/js/js_produccion_demanda/produccion_demanda.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+<style type="text/css">
+
+    .top-right {
+        position: absolute;
+        margin-top: -60px;
+        margin-left: 220px;
+    }
+    .center-right {       
+        margin-top: -14px;
+        position: absolute;
+        margin-left: 221px;
+    }
+    .bottom-right {
+        margin-left: 222px;
+        margin-top: 30px;
+    }
+</style>
+
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Buses y Conductores Programados&nbsp;&nbsp;&nbsp;<br />
+
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarArchivo" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModal();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+
+
+
+    <div class="col-md-2">
+
+        <label><strong>Seleccionar mes y año :</strong></label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="mes_año" value="@fecha_actual" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+
+
+    <div class="col-md-1">
+        <button id="consultar" style="margin-top: 31%;" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</button>
+    </div>
+
+</div>
+
+
+<hr />
+
+<div class="table-responsive">
+
+    <table id="tbGeneral" class="text-center responsive-table" style="width:100%">
+        <thead>
+            <tr>
+                <th width="30" class="text-center">N°</th>
+                <th>ARCHIVO</th>
+                <th class="text-center" scope="col">FECHA DEL ARCHIVO</th>
+                @if (@ViewBag.id_perfilcc != 261 || @ViewBag.id_perfilcc != 241)
+                {
+                    <th class="text-center" scope="col">USU_REG</th>
+                }
+
+
+                @if (@ViewBag.id_perfilcc != 261 || @ViewBag.id_perfilcc != 241)
+                {
+                    <th class="text-center" scope="col">FECHA_REG</th>
+                }
+
+                <th>VIZUALIZAR</th>
+                <th>DESCARGAR</th>
+                <th>ENVIAR</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="8" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@*modal registrar archivo*@
+<div class="modal fade" id="ModalRegistrarArchivo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="formSubirExcelDespacho" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Registrar Archivo</h6>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+
+                <div class="modal-body">
+
+
+                    <div class="form-group" id="sectionFecha">
+                        <label><strong>Fecha del contenido</strong></label>
+                        <input id="txtFechaRegistro" value="@fecha_busqueda" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Archivo</strong></label>
+                        <div class="form-group custom-file">
+
+                            <input type="file" name="programacionArchivo" class="custom-file-input" onchange="subirArchivoTemp($(this), $('#selectTipocarga').val())" id="archivoSubido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <label class="custom-file-label" id="lblArchivoSubido" for="archivoSubido">Seleccionar Archivo</label>
+                        </div>
+                        <p class="text-center" id="text_archivo"></p>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-light">Para</button>
+                            </div>
+                            <div class="col-sm-11">
+                                <input  type="text" id="ParaRegistra" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-light">CC</button>
+                            </div>
+                            <div class="col-sm-11">
+                                <textarea type="text" id="CopiaRegistra" class="form-control" style="height:86px;" disabled ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="text" id="AsuntoRegistra" class="form-control" disabled />
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                            <div class="col-sm-12">
+                                <textarea type="text" id="CuerpoMensajeRegistra" class="form-control" style="height: 280px;" disabled></textarea>
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @*<div class="row">
+                        <div style="margin-left: 90px;margin-top: -15px">
+                            <table id="modal_add"></table>
+                            <br />
+                        </div>
+                    </div>*@
+                    <div class="modal-footer">
+                        <button id="btnSubirArchivo" class="btn btn-info" type="submit">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_enviar_correo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-left: 110px;">
+            <form id="formEnviarCorreo" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Enviar Correo</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+
+                <div class="control-group">
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-light">Para</button>
+                        </div>
+                        <div class="col-sm-11">
+                            <input required type="text" id="Para" class="form-control" placeholder="usuario@example.com,usuario2@example.com,.....,usuarion@example.com" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-light">CC</button>
+                        </div>
+                        <div class="col-sm-11">
+                            <textarea type="text" id="Copia" class="form-control" style="height:86px;" placeholder="usuario@example.com,usuario2@example.com,.....,usuarion@example.com" ></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input required type="text" id="Asunto" class="form-control" placeholder="Agrega un asunto" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <textarea type="text" id="CuerpoMensaje" class="form-control" placeholder="Escribe un mensaje" style="height: 280px;">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div id="firmaenviar" style="margin-left: 138px;color: #19459c;">
+                            @foreach (var item in List)
+                            {
+                                nombre = item.NOMBRES + " " + item.APEPAT + " " + item.APEMAT;
+                                correo = item.CORREO;
+                            }
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btnEnviarCorreo" class="btn btn-primary" type="submit">Enviar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+    var ACTION_REEMPLAZAR_DATOS = @(ViewBag.ACTION_REEMPLAZAR_DATOS?"true":"false");
+
+    @{
+        ViewBag.ACTION_REEMPLAZAR_DATOS = false;
+    }
+
+    var URL_GET_REPORTE_FECHA = "@Url.Action("Listar_Informes", "BusesConductores")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("CargarArchivo", "BusesConductores")";
+    var URL_VER_EXCEL = "@Url.Action("ver_excelFinal", "BusesConductores")";
+    var URL_ENVIAR_CORREO = "@Url.Action("EnviarCorreo", "BusesConductores")";
+
+    var parametro_saludo = "@parametro_saludo"
+    var fecha_dia_siguiente = "@fecha_dia_siguiente";
+    var nombre_enviar = "@nombre";
+    var correo_enviar = "@correo";
+    var nom_archivo_subido="";
+    function subirArchivoTemp(element) {
+        var nombreArchivo = element.val().split("\\").pop();
+        var extensionArchivo = nombreArchivo.split('.')[1];
+        element.siblings(".custom-file-label").html('');
+        if (extensionArchivo == ARCHIVOS_PERMITIDOS.EXCEL) {
+            $('#AsuntoRegistra').val('');
+            nom_archivo_subido = nombreArchivo.substring(0,2)+'/'+nombreArchivo.substring(2,4)+'/'+nombreArchivo.substring(4,8);
+            $('#AsuntoRegistra').val('Placas Programadas Corredores Complementarios - '+nom_archivo_subido)
+            $('#modalImportarProgramacion .modal-footer .btn-success').prop('disabled', false);
+            element.siblings(".custom-file-label").addClass("selected").html("Seleccionar Archivo");
+            $('#lblArchivoSubido').text(nombreArchivo)
+        } else {
+            element.siblings(".custom-file-label").addClass("selected").html("Seleccionar Archivo");
+            $('#modalImportarProgramacion .modal-footer .btn-success').prop('disabled', true);
+            Swal.fire({
+                type: 'error',
+                title: 'El archivo ' + nombreArchivo + ' no tiene el formato correcto.',
+                showConfirmButton: false,
+                timer: 2500
+            })
+        }
+    }
+
+    function AbrirModal() {
+        var para = $('#ParaRegistra').val('');
+        var copia = $('#CopiaRegistra').val('');
+        var asunto = $('#AsuntoRegistra').val('');
+
+        para.val('mvizcarra@atu.gob.pe')
+        copia.val('jose.hermitano@atu.gob.pe,do10@atu.gob.pe,do30@atu.gob.pe,do25@atu.gob.pe,sstr57@atu.gob.pe,sstr44@atu.gob.pe,sstr81@atu.gob.pe,sstr83@atu.gob.pe,raul.vasquez@atu.gob.pe,supervmttosit@atu.gob.pe')
+        asunto.val('Placas Programadas Corredores Complementarios')
+
+        $('#ModalRegistrarArchivo').modal('show')
+    }
+
+    function verExcel(e) {
+        $.blockUI({
+            message: null,
+        });
+
+        var data = $(e[0]).attr("data-nombre")
+        $.ajax({
+            url: URL_VER_EXCEL,
+            dataType: 'json',
+            data: {
+                resultado: data
+            },
+            success: function (result) {
+
+
+                window.open("@ruta/Adjuntos/BusesConductores/" + result);
+                $.unblockUI();
+
+            }
+        }, JSON);
+    }
+
+    function Descargar(e) {
+        var name = $(e[0]).attr('data-nombre')
+        window.open("@ruta/Adjuntos/BusesConductores/" + name);
+    }
+
+    function AbrirEnviarCorreo(e) {
+        nombreadjunto = "";
+        nombreadjunto = $(e[0]).attr('data-nombre')
+        fecha_archivo = $(e[0]).attr('data-FECHA')
+
+
+        var para = $('#Para').val('');
+        var copia = $('#Copia').val('');
+        var asunto = $('#Asunto').val('');
+        var cuerpo = $('#CuerpoMensaje').val('');
+        $('#firmaenviar').empty();
+        para.val('mvizcarra@atu.gob.pe')
+        copia.val('jose.hermitano@atu.gob.pe,do10@atu.gob.pe,do30@atu.gob.pe,do25@atu.gob.pe,sstr57@atu.gob.pe,sstr44@atu.gob.pe,sstr81@atu.gob.pe,sstr83@atu.gob.pe,raul.vasquez@atu.gob.pe,supervmttosit@atu.gob.pe')
+        asunto.val('Placas Programadas Corredores Complementarios - '+ fecha_archivo)
+        cuerpo.val(parametro_saludo+',\n'+
+        'Primero para saludarlo y el deseo de buena salud,\n'+
+        'Mediante la presente informo la remisión de las placas asignadas por los Concesionarios de Corredores Complementarios enviadas de acuerdo a la programación,  con el fin se realice la desinfección de dichas unidades que ejecutaran servicios el día'+ fecha_dia_siguiente +'\n'+
+        'Así mismo informar que el archivo se encuentra disponible  en el Sistema del Centro de Control LINK => http://sistemas.protransporte.gob.pe/LOGINPUA/ y que sus usuarios y contraseñas han sido remitidos a sus respectivos correos y poder ser descargado, menciono lo siguiente con la finalidad de que se mas rápido la obtención del archivo para su uso y fines.\n'+
+        'Es todo cuanto informo Saludos,')
+
+        $('#firmaenviar').append('<div> <img src="https://sistemas.protransporte.gob.pe/LOGINPUA/Util/Logotipo_ATU-01.jpg" width="200px" height="50px" style="margin-top: 30px;"> </div>' +
+                            '<div class="top-right">' + nombre_enviar  +'</br>Subdirección de Servicios de Transporte Regular</div>' +
+                            '<div class="center-right">'+ correo_enviar +'</br>Jirón Cuzco N° 286, Cercado de Lima</div>' +
+                            '<div class="bottom-right">Lima – Perú</br> www.atu.gob.pe </div>')
+        $('#modal_enviar_correo').modal("show")
+   }
+
+function consultarData() {
+
+        var id_perfil = $('#id_perfil').val()
+
+        $('#consultar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando...');
+        $.ajax({
+            url: URL_GET_REPORTE_FECHA,
+            dataType: 'json',
+            data: {
+                mes_año: $('#mes_año').val(),
+            },
+            success: function (result) {
+
+            $('#consultar').prop('disabled', false).html('Consultar');
+            $('#tbGeneral tbody').empty();
+            var strHTML = '';
+            var i = 0;
+            if (result.Table.length <= 0) {
+                strHTML += '<tr><td colspan="5" class="text-center">No hay información para mostrar</td></tr>';
+            } else {
+                $.each(result.Table, function () {
+                    i++;
+                    if (this.length < 0) {
+                        strHTML += '<tr  ><td colspan="13" class="text-center">No hay información para mostrar</td></tr>';
+                    } else {
+                        strHTML += '<tr onclick="seleccionaFila($(this))" data-NOMBRE="' + this.NOMBRE + '" data-FECHA="' + this.FECHA + '">' +
+                                        '<td class="text-center" >' + i + '</td>' +
+                                        '<td class="text-center" >' + this.NOMBRE + '</td>' +
+                                        '<td class="text-center" >' + this.FECHA + '</td>' +
+                                          (id_perfil != 261 ? '<td class="text-center" >' + this.USU_REG + '</td>' : '') +
+                                        (id_perfil != 261 ? '<td class="text-center" >' + this.FECHA_REG + '</td>' : '') +
+                                         '<td class="text-center" ><button class="btn btn-primary btn-sm" onclick="verExcel($(this).parent().parent())"><i class="fas fa-eye" ></i>     </button></td>' +
+                                        '<td class="text-center" ><button class="btn btn-primary btn-sm" onclick="Descargar($(this).parent().parent())"><i class="fas fa-download" ></i>     </button></td>' +
+                                        '<td class="text-center" ><button class="btn btn-primary btn-sm" onclick="AbrirEnviarCorreo($(this).parent().parent())"><i class="fas fa-envelope"></i>     </button></td>' +
+                                    '</tr>';
+                    }
+
+                    });
+                }
+                $('#tbGeneral tbody').append(strHTML);
+
+                $.each($('#tbGeneral').children('tbody').children(), function (j, i) {
+                    if (j == 0) {
+                        $($(this)[0]).css("background-color", "rgba(23, 162, 184, 0.22)")
+                        console.log(this)
+                    }
+                });
+
+
+            }, error: function (xhr, status, error) {
+                Validaciones.ValidarSession();
+            },
+        }, JSON);
+    }
+</script>

@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AD", "AD\AD.csproj", "{44D23C0C-163A-471D-B4A6-03CC862D2F3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entidades", "ENTIDADES\Entidades.csproj", "{EBD3D24A-F878-4B89-8D43-31F161B2F200}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LN", "LN\LN.csproj", "{E4AD381C-1854-486E-BBD9-B01D88B2191A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositorio", "REPOSITORIO\Repositorio.csproj", "{C5047A51-92F9-406E-B979-FF0E8BBF8C3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LOGINPUA", "LOGINPUA\LOGINPUA.csproj", "{719533B9-D021-493C-A229-6D90FA2226EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LOGINPUA.Util", "LOGINPUA.Util\LOGINPUA.Util.csproj", "{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44D23C0C-163A-471D-B4A6-03CC862D2F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44D23C0C-163A-471D-B4A6-03CC862D2F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44D23C0C-163A-471D-B4A6-03CC862D2F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44D23C0C-163A-471D-B4A6-03CC862D2F3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD3D24A-F878-4B89-8D43-31F161B2F200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD3D24A-F878-4B89-8D43-31F161B2F200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD3D24A-F878-4B89-8D43-31F161B2F200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD3D24A-F878-4B89-8D43-31F161B2F200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4AD381C-1854-486E-BBD9-B01D88B2191A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4AD381C-1854-486E-BBD9-B01D88B2191A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4AD381C-1854-486E-BBD9-B01D88B2191A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4AD381C-1854-486E-BBD9-B01D88B2191A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5047A51-92F9-406E-B979-FF0E8BBF8C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5047A51-92F9-406E-B979-FF0E8BBF8C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5047A51-92F9-406E-B979-FF0E8BBF8C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5047A51-92F9-406E-B979-FF0E8BBF8C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{719533B9-D021-493C-A229-6D90FA2226EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{719533B9-D021-493C-A229-6D90FA2226EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{719533B9-D021-493C-A229-6D90FA2226EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{719533B9-D021-493C-A229-6D90FA2226EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1DDA7B9-C5D3-4DE3-87F1-3F132FE33A61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://protransportemetropolitano.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = LOGINPUA\\LOGINPUA.csproj
+		SccProjectName1 = LOGINPUA
+		SccLocalPath1 = LOGINPUA
+		SccProjectUniqueName2 = AD\\AD.csproj
+		SccProjectName2 = AD
+		SccLocalPath2 = AD
+		SccProjectUniqueName3 = ENTIDADES\\Entidades.csproj
+		SccProjectName3 = ENTIDADES
+		SccLocalPath3 = ENTIDADES
+		SccProjectUniqueName4 = LN\\LN.csproj
+		SccProjectName4 = LN
+		SccLocalPath4 = LN
+		SccProjectUniqueName5 = REPOSITORIO\\Repositorio.csproj
+		SccProjectName5 = REPOSITORIO
+		SccLocalPath5 = REPOSITORIO
+		SccProjectUniqueName6 = LOGINPUA.Util\\LOGINPUA.Util.csproj
+		SccProjectName6 = LOGINPUA.Util
+		SccLocalPath6 = LOGINPUA.Util
+	EndGlobalSection
+EndGlobal

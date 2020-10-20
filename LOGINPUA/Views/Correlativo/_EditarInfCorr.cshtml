@@ -1,0 +1,105 @@
+﻿<div class="modal fade" id="modal_editar_inf_corr">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width:600px;margin-left:200px;">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Editar Informe-Correlativo</h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+            <form id="sectionParametrosEditarInfCorr" autocomplete="off">
+                <input type="text" class="form-control" name="ID_INF_CORR" value="" id="txt_infcorr" style="display:none">
+
+                <div class="modal-body" style="padding-left: 45px; padding-right: 0px;">
+                    @*<div class="control-group">
+                        <div class="form-group row">
+                            <div class="form-group  col-md-6">
+                                <label>Fecha Informe</label>
+                                <div>
+                                    <input name="FECHA_INFORME" class="form-control" id="selecteditfechainforme" style="display:unset;width:80% ">
+                                </div>
+                            </div>
+
+                            <div class="form-group  col-md-6">
+                                <label>Fecha Recepcion</label>
+                                <div class="">
+                                    <input name="FECHA_RECEPCION" class="form-control" id="selecteditfecharecepcion" style="display:unset;width:80% ">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>*@
+
+
+
+                    <div class="control-group">
+                        <div class="form-group row">
+
+                            <div class="form-group  col-md-6">
+                                <label>Persona Responsable</label>
+                                <div>
+                                    <input name="PERS_RESP" id="txt_edit_pers_resp" style="display:unset;width:80%" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group  col-md-6">
+                                <label>Persona Dirigida</label>
+                                <div>
+                                    <input name="PERS_DIRIG" class="form-control" id="txt_edit_pers_dirig" style="display:unset;width:80% ">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="form-group row">
+
+                            <div class="form-group col-md-6">
+                                <label>Referencia</label>
+                                <div>
+                                    <input name="REFERENCIA" id="txt_edit_referencia" style="display:unset;width:80%" type="text" class="form-control">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group  col-md-6">
+                                <label>Archivador</label>
+                                <div>
+                                    <input name="ARCHIVADOR" id="txt_edit_archivador" style="display:unset;width:80%" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="form-group row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>Asunto</label>
+                                <div class="">
+                                    <textarea onkeyup="textAreaAdjust(this)" name="ASUNTO" id="txt_edit_asunto" style="display:unset;width:80%;" type="text" class="form-control"></textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button id="editar_infcorr_btn" class="btn btn-info" type="submit">Guardar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

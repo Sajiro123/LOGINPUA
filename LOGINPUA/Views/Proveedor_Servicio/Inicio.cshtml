@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+}
+
+<script src="~/Content/js/js_mantenimiento_Proveedor_Serv/registro_Proveedor_Serv.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .modal-content {
+        width: 120%;
+    }
+
+    .btn-light {
+        background-color: white;
+        border: 1px solid #ced4da;
+    }
+</style>
+<br />
+
+<h3 class="text-center">
+    Mantenimiento Proveedor Servicio
+
+    @foreach (var item in Lista_acciones)
+    {
+        if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+        {
+            <button type="button" id="modal_registroprovserv" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                <span class="fa fa-plus"></span>
+            </button>
+        }
+
+        if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+        {
+            idmodificar = 1;
+            <input type="text" id="permisoActualiza" value="1" hidden />
+        }
+        if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+        {
+            ideliminar = 1;
+            <input type="text" id="permisoEliminar" value="1" hidden />
+        }
+    }
+
+
+
+
+    <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+        <span class="fa fa-search"></span>
+    </button>
+</h3>
+<br />
+<hr />
+<div class="table-responsive">
+
+    <form>
+        <table class="responsive-table" id="tbListarProvServ_Usuario" style="width:100%">
+            <thead class="thead-azul-claro">
+                <tr>
+                    <th style="width: 40px;">N°</th>
+                    <th class="text-center" style="width: 60px;">USUARIO</th>
+                    <th class="text-center" style="width: 60px;">PROVEEDOR</th>
+                    <th class="text-center" style="width: 60px;">U.PROVEEDOR</th>
+                    <th class="text-center" style="width: 60px;">CONTRASEÑA</th>
+
+                    <th class="text-center" style="width: 70px;">USU_REG</th>
+                    <th style="width: 115px;">FECHA_REG</th>
+                    @if (idmodificar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+                        <th class="text-center" style="width:50px;"></th>
+                    }
+                    @if (ideliminar == 1)
+                    {
+                        <th class="text-center" style="width:50px;"></th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="13" class="text-center">No Existe Información.</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+@Html.Partial("_RegistroProv_Serv")
+@Html.Partial("_EditarProv_Serv")
+
+<script>
+
+    $('#txtBuscar_').keyup(function () {
+        if (this.value.length > 0) {
+            $.uiTableFilter($('#tbListarProvServ_Usuario'), this.value);
+        }
+    });
+    var URL_GET_PROVVEDOR_SERV = "@Url.Action("ListarProvee_Serv", "Proveedor_Servicio")";
+    var URL_GET_ID_USUARIO = "@Url.Action("Buscar_x_idusuario", "Proveedor_Servicio")";
+    var URL_GET_AGREGAR_USUARIO_PROVEEDOR = "@Url.Action("AgregarUsuario_Proveedor", "Proveedor_Servicio")";
+    var URL_GET_LISTAR_USUARIO_PROVEEDOR = "@Url.Action("ListarProvServ_Usuario", "Proveedor_Servicio")";
+    var URL_GET_ELIMINAR_USUARIO_PROVEEDOR = "@Url.Action("Desactivar_ProvUsuarios", "Proveedor_Servicio")";
+    var URL_GET_LIST_CORREDOR = "@Url.Action("ListCorredores", "Proveedor_Servicio")";
+    var URL_GET_AGREGARUSUARIO_CORREDOR = "@Url.Action("AgregarUsuarios_Corredor", "Proveedor_Servicio")";
+    var URL_GET_ELIMINAR_USUARIO_CUENTA = "@Url.Action("Desactivar_Cuenta_Usuario", "Proveedor_Servicio")";
+    var URL_GET_ACTUALIZAR_CONTRASEÑA = "@Url.Action("Actualizar_ContraseñaAnti", "Proveedor_Servicio")";
+    var URL_GET_LIST_CORREDOR_X_USUPROV = "@Url.Action("ListCorredor_X_Usuprov", "Proveedor_Servicio")";
+</script>
+

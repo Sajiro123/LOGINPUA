@@ -1,0 +1,51 @@
+﻿
+<div class="modal fade" id="exampleModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog">Registrar Usuario Asignado a un Proovedor</h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="form-group container">
+
+                <fieldset class="border p-1">
+                    <legend class="scheduler-border" style="font-size:18px">Asignacion de Proveedor Usuario</legend>
+                    <div class="control-group">
+                        <div class="form-group row">
+                            <h3 class="col-sm-2 col-form-label">Proveedor</h3>
+                            <div class="col-sm-3">
+                                <select id="txtPROVEEDORSERV" style="width:137%" class="form-control" data-live-search="true"></select>
+                            </div><div class="col-sm-1"></div>
+
+                            <h3 class="col-sm-2 col-form-label">Usuario</h3>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="idusuario_prov" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <h3 class="col-sm-2 col-form-label">Contraseña</h3>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" style="width:100%" id="clave" name="name" value="" />
+                        </div><div class="col-sm-1"></div>
+
+                    </div> 
+                </fieldset>
+
+                <br />
+                 
+                <div class="modal-footer">
+                    <button id="consultar" onclick="AgregarUsuarios_Proveedor()" class="btn btn-info" type="button">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

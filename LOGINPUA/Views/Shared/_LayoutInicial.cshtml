@@ -1,0 +1,418 @@
+﻿@{
+    string ruta = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
+    if (ruta.Substring(ruta.Length - 1).Equals("/"))
+    {
+        ruta = ruta.Substring(0, ruta.Length - 1);
+    }
+
+
+    string action = ViewBag.currentAction as string;
+    string controlador = ViewBag.currentRoute as string;
+    string menu = "";
+
+    int i = 0;
+    var dicMenu_Modulo = (Dictionary<int, LOGINPUA.Models.MenuModels>)Session["modulo_session"];
+    List<ENTIDADES.CC_ACCESO_CORREDORES> List_Acceso = (List<ENTIDADES.CC_ACCESO_CORREDORES>)Session["acceso_corredor"];
+    ViewBag.Lista_Accesos = List_Acceso;
+    var modalidad = 0;
+    string menu_modalidad = "";
+    int idmodulo = 0;
+    string nombmodulo = "";
+
+    Dictionary<string, List<LOGINPUA.Models.MenuModels>> dicMenuP_hijo = new Dictionary<string, List<LOGINPUA.Models.MenuModels>>();
+
+    List<LOGINPUA.Models.MenuModels> listPadres = new List<LOGINPUA.Models.MenuModels>();
+    List<LOGINPUA.Models.MenuModels> ListHijos = new List<LOGINPUA.Models.MenuModels>();
+
+    if (dicMenu_Modulo == null)
+    {
+        Response.Redirect("~/Home/Sistemas_");
+    }
+    else
+    {
+        foreach (var item in dicMenu_Modulo)
+        {
+            if (item.Value.is_padre == 1)
+            {
+                listPadres.Add(item.Value);
+            }
+        }
+
+        foreach (var item_padre in listPadres)
+        {
+            List<LOGINPUA.Models.MenuModels> menu_hijos = new List<LOGINPUA.Models.MenuModels>();
+
+            var nombre_padre = item_padre.nombmenu;
+            foreach (var item_hijo in dicMenu_Modulo)
+            {
+                var menu_hijo = new LOGINPUA.Models.MenuModels();
+
+                if (item_hijo.Value.is_padre == 0 && item_padre.idmenu == item_hijo.Value.id_menu_padre)
+                {
+                    menu_hijo.idmenu = item_hijo.Value.idmenu;
+                    menu_hijo.nombmenu = item_hijo.Value.nombmenu;
+                    nombmodulo = item_hijo.Value.nomModulo;
+                    menu_hijo.url_menu = item_hijo.Value.url_menu;
+                    menu_hijo.is_padre = item_hijo.Value.is_padre;
+                    menu_hijo.id_menu_padre = item_hijo.Value.id_menu_padre;
+                    menu_hijo.idmodulo = item_hijo.Value.idmodulo;
+                    menu_hijo.nomModulo = item_hijo.Value.nomModulo;
+                    menu_hijo.urlmodulo = item_hijo.Value.urlmodulo;
+                    menu_hijo.imgmodulo = item_hijo.Value.imgmodulo;
+                    menu_hijo.id_modalidad = item_hijo.Value.id_modalidad;
+                    idmodulo = item_hijo.Value.idmodulo;
+
+                    if (action != null)
+                    {
+                        string menufinal = controlador + '/' + action;
+                        if (menufinal == item_hijo.Value.url_menu)
+                        {
+                            menu = item_hijo.Value.nombmenu;
+                        }
+                    }
+
+                    menu_hijos.Add(menu_hijo);
+                }
+            }
+            dicMenuP_hijo.Add(nombre_padre, menu_hijos);
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>.::PROTRANSPORTE::.</title>
+
+    <link href="~/Content/scss/tableformt.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.multiselect.css" />
+    <link href="~/Content/css/simple-sidebar.css" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="~/Content/plugins/tooltipster/tooltipster.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.0.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/tooltipster/jquery.tooltipster.min.js"></script>
+    <script src="~/Content/plugins/sweetAlert/sweetalert2.js"></script>
+
+    <link rel="stylesheet" href="~/Content/plugins/datepicker/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/sweetAlert/sweetalert2.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/css/css_conductores/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="~/Content/LayoutInicial.css" />
+    <link href="~/Content/tableexport.css" rel="stylesheet" />
+
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/exportar_excel/FileSaver.js"></script>
+    <script src="~/Scripts/exportar_excel/Blob.js"></script>
+    <script src="~/Scripts/exportar_excel/xls.core.min.js"></script>
+    <script src="~/Scripts/exportar_excel/xlsx.core.min.js"></script>
+
+    <script src="~/Scripts/exportar_excel/jhxlsx.js"></script>
+    <script src="~/Content/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/plugins/moment/moment.js"></script>
+    <script src="~/Scripts/Utilidades/Util.js"></script>
+    <script src="~/Content/js/validaciones.js"></script>
+    <script src="~/Content/plugins/numberValidador/numberValidador.js"></script>
+    <script src="~/Content/js/all.min.js"></script>
+    <script src="~/Content/js/bootstrap-select.js"></script>
+    <script src="~/Content/plugins/lodash/lodash.min.js"></script>
+    <script>eval(mod_pagespeed_2HaUiZdTC$);</script>
+    <link rel="stylesheet" href="~/Content/css/css_programacion/alertify.css" />
+    <script src="~/Content/js/js_programacion/alertify.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.js"></script>
+    <script src="~/Content/plugins/uitablefilter/jquery.uitablefilter.js"></script>
+    <script src="~/Content/plugins/fancytable/fancyTable.js"></script>
+    <script src="~/Scripts/jquery.blockUI.js"></script>
+    <script src="~/Scripts/tableexport.js"></script>
+    <script src="~/Scripts/jscolor.js"></script>
+</head>
+<body>
+
+
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="list-group list-group-flush" style="background-color: #566161 !important;box-shadow: rgb(0, 0, 0) -2px 1px 11px 3px;">
+            <div class="bg-light border-right" id="sidebar-wrapper" style="width: 15rem;background-color: #566161 !important;color: white !important;width:242px;">
+                <br />
+
+                <img src="~/Util/Logotipo_ATU.png" alt="Alternate Text" style="width:90%;margin-left: 13px;" />
+                <br /><br />
+                <div style="text-align:center">
+                    <img src="~/Util/36_blanco.png" style="width:50%" alt="Alternate Text" />
+                    <br />
+                    <span>
+                        <p style="font-size: 1rem;">Sistema Integrado de Transporte para<br />  Corredores Complementarios y COSAC</p>
+                        <br>
+                        <small></small>
+                    </span>
+                </div>
+
+                <div class="list-group list-group-flush">
+                    <div id="accordion">
+                        <input type="hidden" id="mod" />
+                        @foreach (var itempadre_hijo in dicMenuP_hijo)
+                        {
+                            if (itempadre_hijo.Value.Count >= 1)
+                            {
+                                var nombre = itempadre_hijo.Key;
+                                int tam_var = nombre.Length;
+                                string nombre_final = nombre.Substring((tam_var - 2), 2) + "-";
+
+                                <div class="card">
+
+                                    <div class="card-header" style="background-color:#566161 !important">
+                                        <a name="@itempadre_hijo.Key" class="card-link" data-toggle="collapse" href='#collapseOne_@nombre_final'>
+                                            @itempadre_hijo.Key
+                                        </a>
+                                    </div>
+
+
+                                    <div name="@itempadre_hijo.Key" id='collapseOne_@nombre_final' class="collapse" data-parent="#accordion">
+                                        @foreach (var itemhijo in itempadre_hijo.Value)
+                                        {
+                                            <script>$('#mod').val(@itemhijo.id_modalidad);</script>
+                                            modalidad = itemhijo.id_modalidad;
+                                            int indexOf = itemhijo.url_menu.IndexOf('/');
+                                            var actionUrl = "";
+                                            var controllerUrl = "";
+                                            string[] urlMenu = new string[10];
+                                            //
+                                            if (indexOf != -1)
+                                            {
+                                                urlMenu = itemhijo.url_menu.Split('/');
+                                                controllerUrl = urlMenu[0];
+                                                actionUrl = urlMenu[1];
+                                                <div class="card-body">
+                                                    <a data-action="@actionUrl" data-controller="@controllerUrl" data-idmodalidad="@itemhijo.id_modalidad" href="@Url.Action(actionUrl, controllerUrl)" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card-body">
+                                                    <a href="#" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="margin-left: 5px;">
+
+                <button class="btn btn-primary img_resp" id="menu-toggle"><span class="fa fa-align-justify"></span></button>
+                &nbsp;<a href="@Url.Action("Sistemas_", "Home")" style="color:white;"> <button class="btn btn-dark"><i class="fas fa-home"></i></button></a>
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @if (modalidad == 1) { menu_modalidad = "Corredores"; } else { menu_modalidad = "Cosac"; }
+
+
+                <div class="row wrapper" s>
+                    <ol class="breadcrumb" style="background-color: #f8f9fa!important;margin-left: 50px;padding: 0;">
+                        <li class="breadcrumb-item">
+                            <a style="text-decoration:none;color:#616161;text-transform:uppercase;font-family:unset;font-size: 14px;" href="@Url.Action("Sistemas_", "Home")">@menu_modalidad</a>
+                        </li>
+                        @if (action != null)
+                        {
+                            <li class="breadcrumb-item">
+                                <span style="text-decoration:none;cursor:pointer;color:#616161;font-family:unset;font-size: 14px;" onclick="Escoger_Modalidad(1)"> @nombmodulo </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item">
+                                <span style="font-weight:bold;text-decoration:none;cursor:pointer;color:#616161;font-family:unset;font-size: 14px;" onclick="Escoger_Modalidad(1)"> @nombmodulo </span>
+                            </li>
+                        }
+
+
+                        @if (action != null)
+                        {
+                            <li class="breadcrumb-item active">
+                                <a href="@Url.Action(action,controlador)" style="font-weight:bold;text-decoration:none;cursor:pointer;color:#616161;font-family:unset;font-size: 14px;">@menu</a>
+                            </li>
+                        }
+
+                    </ol>
+                </div>
+
+
+
+                <div class="collapse navbar-collapse collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item dropdown img_resp">
+                            <img class="imagen_logo" src="~/Util/Logotipo_ATU.png" alt="logoPT" width="184">
+                        </li>
+                         <li class="nav-item dropdown cards">
+                            @foreach (var itempadre_hijo in dicMenuP_hijo)
+                            {
+                                if (itempadre_hijo.Value.Count >= 1)
+                                {
+                                    var nombre = itempadre_hijo.Key;
+                                    int tam_var = nombre.Length;
+                                    string nombre_final = nombre.Substring((tam_var - 2), 2);
+
+                                    <div class="card">
+
+                                        <div class="card-header">
+                                            <a name="@itempadre_hijo.Key" class="card-link" data-toggle="collapse" href='#collapseOne_@nombre_final'>
+                                                @itempadre_hijo.Key
+                                            </a>
+                                        </div>
+
+
+                                        <div name="@itempadre_hijo.Key" id='collapseOne_@nombre_final' class="collapse" data-parent="#accordion">
+                                            @foreach (var itemhijo in itempadre_hijo.Value)
+                                            {
+                                                <script>$('#mod').val(@itemhijo.id_modalidad);</script>
+                                                modalidad = itemhijo.id_modalidad;
+                                                int indexOf = itemhijo.url_menu.IndexOf('/');
+                                                var actionUrl = "";
+                                                var controllerUrl = "";
+                                                string[] urlMenu = new string[10];
+                                                //
+                                                if (indexOf != -1)
+                                                {
+                                                    urlMenu = itemhijo.url_menu.Split('/');
+                                                    controllerUrl = urlMenu[0];
+                                                    actionUrl = urlMenu[1];
+                                                    <div class="card-body">
+                                                        <a data-action="@actionUrl" data-controller="@controllerUrl" data-idmodalidad="@itemhijo.id_modalidad" href="@Url.Action(actionUrl, controllerUrl)" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="card-body">
+                                                        <a href="#" style="padding-left: 17px;"><span style="font-size:12px;" class="fa fa-angle-double-right"></span>&nbsp; @itemhijo.nombmenu</a>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </li>
+
+
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+
+                        <div class="collapse navbar-collapse" id="navbar1">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a href="#" id="menu" data-toggle="dropdown" class="nav-link dropdown-toggle"><span>@Session["user_login"].ToString() (@Session["user_rol"]) &nbsp;&nbsp;</span><span class="fa fa-user-circle" style="font-size: 20px;"></span></a>
+                                    <ul class="dropdown-menu dropleft">
+
+                                        <li class="dropdown-item dropdown-submenu">
+                                            <a class="dropdown" style="color:#212529" href="@Url.Action("Actualizar_Datos", "Persona")">Actualizar Datos</a>
+                                        </li>
+                                        <li class="dropdown-item dropdown-submenu">
+                                            <a class="dropdown" style="color:#212529" href="@Url.Action("CerrarSesion","Login")">Cerrar Sesión </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown" style="color:white">
+
+                                </li>
+                            </ul>
+
+                        </div>
+                    </ul>
+
+
+                </div>
+
+
+            </nav>
+
+
+
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <script>
+
+
+        var URL_GET_MODALIDAD = "@Url.Action("Sistemas_", "Home")";
+
+        var util = new Util();
+        var currentAction = '@ViewBag.currentAction';
+        var currentController = '@ViewBag.currentRoute';
+        var urlPage = '@ruta';
+
+        //MODALIDAD ESCOGER POR MODULO
+
+        function Escoger_Modalidad(id) {
+            window.location.replace(URL_GET_MODALIDAD + '/?id_modalidad=' + 1);
+        }
+
+        $('.dropdown-submenu > a').on("click", function (e) {
+            var submenu = $(this);
+            $('.dropdown-submenu .dropdown-menu').removeClass('show');
+            submenu.next('.dropdown-menu').addClass('show');
+            e.stopPropagation();
+        });
+        //
+        $('.dropdown').on("hidden.bs.dropdown", function () {
+            // hide any open menus when parent closes
+            $('.dropdown-menu.show').removeClass('show');
+        });
+        //
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        //
+        verificaCurrentView(currentAction, currentController);
+        //verificando action clikeado
+        function verificaCurrentView(action, controller) {
+            $.each($('#accordion .card'), function () {
+                $.each($(this).find('.card-body'), function () {
+                    var elementAction = $(this).find('a');
+                    var actionNombre = elementAction.attr('data-action').toUpperCase();
+                    var controlerNombre = elementAction.attr('data-controller').toUpperCase();
+                    //console.log(actionNombre, controlerNombre)
+                    //console.log(action.toUpperCase(), actionNombre, '<<---->>', controller.toUpperCase(), controlerNombre)
+                    if (action.toUpperCase() == actionNombre && controller.toUpperCase() == controlerNombre) {
+                        //console.log('-->', elementAction[0]);
+                        elementAction.parent().addClass('sombreaItemMenu');
+                        elementAction.parent().parent().addClass('show');
+                        return false;
+                    }
+                });
+            });
+
+        }
+    </script>
+
+
+
+</body>
+</html>

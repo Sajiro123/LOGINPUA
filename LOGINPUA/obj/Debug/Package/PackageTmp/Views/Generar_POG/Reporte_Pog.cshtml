@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Generar_Pog";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+}
+
+<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/plugins/daterangepicker/daterangepicker.min.js"></script>
+<script src="~/Content/js/js_generarPOG/js_Reporte_POG.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Reporte Programacion POG
+        </h4>
+    </div>
+</div>
+
+
+@*<div class="row">
+    *@
+    <section class="design-process-section" id="process-tab">
+        <div class="row">
+            <div style="width:100%">
+                <!-- design process steps-->
+                <!-- Nav tabs -->
+                <br />
+
+                <!-- end design process steps-->
+                <!-- Tab panes -->
+                <div>
+
+                    <div role="tabpanel" class="tab-pane" id="pasodos">
+                        <div class="design-process-content">
+
+                            <div style="padding-bottom: 14px;">
+                                <div class="modal-body">
+                                    <div class="row">
+
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+ 
+                                                <div class="input-group mb-3">
+
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" title="Corredor"><span class="far fa-hospital" aria-hidden="true"></span></span>
+                                                    </div>
+                                                    <select class="form-control form-control-sm" id="selectCorredores_dos" onchange="getRutaPorCorredor_dos();"></select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+ 
+                                                <div class="input-group mb-3">
+
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" title="Ruta"><span class="fas fa-road" aria-hidden="true"></span></span>
+                                                    </div>
+                                                    <select class="form-control form-control-sm" id="selectRuta_dos"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                             <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" title="Seleccionar rango de fechas"><span class="fa fa-calendar" aria-hidden="true"></span></span>
+                                                </div>
+                                                <input class="form-control form-control-sm" id="rangoFechaConsulta" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-1">
+                                             
+                                            <a href="#" id="Consultar" onclick="Listar_Data_Pog();" style="margin-top: 8px;" class="btn btn-success btn-sm" data-toggle="modal">Consultar</a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <hr>
+                                @*TABLE*@
+
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <h5 class="text-center" id="msj_fecha" style="color: #004e86;"></h5>
+                                        <br />
+
+
+                                        <table class="text-center responsive-table" id="tbtable_POG" style="width:100%">
+                                            <thead>
+                                                <tr>
+
+                                                    <th scope="col" colspan="2">FRANJA HORARIA</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">CANTIDAD DE BUSES</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">CANTIDAD BUSES N-S</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">CANTIDAD BUSES S-N</th>
+                                                    <th scope="col" colspan="2">TIEMPO VIAJE PROM</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">TIEMPO CICLO TOTAL</th>
+                                                    <th scope="col" colspan="2">INTERVALO</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">INTERVALO PROMEDIO</th>
+
+
+                                                    <th scope="col" colspan="2" style="vertical-align:middle;">VELOCIDAD PROMEDIO</th>
+                                                    <th scope="col" colspan="2"> DISTANCIA  KILOMETRO</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;"> KM TOTAL</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">VELOCIDAD OPERACIONAL</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">#CICLO</th>
+                                                    <th scope="col" rowspan="2" style="vertical-align:middle;">KM POR CICLOS</th>
+
+
+                                                </tr>
+
+                                                <tr>
+                                                    <th class="text-center">HI</th>
+                                                    <th class="text-center">HF</th>
+                                                    <th class="text-center">N-S</th>
+                                                    <th class="text-center">S-N</th>
+                                                    <th class="text-center">N-S</th>
+                                                    <th class="text-center">S-N</th>
+                                                    <th class="text-center">CANTA N-S</th>
+                                                    <th class="text-center">ALIPIO S-N</th>
+                                                    <th class="text-center">N-S</th>
+                                                    <th class="text-center">S-N</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="19">Presionar el boton para consultar la información.</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    @*TERCERO*@
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    @*
+</div>*@
+
+
+<script>
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var URL_GET_DATA_POG = "@Url.Action("Listar_Data_Pog", "Generar_POG")";
+
+    @{ HtmlString dataCorredores = new HtmlString(ViewBag.corredores); }
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+    $('#rangoFechaConsulta').daterangepicker({
+        startDate: '20/07/2020',
+        endDate: '24/07/2020',
+        dateLimit: { days: 5 },
+        //startDate: '06/11/2019',
+        //endDate: '06/11/2019',
+        timePicker: false,
+        //startDate: moment().startOf('hour'),
+        //endDate: moment().startOf('hour').add(7, 'days'),
+        //"disabledDays": new Array('02/11/2019', '03/11/2019'),
+        "opens": "right",
+        locale: { format: 'DD/MM/YYYY', "daysOfWeek": ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"], "monthNames": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"] }
+    });
+
+
+    function getCorredoresByModalidad() {
+
+        var modalidadTransporteSelecionado = $('#mod').val();
+        $('#selectCorredores, #selectRuta').empty();
+        var cantidadRegistros = 0;
+
+        $.each(JSON_DATA_CORREDORES, function () {
+            if (this.ID_MODALIDAD_TRANS == Number(modalidadTransporteSelecionado)) {
+                cantidadRegistros++;
+                $('#selectCorredores').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+                $('#selectCorredores_dos').append('<option value="' + this.ID_CORREDOR + '">' + this.ABREVIATURA + '</option>');
+
+            }
+        });
+        if (cantidadRegistros == 0) {
+            $('#selectCorredores, #selectRuta').append('<option value="0">' + '-- No hay información --' + '</option>');
+            $('#tbRutatipoServicio tbody').empty();
+            return false
+        }
+        //$('#selectCorredores').val(4); //DURACEL PARA PRUEBAS EN CORREDOR
+        getRutaPorCorredor_dos();
+    }
+
+</script>

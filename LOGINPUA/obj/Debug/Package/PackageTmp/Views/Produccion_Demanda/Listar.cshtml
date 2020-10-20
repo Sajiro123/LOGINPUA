@@ -1,0 +1,311 @@
+﻿
+@{
+    ViewBag.Title = "Listar";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+
+    HtmlString dataCorredores = new HtmlString(ViewBag.corredores);
+    DateTime fecha = DateTime.Now;
+    string fecha_actual = fecha.ToString("MM/yyyy");
+    string fecha_busqueda = fecha.ToString("dd/MM/yyyy");
+
+    string ruta = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
+    if (ruta.Substring(ruta.Length - 1).Equals("/"))
+    {
+        ruta = ruta.Substring(0, ruta.Length - 1);
+    }
+
+}
+
+<input type="text" name="name" value="@ViewBag.id_perfilcc" id="id_perfil" hidden />
+
+<script src="~/Content/js/js_produccion_demanda/produccion_demanda.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+
+
+
+<style>
+    .modal-dialog {
+        max-width: max-content !important;
+    }
+
+    .modal-content input {
+        width: 413px;
+    }
+
+    .sombraContenedor {
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Demanda y Producción De La Operación Diaria&nbsp;&nbsp;&nbsp;<br />
+            (sin conciliar)
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="btnRegistrarArchivo" class="btn btn-success btn-sm" data-toggle="modal" onclick="AbrirModal();">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+
+
+
+    <div class="col-md-2">
+
+        <label><strong>Seleccionar mes y año :</strong></label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
+            </div>
+            <input type="text" id="mes_año" value="@fecha_actual" class="form-control form-control-sm" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+
+
+    <div class="col-md-1">
+        <button id="consultar" style="margin-top: 31%;" class="btn btn-info btn-sm" data-toggle="modal" onclick="consultarData();">Consultar</button>
+    </div>
+
+</div>
+
+
+<hr />
+
+<div class="table-responsive">
+
+    <table id="tbGeneral" class="text-center responsive-table" style="width:100%">
+        <thead>
+            <tr>
+                <th width="30" class="text-center">N°</th>
+                <th>ARCHIVO</th>
+                <th class="text-center" scope="col">FECHA DEL ARCHIVO</th>
+                @if (@ViewBag.id_perfilcc != 241)
+                {
+                    <th class="text-center" scope="col">USU_REG</th>
+                }
+
+
+                @if (@ViewBag.id_perfilcc != 241)
+                {
+                    <th class="text-center" scope="col">FECHA_REG</th>
+                }
+
+                <th>VIZUALIZAR</th>
+                <th>DESCARGAR</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="7" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@*modal imprimi excel*@
+<div class="modal fade" id="ModalRegistrarArchivo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="formSubirExcelDespacho" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Registrar Archivo</h6>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+
+                <div class="modal-body">
+
+
+                    <div class="form-group" id="sectionFecha">
+                        <label><strong>Fecha del contenido</strong></label>
+                        <input id="txtFechaRegistro" value="@fecha_busqueda" class="form-control" />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label><strong>Archivo</strong></label>
+                        <div class="form-group custom-file">
+
+                            <input type="file" name="programacionArchivo" class="custom-file-input" onchange="subirArchivoTemp($(this), $('#selectTipocarga').val())" id="archivoSubido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <label class="custom-file-label" id="lblArchivoSubido" for="archivoSubido">Seleccionar Archivo</label>
+                        </div>
+                        <p class="text-center" id="text_archivo"></p>
+                    </div>
+                </div>
+
+
+                <div class="form-group container">
+                    <div class="row">
+                        <div style="margin-left: 90px;margin-top: -15px">
+                            <table id="modal_add"></table>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnSubirArchivo" class="btn btn-info" type="submit">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@{
+    ViewBag.ACTION_REEMPLAZAR_DATOS = false;
+}
+
+
+<script>
+
+
+    var URL_GET_RUTA_X_CORREDOR = "@Url.Action("getRutaxCorredor", "Programacion")";
+    var FECHA_HOY = '@DateTime.Now.ToString("dd/MM/yyyy")';
+    var JSON_DATA_CORREDORES = JSON.parse('@dataCorredores');
+
+
+    var URL_GET_REPORTE_FECHA = "@Url.Action("Listar_Informes", "Produccion_Demanda")";
+    var URL_ACTION_UPLOAD_FILE = "@Url.Action("CargarArchivo", "Produccion_Demanda")";
+    var URL_VER_EXCEL = "@Url.Action("ver_excelFinal", "Produccion_Demanda")";
+    var ACTION_REEMPLAZAR_DATOS = @(ViewBag.ACTION_REEMPLAZAR_DATOS?"true":"false");
+
+
+    function subirArchivoTemp(element) {
+        var nombreArchivo = element.val().split("\\").pop();
+        var extensionArchivo = nombreArchivo.split('.')[1];
+        element.siblings(".custom-file-label").html('');
+        if (extensionArchivo == ARCHIVOS_PERMITIDOS.EXCEL) {
+            $('#modalImportarProgramacion .modal-footer .btn-success').prop('disabled', false);
+            element.siblings(".custom-file-label").addClass("selected").html("Seleccionar Archivo");
+            $('#text_archivo').text(nombreArchivo)
+        } else {
+            element.siblings(".custom-file-label").addClass("selected").html("Seleccionar Archivo");
+            $('#modalImportarProgramacion .modal-footer .btn-success').prop('disabled', true);
+            Swal.fire({
+                type: 'error',
+                title: 'El archivo ' + nombreArchivo + ' no tiene el formato correcto.',
+                showConfirmButton: false,
+                timer: 2500
+            })
+        }
+    }
+
+    function verExcel(e) {
+
+
+        var data = $(e[0]).attr("data-nombre")
+        console.log(data, 'data')
+        $.ajax({
+            url: URL_VER_EXCEL,
+            dataType: 'json',
+            data: {
+                resultado: data
+            },
+            success: function (result) {
+
+                window.open( "@ruta/Adjuntos/Produccion/" + result);
+            }
+        }, JSON);
+    }
+
+    function AbrirModal() {
+        $('#ModalRegistrarArchivo').modal('show')
+    }
+
+
+    function Descargar(e) {
+        var name = $(e[0]).attr('data-nombre')
+
+        window.open("@ruta/Adjuntos/Produccion/" + name);
+    }
+
+
+function consultarData() {
+
+    var id_perfil = $('#id_perfil').val()
+
+    $('#consultar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Consultando...');
+    $.ajax({
+        url: URL_GET_REPORTE_FECHA,
+        dataType: 'json',
+        data: {
+            mes_año: $('#mes_año').val(),
+        },
+        success: function (result) {
+
+            console.log(result, 'result')
+
+
+            $('#consultar').prop('disabled', false).html('Consultar');
+            $('#tbGeneral tbody').empty();
+            var strHTML = '';
+            var i = 0;
+            if (result.Table.length <= 0) {
+                strHTML += '<tr><td colspan="5" class="text-center">No hay información para mostrar</td></tr>';
+            } else {
+                $.each(result.Table, function () {
+                    i++;
+                    if (this.length < 0) {
+                        strHTML += '<tr  ><td colspan="13" class="text-center">No hay información para mostrar</td></tr>';
+                    } else {
+                        strHTML += '<tr onclick="seleccionaFila($(this))" data-NOMBRE="' + this.NOMBRE + '">' +
+                                        '<td class="text-center" >' + i + '</td>' +
+                                        '<td class="text-center" >' + this.NOMBRE + '</td>' +
+                                        '<td class="text-center" >' + this.FECHA + '</td>' +
+                                          (id_perfil != 241 ? '<td class="text-center" >' + this.USU_REG + '</td>' : '') +
+                                        (id_perfil != 241 ? '<td class="text-center" >' + this.FECHA_REG + '</td>' : '') +
+                                         '<td class="text-center" ><button class="btn btn-primary btn-sm" onclick="verExcel($(this).parent().parent())"><i class="fas fa-eye" ></i>     </button></td>' +
+                                        '<td class="text-center" ><button class="btn btn-primary btn-sm" onclick="Descargar($(this).parent().parent())"><i class="fas fa-download" ></i>     </button></td>' +
+                                    '</tr>';
+                    }
+
+                });
+            }
+            $('#tbGeneral tbody').append(strHTML);
+
+
+            $.each($('#tbGeneral').children('tbody').children(), function (j, i) {
+                if (j == 0) {
+                    $($(this)[0]).css("background-color", "rgba(23, 162, 184, 0.22)")
+                    console.log(this)
+                }
+            });
+
+        }, error: function (xhr, status, error) {
+            Validaciones.ValidarSession();
+        },
+    }, JSON);
+}
+</script>

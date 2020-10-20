@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "MantenimientoPerson";
+    Layout = "~/Views/Shared/_LayoutInicial.cshtml";
+    List<ENTIDADES.CC_PERSONA> lisPersona = new List<ENTIDADES.CC_PERSONA>();
+    lisPersona = ViewBag.listaPersona;
+
+    List<ENTIDADES.CC_MENUPERFIL_ACCION> Lista_acciones = ViewBag.Accionesview as List<ENTIDADES.CC_MENUPERFIL_ACCION>;
+    int ideliminar = 0;
+    int idmodificar = 0;
+}
+
+<style>
+    .modal-content input {
+        width: auto !important;
+    }
+
+    .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<script src="~/Content/js/js_mantenimiento_usuario/registro_usuario.js@("?v="+ DateTime.Now.ToString("yyyyMMddhmmss"))"></script>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>
+            Registro Usuario&nbsp;&nbsp;&nbsp;
+
+            <button type="button" class="btn btn-info btn-sm" id="btnBusquedaEnTabla">
+                <span class="fa fa-search"></span>
+            </button>
+
+            @foreach (var item in Lista_acciones)
+            {
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.REGISTRAR.ToString()) //cambiar a enumerado
+                {
+                    <button type="button" id="modal_registrousu" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                }
+
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.MODIFICAR.ToString())
+                {
+                    idmodificar = 1;
+                    <input type="text" id="permisoActualiza" value="1" hidden />
+                }
+                if (item.NOMBRE == LOGINPUA.Enumerados.Acciones.EnumAcciones.ANULAR.ToString())
+                {
+                    ideliminar = 1;
+                    <input type="text" id="permisoEliminar" value="1" hidden />
+                }
+            }
+
+
+        </h4>
+    </div>
+</div>
+
+ 
+<hr />
+<div class="row">
+    <div class="table-responsive">
+        <div>
+            <table class="responsive-table" id="tbUsuario" style="width:100%">
+                <thead class="thead-azul-claro">
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th class="text-center">USUARIO</th>
+                        <th class="text-center" style="width: 70px;">CONTRASEÑA</th>
+                        <th class="text-center" style="width: 195px;">NOMBRES</th>
+                        <th class="text-center" style="width: 115px;">APELLIDO PATERNO</th>
+                        <th class="text-center" style="width: 115px;">APELLIDO MATERNO</th>
+                        <th class="text-center" style="width: 135px;">ESTADO</th>
+                        <th class="text-center" style="width: 70px;">USUARIO REGISTRO</th>
+                        <th class="text-center" style="width: 140px;">FECHA REGISTRO</th>
+
+                        @if (ideliminar == 1)
+                        {
+                            <th class="text-center" style="width: 50px;"></th>
+
+                        }
+                        @if (idmodificar == 1)
+                        {
+                            <th class="text-center" style="width: 50px;"></th>
+
+                        }
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="13" class="text-center">Presionar el boton Consultar para obtener la información.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_RegistroUsuario")
+@Html.Partial("_EditarUsuario")
+
+<script>
+
+    var URL_GET_PERFIL_USUARIO = "@Url.Action("ListarPerfil", "Usuario_Personas")";
+    var URL_GET_AGREGAR_USUARIOS = "@Url.Action("AgregarUsuario", "Usuario_Personas")";
+    var URL_GET_LISTAR_USUARIO = "@Url.Action("ListarUsuarios", "Usuario_Personas")";
+    var URL_ANULA_USUARIO = "@Url.Action("Desactivar_Usuarios", "Usuario_Personas")";
+    var URL_GET_MODIFICAR_USUARIO = "@Url.Action("ModificarUsuarios", "Usuario_Personas")";
+    var URL_GET_PERFIL_MODALIDAD = "@Url.Action("ListarPerfil_modalidad", "Usuario_Personas")";
+    var URL_GET_LISTAR_USUARIO_ID = "@Url.Action("ListarUsuario_x_ID", "Usuario_Personas")";
+    var URL_GET_LISTAR_PERSONA = "@Url.Action("ListarPersonas", "Usuario_Personas")";
+    var URL_GET_PROVVEDOR_SERV = "@Url.Action("ListarProvee_Serv", "Proveedor_Servicio")";
+    var URL_GET_LIST_CORREDOR = "@Url.Action("ListCorredores", "Proveedor_Servicio")";
+    var URL_GET_LIST_CUENTAS_X_ID= "@Url.Action("ListCuentas_x_id", "Usuario_Personas")";
+    var URL_GET_CONSULTAR_CUENTAPROVUSU= "@Url.Action("Consultar_CuentaProvUsu", "Usuario_Personas")";
+
+    
+
+</script>
+
+

@@ -1,0 +1,85 @@
+﻿<style>
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #626b74;
+    }
+</style>
+<link href="https://www.jqueryscript.net/demo/time-picker-bootstrap/timepicker.css" rel="stylesheet" />
+<script src="https://www.jqueryscript.net/demo/time-picker-bootstrap/timepicker.js"></script>
+
+<div class="modal fade" id="modal_DetallSalida">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloDialog" style="text-align:center;">Registrar Viaje </h6>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group ">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-2 col-form-label">Unidad</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <select id="txtunidad_" class="selectpicker" data-live-search="true"></select>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-12 col-form-label">Conductor</h3>
+                            </div>  
+                            <div class="col-md-9 col-md-push-3" id="conductor_div">
+                                <select style="width:137%;" id="idcond_atuocomp" onchange="click()" class="selectpicker" data-live-search="true" name="ID_BUS"></select>
+                            </div>
+                            <div class="col-md-3" id="conductor_div2"></div>
+                            <div class="col-md-4">
+                                <small id="emailHelp" class="form-text" style="font-weight: bold;margin-left: 12px;">
+                                    Conductor sin Cac &nbsp;&nbsp; <input type="checkbox"  style="height: 16px;width: 24px;"  id="conduc_cac">
+                                </small>
+                            </div> 
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-12 col-form-label">Hora Salida</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <input value="@DateTime.Now.ToString("HH:mm")" style="border: 1px solid #ccc!important;" class="form-control simpleExample" id="txtHorasalida_" type="text">
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+
+                            <div class="col-md-3 col-md-pull-9">
+                                <h3 class="col-sm-2 col-form-label">Observaciones</h3>
+                            </div>
+                            <div class="col-md-9 col-md-push-3">
+                                <textarea class="form-control" id="id_observacion" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+
+                        <br />
+                        <div class="modal-footer">
+                            <button id="consultar" onclick="Actualizar_ViajeTemporal()" class="btn btn-info" type="button" style="margin-left: 249px;">
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
